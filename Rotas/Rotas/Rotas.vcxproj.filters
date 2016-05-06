@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="src">
+      <UniqueIdentifier>{b8141bb7-4e70-4dcc-a247-163b9965c7b7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{9c52d1ea-a104-4149-bfec-bedc71fa19e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\domain">
+      <UniqueIdentifier>{573c2fd3-78c8-4db2-82b7-cea603390775}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\domain">
+      <UniqueIdentifier>{eee93ac2-b2a3-43f8-9b1a-c9001da87346}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\rotas.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\domain\edge.cpp">
+      <Filter>src\domain</Filter>
+    </ClCompile>
+    <ClCompile Include="src\domain\vertex.cpp">
+      <Filter>src\domain</Filter>
+    </ClCompile>
+    <ClCompile Include="path.cpp">
+      <Filter>src\domain</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\domain\edge.h">
+      <Filter>include\domain</Filter>
+    </ClInclude>
+    <ClInclude Include="include\domain\vertex.h">
+      <Filter>include\domain</Filter>
+    </ClInclude>
+    <ClInclude Include="path.h">
+      <Filter>include\domain</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
