@@ -2,11 +2,14 @@
 //
 
 #include <iostream>
+#include "cli\exibicao.h"
 
 using namespace std;
 
 int main()
 {
+
+	Exibicao::exibe_instrucoes();
 	cout << "Pressione qualquer tecla para sair.";
 	cin.get();
 

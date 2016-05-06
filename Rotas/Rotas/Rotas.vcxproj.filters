@@ -13,29 +13,41 @@
     <Filter Include="include\domain">
       <UniqueIdentifier>{eee93ac2-b2a3-43f8-9b1a-c9001da87346}</UniqueIdentifier>
     </Filter>
+    <Filter Include="src\cli">
+      <UniqueIdentifier>{04b0f04e-a278-4f96-8826-87a35954e34a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include\cli">
+      <UniqueIdentifier>{13eb3160-fdef-4463-936b-add4afbff817}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\rotas.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\domain\edge.cpp">
+    <ClCompile Include="src\cli\exibicao.cpp">
+      <Filter>src\cli</Filter>
+    </ClCompile>
+    <ClCompile Include="src\domain\caminho.cpp">
       <Filter>src\domain</Filter>
     </ClCompile>
-    <ClCompile Include="src\domain\vertex.cpp">
+    <ClCompile Include="src\domain\rota.cpp">
       <Filter>src\domain</Filter>
     </ClCompile>
-    <ClCompile Include="path.cpp">
+    <ClCompile Include="src\domain\cidade.cpp">
       <Filter>src\domain</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\domain\edge.h">
+    <ClInclude Include="include\cli\exibicao.h">
+      <Filter>include\cli</Filter>
+    </ClInclude>
+    <ClInclude Include="include\domain\rota.h">
       <Filter>include\domain</Filter>
     </ClInclude>
-    <ClInclude Include="include\domain\vertex.h">
+    <ClInclude Include="include\domain\caminho.h">
       <Filter>include\domain</Filter>
     </ClInclude>
-    <ClInclude Include="path.h">
+    <ClInclude Include="include\domain\cidade.h">
       <Filter>include\domain</Filter>
     </ClInclude>
   </ItemGroup>
