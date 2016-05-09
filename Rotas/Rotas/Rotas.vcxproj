@@ -20,16 +20,18 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\cli\exibicao.cpp" />
+    <ClCompile Include="src\cli\manipula_entrada.cpp" />
     <ClCompile Include="src\domain\rota.cpp" />
     <ClCompile Include="src\domain\caminho.cpp" />
     <ClCompile Include="src\domain\cidade.cpp" />
     <ClCompile Include="src\rotas.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="include\cli\exibicao.h" />
-    <ClInclude Include="include\domain\rota.h" />
-    <ClInclude Include="include\domain\caminho.h" />
-    <ClInclude Include="include\domain\cidade.h" />
+    <ClInclude Include="src\cli\exibicao.h" />
+    <ClInclude Include="src\cli\manipula_entrada.h" />
+    <ClInclude Include="src\domain\caminho.h" />
+    <ClInclude Include="src\domain\cidade.h" />
+    <ClInclude Include="src\domain\rota.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{37235E36-F341-49F1-B34E-35915C456259}</ProjectGuid>

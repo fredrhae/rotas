@@ -1,7 +1,7 @@
 #ifndef ROTAS_DOMAIN_ROTA_H_
 #define ROTAS_DOMAIN_ROTA_H_
 
-#include "domain\cidade.h"
+#include "cidade.h"
 
 class Rota {
 	Cidade origem;

@@ -1,7 +1,7 @@
 #ifndef ROTAS_DOMAIN_PATH_H_
 #define ROTAS_DOMAIN_PATH_H_
 
-#include "domain\rota.h"
+#include "rota.h"
 #include <vector>
 
 class Caminho {
