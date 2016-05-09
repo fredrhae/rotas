@@ -2,7 +2,7 @@
 
 Cidade Caminho::get_origem()
 {
-	return caminho.front().get_origem();
+	return caminho.front().get_destino();
 }
 
 Cidade Caminho::get_destino()

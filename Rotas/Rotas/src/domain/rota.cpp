@@ -5,8 +5,9 @@ double Rota::get_distancia()
 	return distancia;
 }
 
-Cidade Rota::get_origem() {
-	return origem;
+void Rota::set_distancia(double nova_distancia)
+{
+	distancia = nova_distancia;
 }
 
 Cidade Rota::get_destino() {

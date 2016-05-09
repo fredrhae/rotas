@@ -5,10 +5,12 @@
 
 class Cidade {
 	std::string nome;
+	int id;
 public:
 	Cidade() {};
-	Cidade(std::string nome) : nome(nome) {};
+	Cidade(std::string nome, int id) : nome(nome), id(id) {};
 	std::string get_nome();
+	int get_id();
 };
 
 #endif // ROTAS_DOMAIN_CIDADE_H_

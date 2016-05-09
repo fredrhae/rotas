@@ -4,16 +4,15 @@
 #include "cidade.h"
 
 class Rota {
-	Cidade origem;
 	Cidade destino;
 	double distancia;
 public:
 	Rota() {};
-	Rota(Cidade origem, Cidade destino, double distancia) : origem(origem),
+	Rota(Cidade destino, double distancia) :
 		destino(destino), distancia(distancia){};
-	Cidade get_origem();
 	Cidade get_destino();
 	double get_distancia();
+	void set_distancia(double nova_distancia);
 };
 
 #endif // ROTAS_DOMAIN_ROTA_H_

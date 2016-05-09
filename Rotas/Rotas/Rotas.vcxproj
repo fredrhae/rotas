@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\algoritmos\dijkstra.cpp" />
     <ClCompile Include="src\cli\exibicao.cpp" />
     <ClCompile Include="src\cli\manipula_entrada.cpp" />
     <ClCompile Include="src\domain\rota.cpp" />
@@ -27,6 +28,7 @@
     <ClCompile Include="src\rotas.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\algoritmos\dijkstra.h" />
     <ClInclude Include="src\cli\exibicao.h" />
     <ClInclude Include="src\cli\manipula_entrada.h" />
     <ClInclude Include="src\domain\caminho.h" />
@@ -117,7 +119,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)Rotas\include\domain;$(SolutionDir)Rotas\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Rotas\src\domain;$(SolutionDir)Rotas\src\cli;$(SolutionDir)Rotas\src\algoritmos;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
