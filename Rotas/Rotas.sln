@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Rotas", "Rotas\Rotas.vcxpro
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GoogleTest", "GoogleTest\GoogleTest.vcxproj", "{726BDFF8-8447-4D3F-A612-01F8F23F69DB}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_Rotas", "test_rotas\test_rotas.vcxproj", "{F3B581C7-1450-4646-A3FF-A1D345867AAE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -49,6 +51,20 @@ Global
 		{726BDFF8-8447-4D3F-A612-01F8F23F69DB}.Release|x64.ActiveCfg = Release|Win32
 		{726BDFF8-8447-4D3F-A612-01F8F23F69DB}.Release|x86.ActiveCfg = Release|Win32
 		{726BDFF8-8447-4D3F-A612-01F8F23F69DB}.Release|x86.Build.0 = Release|Win32
+		{F3B581C7-1450-4646-A3FF-A1D345867AAE}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{F3B581C7-1450-4646-A3FF-A1D345867AAE}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{F3B581C7-1450-4646-A3FF-A1D345867AAE}.Debug|Win32.ActiveCfg = Debug|Win32
+		{F3B581C7-1450-4646-A3FF-A1D345867AAE}.Debug|Win32.Build.0 = Debug|Win32
+		{F3B581C7-1450-4646-A3FF-A1D345867AAE}.Debug|x64.ActiveCfg = Debug|Win32
+		{F3B581C7-1450-4646-A3FF-A1D345867AAE}.Debug|x86.ActiveCfg = Debug|Win32
+		{F3B581C7-1450-4646-A3FF-A1D345867AAE}.Debug|x86.Build.0 = Debug|Win32
+		{F3B581C7-1450-4646-A3FF-A1D345867AAE}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{F3B581C7-1450-4646-A3FF-A1D345867AAE}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{F3B581C7-1450-4646-A3FF-A1D345867AAE}.Release|Win32.ActiveCfg = Release|Win32
+		{F3B581C7-1450-4646-A3FF-A1D345867AAE}.Release|Win32.Build.0 = Release|Win32
+		{F3B581C7-1450-4646-A3FF-A1D345867AAE}.Release|x64.ActiveCfg = Release|Win32
+		{F3B581C7-1450-4646-A3FF-A1D345867AAE}.Release|x86.ActiveCfg = Release|Win32
+		{F3B581C7-1450-4646-A3FF-A1D345867AAE}.Release|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
