@@ -2,8 +2,8 @@
 //
 
 #include <iostream>
-#include "exibicao.h"
-#include "algoritmos\dijkstra.h"
+#include "cli/exibicao.h"
+#include "algoritmos/dijkstra.h"
 
 using namespace std;
 
