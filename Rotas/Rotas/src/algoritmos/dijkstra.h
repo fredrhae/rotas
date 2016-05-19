@@ -1,16 +1,17 @@
 #ifndef ROTAS_ALGORITMOS_H_
 #define ROTAS_ALGORITMOS_H_
 
+#define kCidades 9
+
 #include <limits>;
 #include <vector>;
 #include "caminho.h"
 
-#define kCidades 9
-
 class Dijkstra {
 		const double max_distance = std::numeric_limits<double>::infinity();
 		Caminho caminho_distancia_minima;
-		double minima_distancia_partindo_da_origem(double dist[], bool sptSet[]);
+		int minima_distancia_partindo_da_origem(double distancias[], bool marcador_distancia_encontrada[], int numero_cidades);
+		double* inicializa_distancias_encontradas(int);
 	public:
 		Dijkstra(){};
 		void imprime_caminho_curto_dijkstra(double dist[], int n);
