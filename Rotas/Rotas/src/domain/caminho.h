@@ -5,14 +5,12 @@
 #include <vector>
 
 class Caminho {
-	std::vector<Rota> caminho;
-	double distancia_total;
-public:
-	Caminho() {};
-	Caminho(std::vector<Rota> route) : caminho(route){};
-	Cidade get_origem();
-	Cidade get_destino();
-	double get_distancia_total();
+	public:
+		Caminho() {};
+		Caminho(std::vector<Rota> route) : distancias_entre_cidades(route){};
+		std::vector<Rota> distancias_entre_cidades;
+		Cidade get_origem();
+		Cidade get_destino();
 };
 
 #endif // ROTAS_DOMAIN_PATH_H_

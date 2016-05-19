@@ -3,7 +3,7 @@
 
 #include <limits>;
 #include <vector>;
-#include "domain/caminho.h"
+#include "caminho.h"
 
 #define kCidades 9
 
@@ -14,7 +14,7 @@ class Dijkstra {
 	public:
 		Dijkstra(){};
 		void imprime_caminho_curto_dijkstra(double dist[], int n);
-		void dijkstra_menor_caminho(double graph[kCidades][kCidades], int origem);
+		void dijkstra_menor_caminho(std::vector<Caminho> distancias, Cidade origem);
 };
 
 #endif // ROTAS_ALGORITMOS_H_

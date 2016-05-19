@@ -29,27 +29,30 @@ void Dijkstra::imprime_caminho_curto_dijkstra(double dist[], int n)
 
 // Funtion that implements Dijkstra's single source shortest path algorithm
 // for a graph represented using adjacency matrix representation
-void Dijkstra::dijkstra_menor_caminho(double graph[kCidades][kCidades], int origem)
+void Dijkstra::dijkstra_menor_caminho(std::vector<Caminho> distancias, Cidade origem)
 {
 	
-	double distancias_encontradas[kCidades];     // The output array.  dist[i] will hold the shortest
+	if(distancias.size() < 1)
+		return;
+
+	double *distancias_encontradas = new double[distancias.size()]; // The output array.  dist[i] will hold the shortest
 					 // distance from src to i
 
-	bool sptSet[kCidades]; // sptSet[i] will true if vertex i is included in shortest
+	bool *sptSet = new bool[distancias.size()]; // sptSet[i] will true if vertex i is included in shortest
 					// path tree or shortest distance from src to i is finalized
 
 	// Initialize all distances as INFINITE and stpSet[] as false
-	for (int i = 0; i < kCidades; i++)
+	for (int i = 0; i < distancias.size(); i++)
 	{
 		distancias_encontradas[i] = max_distance;
 		sptSet[i] = false;
 
 	}
 	// Distance of source vertex from itself is always 0
-	distancias_encontradas[origem] = 0;
+	distancias_encontradas[origem.get_id()] = 0;
 
 	// Find shortest path for all vertices
-	for (int count = 0; count < kCidades - 1; count++)
+	for (int count = 0; count < distancias.size() - 1; count++)
 	{
 		// Pick the minimum distance vertex from the set of vertices not
 		// yet processed. u is always equal to src in first iteration.
@@ -59,17 +62,17 @@ void Dijkstra::dijkstra_menor_caminho(double graph[kCidades][kCidades], int orig
 		sptSet[u] = true;
 
 		// Update dist value of the adjacent vertices of the picked vertex.
-		for (int v = 0; v < kCidades; v++)
+		for (int v = 0; v < distancias.size(); v++)
 		{
 			// Update dist[v] only if is not in sptSet, there is an edge from 
 			// u to v, and total weight of path from src to  v through u is 
 			// smaller than current value of dist[v]
-			if (!sptSet[v] && graph[u][v] && distancias_encontradas[u] != max_distance
-				&& distancias_encontradas[u] + graph[u][v] < distancias_encontradas[v])
-				distancias_encontradas[v] = distancias_encontradas[u] + graph[u][v];
+			if (!sptSet[v] && distancias[u].distancias_entre_cidades[v].get_distancia() && distancias_encontradas[u] != max_distance
+				&& distancias_encontradas[u] + distancias[u].distancias_entre_cidades[v].get_distancia() < distancias_encontradas[v])
+				distancias_encontradas[v] = distancias_encontradas[u] + distancias[u].distancias_entre_cidades[v].get_distancia();
 		}
 	}
 
 	// print the constructed distance array
-	imprime_caminho_curto_dijkstra(distancias_encontradas, kCidades);
+	imprime_caminho_curto_dijkstra(distancias_encontradas, distancias.size());
 }

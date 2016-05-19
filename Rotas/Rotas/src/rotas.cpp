@@ -7,6 +7,56 @@
 
 using namespace std;
 
+vector<Cidade> cidades;
+vector<Caminho> caminhos;
+
+void inicializa_cidades()
+{
+	cidades = vector<Cidade>();
+
+	Cidade aux = Cidade("A",0);
+	cidades.push_back(aux);
+	aux = Cidade("B",1);
+	cidades.push_back(aux);
+	aux = Cidade("C", 2);
+	cidades.push_back(aux);
+	aux = Cidade("D", 3);
+	cidades.push_back(aux);
+	aux = Cidade("E", 4);
+	cidades.push_back(aux);
+	aux = Cidade("F", 5);
+	cidades.push_back(aux);
+	aux = Cidade("G", 6);
+	cidades.push_back(aux);
+	aux = Cidade("H", 7);
+	cidades.push_back(aux);
+	aux = Cidade("I", 8);
+	cidades.push_back(aux);
+}
+
+void inicializa_rotas(double rotas[9][9])
+{
+	caminhos = vector<Caminho>();
+
+	for (int i = 0; i < 9; i++)
+	{
+		vector<Rota> rotas_cidade_atual = vector<Rota>();
+		for (int j = 0; j < 9; j++)
+		{
+			Rota rota_para_cidade = Rota(cidades[j],rotas[i][j]);
+			rotas_cidade_atual.push_back(rota_para_cidade);
+		}
+		
+		caminhos.push_back(rotas_cidade_atual);
+	}
+
+}
+
+void inicializa_dados()
+{
+	
+}
+
 int main()
 {
 
@@ -24,7 +74,27 @@ int main()
 	{ 0, 0, 2, 0, 0, 0, 6, 7, 0 }
 	};
 
-	objeto.dijkstra_menor_caminho(graph, 0);
+	inicializa_cidades();
+
+	inicializa_rotas(graph);
+
+	objeto.dijkstra_menor_caminho(caminhos, cidades.front());
+
+	objeto.dijkstra_menor_caminho(caminhos, cidades[1]);
+
+	objeto.dijkstra_menor_caminho(caminhos, cidades[2]);
+
+	objeto.dijkstra_menor_caminho(caminhos, cidades[3]);
+
+	objeto.dijkstra_menor_caminho(caminhos, cidades[4]);
+
+	objeto.dijkstra_menor_caminho(caminhos, cidades[5]);
+
+	objeto.dijkstra_menor_caminho(caminhos, cidades[6]);
+
+	objeto.dijkstra_menor_caminho(caminhos, cidades[7]);
+
+	objeto.dijkstra_menor_caminho(caminhos, cidades[8]);
 
 	Exibicao::exibe_instrucoes();
 	cout << "Pressione qualquer tecla para sair.";
