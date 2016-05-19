@@ -5,7 +5,7 @@
 
 #include <limits>;
 #include <vector>;
-#include "caminho.h"
+#include "domain/caminho.h"
 
 class Dijkstra {
 		const double max_distance = std::numeric_limits<double>::infinity();
