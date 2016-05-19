@@ -78,23 +78,7 @@ int main()
 
 	inicializa_rotas(graph);
 
-	objeto.dijkstra_menor_caminho(caminhos, cidades.front());
-
-	objeto.dijkstra_menor_caminho(caminhos, cidades[1]);
-
-	objeto.dijkstra_menor_caminho(caminhos, cidades[2]);
-
-	objeto.dijkstra_menor_caminho(caminhos, cidades[3]);
-
-	objeto.dijkstra_menor_caminho(caminhos, cidades[4]);
-
-	objeto.dijkstra_menor_caminho(caminhos, cidades[5]);
-
-	objeto.dijkstra_menor_caminho(caminhos, cidades[6]);
-
-	objeto.dijkstra_menor_caminho(caminhos, cidades[7]);
-
-	objeto.dijkstra_menor_caminho(caminhos, cidades[8]);
+	Caminho menor_caminho = objeto.dijkstra_menor_caminho(caminhos, cidades.front(),cidades);
 
 	Exibicao::exibe_instrucoes();
 	cout << "Pressione qualquer tecla para sair.";
