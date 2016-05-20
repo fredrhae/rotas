@@ -4,13 +4,21 @@
 #include <vector>
 #include "domain/caminho.h"
 
-class GilletJohnson
+namespace rotas
 {
-public:
-	GilletJohnson() {};
-	~GilletJohnson() {};
+	namespace algoritmos
+	{
+		using namespace domain;
 
-	void atribui_medianas(std::vector<Caminho> distancias, std::vector<Cidade> cidades);
-};
+		class GilletJohnson
+		{
+		public:
+			GilletJohnson() {};
+			~GilletJohnson() {};
+
+			void atribui_medianas(std::vector<Caminho> distancias, std::vector<Cidade> cidades);
+		};
+	} // algoritmos
+} // rotas
 
 #endif //ROTAS_ALGORITMOS_GILLET_H_

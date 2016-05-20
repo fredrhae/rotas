@@ -39,6 +39,9 @@
     <ClCompile Include="src\algoritmos\gillet_johnson.cpp">
       <Filter>src\algoritmos</Filter>
     </ClCompile>
+    <ClCompile Include="teitz_bart.cpp">
+      <Filter>src\algoritmos</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\cli\exibicao.h">
@@ -60,6 +63,9 @@
       <Filter>src\algoritmos</Filter>
     </ClInclude>
     <ClInclude Include="src\algoritmos\gillet_johnson.h">
+      <Filter>src\algoritmos</Filter>
+    </ClInclude>
+    <ClInclude Include="teitz_bart.h">
       <Filter>src\algoritmos</Filter>
     </ClInclude>
   </ItemGroup>

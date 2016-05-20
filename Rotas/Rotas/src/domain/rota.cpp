@@ -1,15 +1,21 @@
 #include "rota.h"
 
-double Rota::get_distancia()
+namespace rotas 
 {
-	return distancia;
-}
+	namespace domain 
+	{
+		double Rota::get_distancia()
+		{
+			return distancia;
+		}
 
-void Rota::set_distancia(double nova_distancia)
-{
-	distancia = nova_distancia;
-}
+		void Rota::set_distancia(double nova_distancia)
+		{
+			distancia = nova_distancia;
+		}
 
-Cidade Rota::get_destino() {
-	return destino;
-}
+		Cidade Rota::get_destino() {
+			return destino;
+		}
+	} // domain
+} // rotas

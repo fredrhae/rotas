@@ -27,6 +27,7 @@
     <ClCompile Include="src\domain\caminho.cpp" />
     <ClCompile Include="src\domain\cidade.cpp" />
     <ClCompile Include="src\rotas.cpp" />
+    <ClCompile Include="teitz_bart.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\algoritmos\dijkstra.h" />
@@ -36,6 +37,7 @@
     <ClInclude Include="src\domain\caminho.h" />
     <ClInclude Include="src\domain\cidade.h" />
     <ClInclude Include="src\domain\rota.h" />
+    <ClInclude Include="teitz_bart.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{37235E36-F341-49F1-B34E-35915C456259}</ProjectGuid>

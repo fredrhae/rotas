@@ -7,6 +7,8 @@
 #include "algoritmos/gillet_johnson.h"
 
 using namespace std;
+using namespace rotas::algoritmos;
+using namespace rotas::domain;
 
 vector<Cidade> cidades;
 vector<Caminho> caminhos;
