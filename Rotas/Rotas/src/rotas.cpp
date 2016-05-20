@@ -4,6 +4,7 @@
 #include <iostream>
 #include "cli/exibicao.h"
 #include "algoritmos/dijkstra.h"
+#include "algoritmos/gillet_johnson.h"
 
 using namespace std;
 
@@ -60,7 +61,8 @@ void inicializa_dados()
 int main()
 {
 
-	Dijkstra objeto = Dijkstra();
+	Dijkstra dijkstra = Dijkstra();
+	GilletJohnson gillet_johnson = GilletJohnson();
 	
 	/* Let us create the example graph discussed above */
 	double graph[9][9] = { { 0, 4, 0, 0, 0, 0, 0, 8, 0 },
@@ -78,9 +80,16 @@ int main()
 
 	inicializa_rotas(graph);
 
-	Caminho menor_caminho = objeto.dijkstra_menor_caminho(caminhos, cidades.front(),cidades);
+	cout << "----- Dijkstra -------" << endl;
+	Caminho *menor_caminho = new Caminho[9];
+	for (int i = 0; i < 9; i++) {
+		menor_caminho[i] = dijkstra.dijkstra_menor_caminho(caminhos, cidades.at(i),cidades);
+	}
+	
+	cout << "----- Gillet e Johnson -------" << endl;
+	//gillet_johnson.atribui_medianas(caminhos, cidades);
 
-	Exibicao::exibe_instrucoes();
+	//Exibicao::exibe_instrucoes();
 	cout << "Pressione qualquer tecla para sair.";
 	cin.get();
 

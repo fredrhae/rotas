@@ -1,7 +1,7 @@
 #ifndef ROTAS_CLI_EXIBICAO_H_
 #define ROTAS_CLI_EXIBICAO_H_
 
-#include <string>;
+#include <string>
 
 class Exibicao {
 

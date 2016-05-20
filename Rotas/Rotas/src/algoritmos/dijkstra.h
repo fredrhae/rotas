@@ -1,10 +1,10 @@
-#ifndef ROTAS_ALGORITMOS_H_
-#define ROTAS_ALGORITMOS_H_
+#ifndef ROTAS_ALGORITMOS_DIJKSTRA_H_
+#define ROTAS_ALGORITMOS_DIJKSTRA_H_
 
 #define kCidades 9
 
-#include <limits>;
-#include <vector>;
+#include <limits>
+#include <vector>
 #include "domain/caminho.h"
 
 class Dijkstra {
@@ -17,4 +17,4 @@ class Dijkstra {
 		Caminho dijkstra_menor_caminho(std::vector<Caminho> distancias, Cidade origem, std::vector<Cidade> cidades);
 };
 
-#endif // ROTAS_ALGORITMOS_H_
+#endif // ROTAS_ALGORITMOS_DIJKSTRA_H_
