@@ -1,11 +1,9 @@
 #ifndef ROTAS_ALGORITMOS_DIJKSTRA_H_
 #define ROTAS_ALGORITMOS_DIJKSTRA_H_
 
-#define kCidades 9
-
 #include <limits>
 #include <vector>
-#include "domain/caminho.h"
+#include "caminho.h"
 
 namespace rotas
 {
