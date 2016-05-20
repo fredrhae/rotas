@@ -11,7 +11,7 @@ class Cidade {
 
 public:
 	Cidade() {};
-	Cidade(std::string nome, int id) : nome(nome), id(id), id_mediana(-1) {};
+	Cidade(std::string nome, int id) : nome(nome), id(id), id_mediana(-1), mediana(false) {};
 	std::string get_nome();
 	int get_id();
 	bool is_mediana();
