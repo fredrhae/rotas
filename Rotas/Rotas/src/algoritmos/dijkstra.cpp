@@ -30,7 +30,7 @@ namespace rotas
 		{
 			std::string nome_origem = menor_caminho.get_origem().get_nome();
 			std::cout << "Menores caminhos encontrados partindo da origem " + nome_origem + ":" << std::endl;
-			for (int i = 0; i < menor_caminho.distancias_entre_cidades.size(); i++)
+			for (unsigned int i = 0; i < menor_caminho.distancias_entre_cidades.size(); i++)
 				std::cout << menor_caminho.distancias_entre_cidades[i].get_destino().get_nome() << "(" <<
 				i << ") - \t\t " << menor_caminho.distancias_entre_cidades[i].get_distancia() << std::endl;
 		}
@@ -92,7 +92,7 @@ namespace rotas
 			distancias_encontradas[origem.get_id()] = 0;
 
 			// Acha menor caminho para todas as cidades
-			for (int count = 0; count < distancias.size() - 1; count++)
+			for (unsigned int count = 0; count < distancias.size() - 1; count++)
 			{
 				// Pega a menor distancia para a cidade do conjunto de cidades ainda nao processados.
 				// u e igual a origem na primeira iteracao
@@ -102,7 +102,7 @@ namespace rotas
 				marcador_distancia_encontrada[u] = true;
 
 				// Atualiza o valor da distancia das cidades adjacentes a cidade escolhida nessa iteracao
-				for (int v = 0; v < distancias.size(); v++)
+				for (unsigned int v = 0; v < distancias.size(); v++)
 				{
 					// Atualiza distancias encontradas apenas se ela tiver marcada como 
 					// como nao encontrada, se tiver um caminho da cidade u para v, e a distancia
