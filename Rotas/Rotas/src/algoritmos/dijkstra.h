@@ -3,7 +3,7 @@
 
 #include <limits>
 #include <vector>
-#include "caminho.h"
+#include "domain/caminho.h"
 
 namespace rotas
 {
