@@ -17,7 +17,7 @@ namespace rotas
 			double* inicializa_distancias_encontradas(int);
 		public:
 			Dijkstra() {};
-			void imprime_caminho_curto_dijkstra(Caminho menor_caminho);
+			void imprime_caminho_curto_dijkstra(Caminho menor_caminho, Cidade origem);
 			Caminho dijkstra_menor_caminho(std::vector<Caminho> distancias, Cidade origem, std::vector<Cidade> cidades);
 		};
 	} // algoritmos

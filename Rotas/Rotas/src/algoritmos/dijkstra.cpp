@@ -26,9 +26,9 @@ namespace rotas
 		}
 
 		// A utility function to print the constructed MST stored in parent[]
-		void Dijkstra::imprime_caminho_curto_dijkstra(Caminho menor_caminho)
+		void Dijkstra::imprime_caminho_curto_dijkstra(Caminho menor_caminho, Cidade origem)
 		{
-			std::string nome_origem = menor_caminho.get_origem().get_nome();
+			std::string nome_origem = origem.get_nome();
 			std::cout << "Menores caminhos encontrados partindo da origem " + nome_origem + ":" << std::endl;
 			for (unsigned int i = 0; i < menor_caminho.distancias_entre_cidades.size(); i++)
 				std::cout << menor_caminho.distancias_entre_cidades[i].get_destino().get_nome() << "(" <<
@@ -126,7 +126,7 @@ namespace rotas
 			Caminho menor_caminho = gera_menor_caminho_dijkstra(distancias_encontradas, distancias.size(), cidades);
 
 			// print the constructed distance array
-			imprime_caminho_curto_dijkstra(menor_caminho);
+			imprime_caminho_curto_dijkstra(menor_caminho, origem);
 
 			// Libera memoria de vetores alocados
 			delete[] distancias_encontradas;
