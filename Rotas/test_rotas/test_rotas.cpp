@@ -6,7 +6,9 @@
 #include "algoritmos/dijkstra.h"
 #include "domain/caminho.h"
 
+using namespace std;
 using namespace rotas;
+using namespace domain;
 
 class RotasTest : public ::testing::Test {
 protected:
@@ -69,7 +71,17 @@ protected:
 	}
 
 	virtual void SetUp() {
-
+		//Inicializa as cidades		
+		string nomes[] = { "A", "B", "C", "D", "E", "F", "G", "H", "I" };
+		for (unsigned int i = 0; i < 9; i++) {
+			vector<Rota> rotas = vector<Rota>();
+			for (unsigned int j = 0; j < 9; j++) {
+				Rota nova_rota = Rota(i, j, graph2[i][j]);
+				rotas.push_back(nova_rota);
+			}
+			Cidade nova_cidade = Cidade(nomes[i], i, rotas);
+			cidades.push_back(nova_cidade);
+		}
 	}
 };
 
@@ -90,6 +102,28 @@ protected:
 		a = 7;
 	}
 };
+
+TEST_F(RotasTest, validacaoCidades)
+{
+	cout << "Cidades testadas :" << endl;
+	for (int i = 0; i < cidades.size(); i++) {
+		cout << cidades[i].get_nome() << " ";
+	}
+	cout << endl;
+
+	cout << "---------------------------" << endl;
+
+	for (int i = 0; i < cidades.size(); i++) {
+		Cidade cidade = cidades[i];
+		vector<Rota> rotas = cidade.get_rotas();
+		cout << "Rotas partindo de " << cidade.get_nome() << ":" << endl;
+		for (int j = 0; j < rotas.size(); j++) {
+			Rota rota = rotas[j];
+			cout << rota.get_id_origem() << " até " << rota.get_id_destino() << " = " << rota.get_distancia() << endl;
+		}
+		cout << endl;
+	}
+}
 
 TEST_F(DijkstraTest, validacaoTrivial)
 {

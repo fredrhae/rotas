@@ -31,6 +31,7 @@ namespace rotas {
 			void set_id_mediana(int id);
 			void add_rota(Rota rota);
 			void set_rotas(vector<Rota> rotas);
+			vector<Rota> get_rotas();
 		};
 	} // domain
 } // rotas

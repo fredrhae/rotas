@@ -40,5 +40,10 @@ namespace rotas
 			rotas_possiveis = rotas;
 		}
 
+		vector<Rota> Cidade::get_rotas()
+		{
+			return rotas_possiveis;
+		}
+
 	} // domain
 } // rotas
