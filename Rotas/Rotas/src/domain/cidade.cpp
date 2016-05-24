@@ -1,12 +1,11 @@
 
 #include "cidade.h"
+using namespace std;
 
 namespace rotas 
 {
 	namespace domain 
-	{
-		using namespace std;
-
+	{		
 		string Cidade::get_nome() {
 			return nome;
 		}
@@ -30,5 +29,16 @@ namespace rotas
 		void Cidade::set_id_mediana(int id) {
 			id_mediana = id;
 		}
+
+		void Cidade::add_rota(Rota rota)
+		{
+			rotas_possiveis.push_back(rota);
+		}
+
+		void Cidade::set_rotas(vector<Rota> rotas)
+		{
+			rotas_possiveis = rotas;
+		}
+
 	} // domain
 } // rotas

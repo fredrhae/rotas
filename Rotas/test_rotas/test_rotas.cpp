@@ -60,7 +60,7 @@ protected:
 			std::vector<domain::Rota> rotas_cidade_atual = std::vector<domain::Rota>();
 			for (int j = 0; j < 9; j++)
 			{
-				domain::Rota rota_para_cidade = domain::Rota(cidades[j], distancias[i][j]);
+				domain::Rota rota_para_cidade = domain::Rota(i, j, distancias[i][j]);
 				rotas_cidade_atual.push_back(rota_para_cidade);
 			}
 

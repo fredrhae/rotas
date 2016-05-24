@@ -1,8 +1,8 @@
 #ifndef ROTAS_DOMAIN_PATH_H_
 #define ROTAS_DOMAIN_PATH_H_
 
-#include "rota.h"
 #include <vector>
+#include "cidade.h"
 
 namespace rotas
 {
@@ -10,12 +10,15 @@ namespace rotas
 	{
 		class Caminho 
 		{
+			Cidade origem;
+			Cidade destino;
+			std::vector<Rota> trajeto;
 		public:
 			Caminho() {};
-			Caminho(std::vector<Rota> route) : distancias_entre_cidades(route) {};
-			std::vector<Rota> distancias_entre_cidades;
+			Caminho(std::vector<Rota> trajeto) : trajeto(trajeto) {};
 			Cidade get_origem();
 			Cidade get_destino();
+			double get_distancia();
 		};
 	} // domain
 } // rotas

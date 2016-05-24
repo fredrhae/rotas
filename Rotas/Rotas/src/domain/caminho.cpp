@@ -6,12 +6,18 @@ namespace rotas
 	{
 		Cidade Caminho::get_origem()
 		{
-			return distancias_entre_cidades.front().get_destino();
+			return origem;
 		}
 
 		Cidade Caminho::get_destino()
 		{
-			return distancias_entre_cidades.back().get_destino();
+			return destino;
+		}
+		
+		double Caminho::get_distancia()
+		{
+			//TODO: implementar a soma das distâncias
+			return 0.0;
 		}
 	} // domain
 } // rotas

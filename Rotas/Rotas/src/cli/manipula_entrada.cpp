@@ -43,7 +43,7 @@ void inicializa_rotas(double rotas[9][9])
 		vector<Rota> rotas_cidade_atual = vector<Rota>();
 		for (int j = 0; j < 9; j++)
 		{
-			Rota rota_para_cidade = Rota(cidades[j], rotas[i][j]);
+			Rota rota_para_cidade = Rota(i, j, rotas[i][j]);
 			rotas_cidade_atual.push_back(rota_para_cidade);
 		}
 

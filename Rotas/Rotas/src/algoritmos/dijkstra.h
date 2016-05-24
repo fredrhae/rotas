@@ -1,6 +1,8 @@
 #ifndef ROTAS_ALGORITMOS_DIJKSTRA_H_
 #define ROTAS_ALGORITMOS_DIJKSTRA_H_
 
+#define __DIJKSTRA_BUGADA 1
+
 #include <limits>
 #include <vector>
 #include "domain/caminho.h"

@@ -32,15 +32,6 @@ namespace rotas
 
 			//Achar o indice da mediana mais próxima (L1)
 			int L1 = -1;
-			double distancia = caminhos[0].distancias_entre_cidades[0].get_distancia();
-			double distancia_min = distancia;
-			for (unsigned int j = 0; j < medianas.size(); j++) {
-				distancia = caminhos[0].distancias_entre_cidades[j].get_distancia();
-				distancia_min = distancia < distancia_min ? distancia : distancia_min;
-			}
-
-
-
 
 			std::cout << "Cidades: " << std::endl;
 			for (int i = 0; i < 9; i++) {

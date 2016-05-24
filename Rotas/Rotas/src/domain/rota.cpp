@@ -9,13 +9,12 @@ namespace rotas
 			return distancia;
 		}
 
-		void Rota::set_distancia(double nova_distancia)
-		{
-			distancia = nova_distancia;
+		int Rota::get_id_origem() {
+			return id_origem;
 		}
 
-		Cidade Rota::get_destino() {
-			return destino;
+		int Rota::get_id_destino() {
+			return id_destino;
 		}
 	} // domain
 } // rotas

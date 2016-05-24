@@ -1,23 +1,22 @@
 #ifndef ROTAS_DOMAIN_ROTA_H_
 #define ROTAS_DOMAIN_ROTA_H_
 
-#include "cidade.h"
-
 namespace rotas
 {
 	namespace domain
 	{
 		class Rota
 		{
-			Cidade destino;
+			int id_origem;
+			int id_destino;
 			double distancia;
 		public:
 			Rota() {};
-			Rota(Cidade destino, double distancia) :
-				destino(destino), distancia(distancia) {};
-			Cidade get_destino();
+			Rota(int id_origem, int id_destino, double distancia) :
+				id_origem(id_origem), id_destino(id_destino), distancia(distancia) {};
+			int get_id_origem();
+			int get_id_destino();
 			double get_distancia();
-			void set_distancia(double nova_distancia);
 		};
 	} // domain
 } // rotas
