@@ -1,4 +1,7 @@
 #include <vector>
+#include <iostream>
+#include <sstream>
+#include <fstream>
 #include "domain\cidade.h"
 #include "domain\caminho.h"
 #include "cli\manipula_entrada.h"
@@ -10,63 +13,159 @@ using namespace std;
 vector<Cidade> cidades;
 vector<Caminho> caminhos;
 
-void inicializa_cidades()
+vector<string> extrai_colunas_matriz(string linha_matriz)
+{
+	stringstream linha_matriz_stream(linha_matriz);
+	string word = "";
+	vector<string> colunas_da_linha;
+	while (getline(linha_matriz_stream, word, ';'))
+	{
+		colunas_da_linha.push_back(word);
+	}
+	
+	return colunas_da_linha;
+}
+
+vector<vector<string>> extrai_matriz_distancia(string path)
+{
+	ifstream infile(path);
+	string line = "";
+	vector<vector<string>> matriz_distancias;
+	while (getline(infile, line))
+	{
+		vector<string> colunas_matriz = extrai_colunas_matriz(line);
+		matriz_distancias.push_back(colunas_matriz);
+	}
+
+	return matriz_distancias;
+}
+
+void inicializa_cidades(vector<string> vetor_nomes_cidades)
 {
 	cidades = vector<Cidade>();
 
-	Cidade aux = Cidade("A", 0);
-	cidades.push_back(aux);
-	aux = Cidade("B", 1);
-	cidades.push_back(aux);
-	aux = Cidade("C", 2);
-	cidades.push_back(aux);
-	aux = Cidade("D", 3);
-	cidades.push_back(aux);
-	aux = Cidade("E", 4);
-	cidades.push_back(aux);
-	aux = Cidade("F", 5);
-	cidades.push_back(aux);
-	aux = Cidade("G", 6);
-	cidades.push_back(aux);
-	aux = Cidade("H", 7);
-	cidades.push_back(aux);
-	aux = Cidade("I", 8);
-	cidades.push_back(aux);
+	for (int i = 0; i < vetor_nomes_cidades.size(); i++)
+	{
+		Cidade cidade_atual = Cidade(vetor_nomes_cidades.at(i), i);
+		cidades.push_back(cidade_atual);
+	}
+
 }
 
-void inicializa_rotas(double rotas[9][9])
+void inicializa_rotas(vector<vector<string>> matriz_distancias_string)
 {
 	caminhos = vector<Caminho>();
 
-	for (int i = 0; i < 9; i++)
+	for (int i = 0; i < matriz_distancias_string.size(); i++)
 	{
 		vector<Rota> rotas_cidade_atual = vector<Rota>();
-		for (int j = 0; j < 9; j++)
+
+		for (int j = 0; j < matriz_distancias_string[i].size(); j++)
 		{
-			Rota rota_para_cidade = Rota(i, j, rotas[i][j]);
+			Rota rota_para_cidade = Rota(i, j, std::stod(matriz_distancias_string[i][j]));
 			rotas_cidade_atual.push_back(rota_para_cidade);
 		}
 
-		caminhos.push_back(rotas_cidade_atual);
+		caminhos.push_back(Caminho(rotas_cidade_atual));
 	}
 }
 
-void ManipulaEntrada::manipula_entrada(char metodo_selecionado, char algoritmo_selecionado)
+bool checa_path_e_valido(string path)
+{
+	ifstream test(path);
+	if (!test)
+	{
+		return false;
+	}
+
+	return true;
+}
+
+bool checa_matriz_quadrada(vector<vector<string>> matriz_distancias)
+{
+	bool e_quadrada = true;
+	for (int i = 1; i < matriz_distancias.size(); i++)
+	{
+		if (matriz_distancias.at(i).size() != cidades.size())
+		{
+			e_quadrada = false;
+			break;
+		}
+	}
+
+	return e_quadrada;
+}
+
+bool checa_matriz_simetrica(vector<vector<string>> matriz_distancias)
+{
+	bool e_simetrica = true;
+	for (int i = 0; i < matriz_distancias.size(); i++)
+	{
+		for (int j = 0; j < matriz_distancias.size(); j++)
+		{
+			if (matriz_distancias[i][j] != matriz_distancias[j][i])
+			{
+				e_simetrica = false;
+				break;
+			}
+		}
+	}
+
+	return e_simetrica;
+}
+
+bool checa_matriz_diagonal(vector<vector<string>> matriz_distancias)
+{
+	bool diagonal_e_zero = true;
+	for (int i = 0; i < matriz_distancias.size(); i++)
+	{
+		if (matriz_distancias[i][i] != "0")
+		{
+			diagonal_e_zero = false;
+			break;
+		}
+	}
+
+	return diagonal_e_zero;
+}
+
+vector<vector<string>> remove_elementos_desnecessarios(vector<vector<string>> matriz_distancias)
+{
+	vector<vector<string>> nova_matriz_distancias = matriz_distancias;
+
+	// Remove a primeira coluna de todas as linhas
+	for (int i = 0; i < nova_matriz_distancias.size(); i++)
+	{
+		nova_matriz_distancias[i].erase(nova_matriz_distancias[i].begin());
+	}
+	
+	return nova_matriz_distancias;
+}
+bool ManipulaEntrada::inicializa_dados_partir_do_csv(string path)
 {
 
-	/* Let us create the example graph discussed above */
-	double graph[9][9] = { { 0, 4, 0, 0, 0, 0, 0, 8, 0 },
-	{ 4, 0, 8, 0, 0, 0, 0, 11, 0 },
-	{ 0, 8, 0, 7, 0, 4, 0, 0, 2 },
-	{ 0, 0, 7, 0, 9, 14, 0, 0, 0 },
-	{ 0, 0, 0, 9, 0, 10, 0, 0, 0 },
-	{ 0, 0, 4, 0, 10, 0, 2, 0, 0 },
-	{ 0, 0, 0, 14, 0, 2, 0, 1, 6 },
-	{ 8, 11, 0, 0, 0, 0, 1, 0, 7 },
-	{ 0, 0, 2, 0, 0, 0, 6, 7, 0 }
-	};
+	if(!checa_path_e_valido(path))
+		return false;
 
-	inicializa_cidades();
-	inicializa_rotas(graph);
+	vector<vector<string>> matriz_distancias = extrai_matriz_distancia(path);
+	
+	matriz_distancias =	remove_elementos_desnecessarios(matriz_distancias);
+
+	inicializa_cidades(matriz_distancias.front());
+
+	// Remove a primeira linha com os nomes das cidades
+	matriz_distancias.erase(matriz_distancias.begin());
+
+	bool matriz_e_quadrada, matriz_e_simetrica, diagonal_e_zero;
+	
+	matriz_e_quadrada = checa_matriz_quadrada(matriz_distancias);
+	matriz_e_simetrica = checa_matriz_simetrica(matriz_distancias);
+	diagonal_e_zero = checa_matriz_diagonal(matriz_distancias);
+
+	if(!matriz_e_quadrada || !matriz_e_simetrica || !diagonal_e_zero)
+		return false;
+
+	inicializa_rotas(matriz_distancias);
+	return true;
 }
 
