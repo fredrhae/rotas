@@ -66,7 +66,9 @@ void inicializa_rotas(vector<vector<string>> matriz_distancias_string)
 			rotas_cidade_atual.push_back(rota_para_cidade);
 		}
 
-		caminhos.push_back(Caminho(rotas_cidade_atual));
+		Cidade origem_rota = cidades[rotas_cidade_atual.front().get_id_origem()];
+		Cidade destino_rota = cidades[rotas_cidade_atual.back().get_id_destino()];
+		caminhos.push_back(Caminho(origem_rota,destino_rota,rotas_cidade_atual));
 	}
 }
 

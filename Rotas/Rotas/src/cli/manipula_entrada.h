@@ -8,7 +8,7 @@ namespace rotas
 {
 	namespace cli
 	{
-		static class ManipulaEntrada {
+		class ManipulaEntrada {
 			public:
 				static bool inicializa_dados_partir_do_csv(std::string path);
 		};

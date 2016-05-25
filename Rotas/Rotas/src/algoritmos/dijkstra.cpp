@@ -8,13 +8,13 @@ namespace rotas
 	{
 		// Uma funcao auxiliar que acha a cidade com menor distância de um 
 		// conjunto de cidades ainda não inclusos na rota
-		int Dijkstra::minima_distancia_partindo_da_origem(double distancias[], bool marcador_distancia_encontrada[], int numero_cidades)
+		int Dijkstra::minima_distancia_partindo_da_origem(double distancias[], bool marcador_distancia_encontrada[], size_t numero_cidades)
 		{
 			// Initialize min value
 			double min = Dijkstra::max_distance;
 			int min_index;
 
-			for (int v = 0; v < numero_cidades; v++)
+			for (unsigned int v = 0; v < numero_cidades; v++)
 			{
 				if (marcador_distancia_encontrada[v] == false && distancias[v] <= min)
 				{
@@ -39,12 +39,12 @@ namespace rotas
 #endif
 		}
 
-		double* Dijkstra::inicializa_distancias_encontradas(int total_cidades)
+		double* Dijkstra::inicializa_distancias_encontradas(size_t total_cidades)
 		{
 			// Vetor com as menores distancias encontradas a partir da origem pra todas as demais cidades
 			double *distancias_encontradas = new double[total_cidades];
 
-			for (int i = 0; i < total_cidades; i++)
+			for (unsigned int i = 0; i < total_cidades; i++)
 			{
 				distancias_encontradas[i] = max_distance;
 			}
@@ -52,13 +52,13 @@ namespace rotas
 			return distancias_encontradas;
 		}
 
-		bool* inicializa_marcador_cidades_processadas(int total_cidades)
+		bool* inicializa_marcador_cidades_processadas(size_t total_cidades)
 		{
 			// Vetor com a marcacao das cidades que ja foram incluidas no menor caminho ou todas
 			// as distancias foram encontradas
 			bool *menor_distancia_encontrada = new bool[total_cidades];
 
-			for (int i = 0; i < total_cidades; i++)
+			for (unsigned int i = 0; i < total_cidades; i++)
 			{
 				menor_distancia_encontrada[i] = false;
 			}
@@ -66,7 +66,7 @@ namespace rotas
 			return menor_distancia_encontrada;
 		}
 
-		Caminho gera_menor_caminho_dijkstra(double distancias[], int n, std::vector<Cidade> cidades)
+		Caminho gera_menor_caminho_dijkstra(double distancias[], size_t n, std::vector<Cidade> cidades)
 		{
 			Caminho menores_distancias;
 #if !__DIJKSTRA_BUGADA

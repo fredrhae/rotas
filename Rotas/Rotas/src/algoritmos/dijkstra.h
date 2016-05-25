@@ -15,8 +15,8 @@ namespace rotas
 
 		class Dijkstra {
 			const double max_distance = std::numeric_limits<double>::infinity();
-			int minima_distancia_partindo_da_origem(double distancias[], bool marcador_distancia_encontrada[], int numero_cidades);
-			double* inicializa_distancias_encontradas(int);
+			int minima_distancia_partindo_da_origem(double distancias[], bool marcador_distancia_encontrada[], size_t numero_cidades);
+			double* inicializa_distancias_encontradas(size_t );
 		public:
 			Dijkstra() {};
 			void imprime_caminho_curto_dijkstra(Caminho menor_caminho, Cidade origem);

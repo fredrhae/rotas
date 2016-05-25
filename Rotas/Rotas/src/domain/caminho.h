@@ -15,7 +15,7 @@ namespace rotas
 			std::vector<Rota> trajeto;
 		public:
 			Caminho() {};
-			Caminho(std::vector<Rota> trajeto) : trajeto(trajeto) {};
+			Caminho(Cidade origem, Cidade destino, std::vector<Rota> trajeto) : origem(origem), destino(destino), trajeto(trajeto) {};
 			Cidade get_origem();
 			Cidade get_destino();
 			double get_distancia();
