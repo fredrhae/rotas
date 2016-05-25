@@ -6,15 +6,19 @@ namespace rotas
 {
 	namespace algoritmos
 	{
+		// Variaveis globais usadas pela maioria das funcoes
+		static std::vector<Cidade> cidades;
+		static Cidade origem;
+		
 		// Uma funcao auxiliar que acha a cidade com menor distância de um 
 		// conjunto de cidades ainda não inclusos na rota
-		int Dijkstra::minima_distancia_partindo_da_origem(double distancias[], bool marcador_distancia_encontrada[], size_t numero_cidades)
+		int Dijkstra::minima_distancia_partindo_da_origem(double distancias[], bool marcador_distancia_encontrada[])
 		{
 			// Initialize min value
 			double min = Dijkstra::max_distance;
 			int min_index;
 
-			for (unsigned int v = 0; v < numero_cidades; v++)
+			for (unsigned int v = 0; v < cidades.size(); v++)
 			{
 				if (marcador_distancia_encontrada[v] == false && distancias[v] <= min)
 				{
@@ -26,25 +30,21 @@ namespace rotas
 		}
 
 		// A utility function to print the constructed MST stored in parent[]
-		void Dijkstra::imprime_caminho_curto_dijkstra(Caminho menor_caminho, Cidade origem)
+		void Dijkstra::imprime_caminho_curto_dijkstra(Caminho menor_caminho)
 		{
-#if __DIJKSTRA_BUGADA
-			return;
-#else
 			std::string nome_origem = origem.get_nome();
 			std::cout << "Menores caminhos encontrados partindo da origem " + nome_origem + ":" << std::endl;
-			for (unsigned int i = 0; i < menor_caminho.distancias_entre_cidades.size(); i++)
-				std::cout << menor_caminho.distancias_entre_cidades[i].get_destino().get_nome() << "(" <<
-				i << ") - \t\t " << menor_caminho.distancias_entre_cidades[i].get_distancia() << std::endl;
-#endif
+			for (unsigned int i = 0; i < menor_caminho.get_trajeto().size(); i++)
+				std::cout << cidades[menor_caminho.get_trajeto()[i].get_id_destino()].get_nome() << "(" <<
+				i << ") - \t\t " << menor_caminho.get_trajeto()[i].get_distancia() << std::endl;
 		}
 
-		double* Dijkstra::inicializa_distancias_encontradas(size_t total_cidades)
+		double* Dijkstra::inicializa_distancias_encontradas()
 		{
 			// Vetor com as menores distancias encontradas a partir da origem pra todas as demais cidades
-			double *distancias_encontradas = new double[total_cidades];
+			double *distancias_encontradas = new double[cidades.size()];
 
-			for (unsigned int i = 0; i < total_cidades; i++)
+			for (unsigned int i = 0; i < cidades.size(); i++)
 			{
 				distancias_encontradas[i] = max_distance;
 			}
@@ -52,13 +52,13 @@ namespace rotas
 			return distancias_encontradas;
 		}
 
-		bool* inicializa_marcador_cidades_processadas(size_t total_cidades)
+		bool* inicializa_marcador_cidades_processadas()
 		{
 			// Vetor com a marcacao das cidades que ja foram incluidas no menor caminho ou todas
 			// as distancias foram encontradas
-			bool *menor_distancia_encontrada = new bool[total_cidades];
+			bool *menor_distancia_encontrada = new bool[cidades.size()];
 
-			for (unsigned int i = 0; i < total_cidades; i++)
+			for (unsigned int i = 0; i < cidades.size(); i++)
 			{
 				menor_distancia_encontrada[i] = false;
 			}
@@ -66,32 +66,41 @@ namespace rotas
 			return menor_distancia_encontrada;
 		}
 
-		Caminho gera_menor_caminho_dijkstra(double distancias[], size_t n, std::vector<Cidade> cidades)
+		Caminho gera_menor_caminho_dijkstra(double distancias[])
 		{
 			Caminho menores_distancias;
-#if !__DIJKSTRA_BUGADA
-			for (int index = 0; index < n; index++)
+
+			vector<Rota> rotas_menor_caminho;
+			for (unsigned int index = 0; index < cidades.size(); index++)
 			{
-				Rota rota_atual = Rota(cidades[index], distancias[index]);
-				menores_distancias.distancias_entre_cidades.push_back(rota_atual);
+				Rota rota_atual = Rota(origem.get_id(),index, distancias[index]);
+				rotas_menor_caminho.push_back(rota_atual);
 			}
-#endif
+
+			Cidade origem_rota = cidades[rotas_menor_caminho.front().get_id_origem()];
+			Cidade destino_rota = cidades[rotas_menor_caminho.back().get_id_destino()];
+			menores_distancias = Caminho(origem_rota, destino_rota, rotas_menor_caminho);
+
 			return menores_distancias;
 		}
 
 		// Funcao que implementa algoritmo de menor caminho de origem única do Dijkstra
 		// para um grafo dado representado como matriz de adjacência
-		Caminho Dijkstra::dijkstra_menor_caminho(std::vector<Caminho> distancias, Cidade origem, std::vector<Cidade> cidades)
+		Caminho Dijkstra::dijkstra_menor_caminho(std::vector<Caminho> distancias, Cidade origem_entrada, std::vector<Cidade> cidades_entrada)
 		{
 			// Se matriz de adjacencia for vazia, nao ha nada a fazer
 			if (distancias.size() < 1)
 				return Caminho();
+			
+			//Inicializa as variaveis globais
+			cidades = cidades_entrada;
+			origem = origem_entrada;
 
 			// Vetor com as menores distancias encontradas a partir da origem pra todas as demais cidades
-			double *distancias_encontradas = inicializa_distancias_encontradas(distancias.size());
+			double *distancias_encontradas = inicializa_distancias_encontradas();
 
 
-			bool *marcador_distancia_encontrada = inicializa_marcador_cidades_processadas(distancias.size());
+			bool *marcador_distancia_encontrada = inicializa_marcador_cidades_processadas();
 
 			// Distancia para a cidade de origem sempre e 0
 			distancias_encontradas[origem.get_id()] = 0;
@@ -101,7 +110,7 @@ namespace rotas
 			{
 				// Pega a menor distancia para a cidade do conjunto de cidades ainda nao processados.
 				// u e igual a origem na primeira iteracao
-				int u = minima_distancia_partindo_da_origem(distancias_encontradas, marcador_distancia_encontrada, distancias.size());
+				int u = minima_distancia_partindo_da_origem(distancias_encontradas, marcador_distancia_encontrada);
 
 				// Marca a cidade escolhida como processada
 				marcador_distancia_encontrada[u] = true;
@@ -113,11 +122,8 @@ namespace rotas
 					// como nao encontrada, se tiver um caminho da cidade u para v, e a distancia
 					// da origem apara cidade v passando por u for menor que a menor distancia
 					// atualmente setada em v
-#if __DIJKSTRA_BUGADA
-					double distancia_para_cidade_sendo_processada = 0.0;
-#else
-					double distancia_para_cidade_sendo_processada = distancias[u].distancias_entre_cidades[v].get_distancia();
-#endif
+
+					double distancia_para_cidade_sendo_processada = distancias[u].get_trajeto()[v].get_distancia();
 
 					double nova_distancia = distancias_encontradas[u] + distancia_para_cidade_sendo_processada;
 
@@ -132,10 +138,10 @@ namespace rotas
 			}
 
 			// Gera o caminho com as rotas encontradas
-			Caminho menor_caminho = gera_menor_caminho_dijkstra(distancias_encontradas, distancias.size(), cidades);
+			Caminho menor_caminho = gera_menor_caminho_dijkstra(distancias_encontradas);
 
 			// print the constructed distance array
-			imprime_caminho_curto_dijkstra(menor_caminho, origem);
+			imprime_caminho_curto_dijkstra(menor_caminho);
 
 			// Libera memoria de vetores alocados
 			delete[] distancias_encontradas;

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Rotas", "Rotas\Rotas.vcxproj", "{37235E36-F341-49F1-B34E-35915C456259}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -28,8 +28,8 @@ Global
 		{37235E36-F341-49F1-B34E-35915C456259}.Debug|Mixed Platforms.Build.0 = Debug|Win32
 		{37235E36-F341-49F1-B34E-35915C456259}.Debug|Win32.ActiveCfg = Debug|Win32
 		{37235E36-F341-49F1-B34E-35915C456259}.Debug|Win32.Build.0 = Debug|Win32
-		{37235E36-F341-49F1-B34E-35915C456259}.Debug|x64.ActiveCfg = Debug|x64
-		{37235E36-F341-49F1-B34E-35915C456259}.Debug|x64.Build.0 = Debug|x64
+		{37235E36-F341-49F1-B34E-35915C456259}.Debug|x64.ActiveCfg = Debug|Win32
+		{37235E36-F341-49F1-B34E-35915C456259}.Debug|x64.Build.0 = Debug|Win32
 		{37235E36-F341-49F1-B34E-35915C456259}.Debug|x86.ActiveCfg = Debug|Win32
 		{37235E36-F341-49F1-B34E-35915C456259}.Debug|x86.Build.0 = Debug|Win32
 		{37235E36-F341-49F1-B34E-35915C456259}.Release|Mixed Platforms.ActiveCfg = Release|Win32
@@ -45,6 +45,7 @@ Global
 		{726BDFF8-8447-4D3F-A612-01F8F23F69DB}.Debug|Win32.ActiveCfg = Debug|Win32
 		{726BDFF8-8447-4D3F-A612-01F8F23F69DB}.Debug|Win32.Build.0 = Debug|Win32
 		{726BDFF8-8447-4D3F-A612-01F8F23F69DB}.Debug|x64.ActiveCfg = Debug|Win32
+		{726BDFF8-8447-4D3F-A612-01F8F23F69DB}.Debug|x64.Build.0 = Debug|Win32
 		{726BDFF8-8447-4D3F-A612-01F8F23F69DB}.Debug|x86.ActiveCfg = Debug|Win32
 		{726BDFF8-8447-4D3F-A612-01F8F23F69DB}.Debug|x86.Build.0 = Debug|Win32
 		{726BDFF8-8447-4D3F-A612-01F8F23F69DB}.Release|Mixed Platforms.ActiveCfg = Release|Win32
@@ -59,6 +60,7 @@ Global
 		{F3B581C7-1450-4646-A3FF-A1D345867AAE}.Debug|Win32.ActiveCfg = Debug|Win32
 		{F3B581C7-1450-4646-A3FF-A1D345867AAE}.Debug|Win32.Build.0 = Debug|Win32
 		{F3B581C7-1450-4646-A3FF-A1D345867AAE}.Debug|x64.ActiveCfg = Debug|Win32
+		{F3B581C7-1450-4646-A3FF-A1D345867AAE}.Debug|x64.Build.0 = Debug|Win32
 		{F3B581C7-1450-4646-A3FF-A1D345867AAE}.Debug|x86.ActiveCfg = Debug|Win32
 		{F3B581C7-1450-4646-A3FF-A1D345867AAE}.Debug|x86.Build.0 = Debug|Win32
 		{F3B581C7-1450-4646-A3FF-A1D345867AAE}.Release|Mixed Platforms.ActiveCfg = Release|Win32
