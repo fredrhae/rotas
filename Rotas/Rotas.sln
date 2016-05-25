@@ -1,9 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Rotas", "Rotas\Rotas.vcxproj", "{37235E36-F341-49F1-B34E-35915C456259}"
+	ProjectSection(ProjectDependencies) = postProject
+		{726BDFF8-8447-4D3F-A612-01F8F23F69DB} = {726BDFF8-8447-4D3F-A612-01F8F23F69DB}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "GoogleTest", "GoogleTest\GoogleTest.vcxproj", "{726BDFF8-8447-4D3F-A612-01F8F23F69DB}"
 EndProject
