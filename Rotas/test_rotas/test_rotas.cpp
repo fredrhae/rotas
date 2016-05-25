@@ -54,7 +54,7 @@ protected:
 	}
 
 	void inicializa_rotas(double distancias[9][9]) {
-#if 0
+
 		caminhos = std::vector<domain::Caminho>();
 		init_cidades();
 
@@ -66,10 +66,10 @@ protected:
 				domain::Rota rota_para_cidade = domain::Rota(i, j, distancias[i][j]);
 				rotas_cidade_atual.push_back(rota_para_cidade);
 			}
-
-			caminhos.push_back(rotas_cidade_atual);
+			Cidade origem_rota = cidades[rotas_cidade_atual.front().get_id_origem()];
+			Cidade destino_rota = cidades[rotas_cidade_atual.back().get_id_destino()];
+			caminhos.push_back(Caminho(origem_rota, destino_rota, rotas_cidade_atual));
 		}
-#endif
 	}
 	virtual void SetUp() {
 		//Inicializa as cidades		

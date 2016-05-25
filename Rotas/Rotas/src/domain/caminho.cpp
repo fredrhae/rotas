@@ -13,6 +13,11 @@ namespace rotas
 		{
 			return destino;
 		}
+
+		std::vector<Rota> Caminho::get_trajeto()
+		{
+			return trajeto;
+		}
 		
 		double Caminho::get_distancia()
 		{
