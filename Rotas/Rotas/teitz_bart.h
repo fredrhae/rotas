@@ -49,7 +49,7 @@ namespace rotas
 			/**
 			 * Recupera a lista de vértices para serem analisadas pelo algoritmo.
 			 */
-			lista_vertices_t vertices_para_analisar(const lista_medianas_t& medianas);
+			lista_vertices_t vertices_para_analisar(const std::vector<Cidade>& cidades, const lista_medianas_t& medianas);
 
 			/**
 			 * Informa se todos os vértices foram analisados.
@@ -60,6 +60,11 @@ namespace rotas
 			 * Analisa se é uma mediana melhor. Retorna true se houve modificações no conjunto 'S'.
 			 */
 			bool analisa_vertice(vertice_t& vertice, lista_medianas_t& medianas);
+
+			/**
+			 * Procura uma mediana em uma lista. Retorna -1 se não encontrar.
+			 */
+			int procura_mediana(const lista_medianas_t& medianas, const mediana_t& mediana);
 		};
 	} // algoritmos
 } // rotas
