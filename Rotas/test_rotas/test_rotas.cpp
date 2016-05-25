@@ -54,6 +54,7 @@ protected:
 	}
 
 	void inicializa_rotas(double distancias[9][9]) {
+#if 0
 		caminhos = std::vector<domain::Caminho>();
 		init_cidades();
 
@@ -68,8 +69,8 @@ protected:
 
 			caminhos.push_back(rotas_cidade_atual);
 		}
+#endif
 	}
-
 	virtual void SetUp() {
 		//Inicializa as cidades		
 		string nomes[] = { "A", "B", "C", "D", "E", "F", "G", "H", "I" };
