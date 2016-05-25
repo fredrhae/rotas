@@ -44,7 +44,7 @@ void inicializa_cidades(vector<string> vetor_nomes_cidades)
 {
 	cidades = vector<Cidade>();
 
-	for (int i = 0; i < vetor_nomes_cidades.size(); i++)
+	for (unsigned int i = 0; i < vetor_nomes_cidades.size(); i++)
 	{
 		Cidade cidade_atual = Cidade(vetor_nomes_cidades.at(i), i);
 		cidades.push_back(cidade_atual);
@@ -56,11 +56,11 @@ void inicializa_rotas(vector<vector<string>> matriz_distancias_string)
 {
 	caminhos = vector<Caminho>();
 
-	for (int i = 0; i < matriz_distancias_string.size(); i++)
+	for (unsigned int i = 0; i < matriz_distancias_string.size(); i++)
 	{
 		vector<Rota> rotas_cidade_atual = vector<Rota>();
 
-		for (int j = 0; j < matriz_distancias_string[i].size(); j++)
+		for (unsigned int j = 0; j < matriz_distancias_string[i].size(); j++)
 		{
 			Rota rota_para_cidade = Rota(i, j, std::stod(matriz_distancias_string[i][j]));
 			rotas_cidade_atual.push_back(rota_para_cidade);
@@ -86,7 +86,7 @@ bool checa_path_e_valido(string path)
 bool checa_matriz_quadrada(vector<vector<string>> matriz_distancias)
 {
 	bool e_quadrada = true;
-	for (int i = 1; i < matriz_distancias.size(); i++)
+	for (unsigned int i = 1; i < matriz_distancias.size(); i++)
 	{
 		if (matriz_distancias.at(i).size() != cidades.size())
 		{
@@ -101,9 +101,9 @@ bool checa_matriz_quadrada(vector<vector<string>> matriz_distancias)
 bool checa_matriz_simetrica(vector<vector<string>> matriz_distancias)
 {
 	bool e_simetrica = true;
-	for (int i = 0; i < matriz_distancias.size(); i++)
+	for (unsigned int i = 0; i < matriz_distancias.size(); i++)
 	{
-		for (int j = 0; j < matriz_distancias.size(); j++)
+		for (unsigned int j = 0; j < matriz_distancias.size(); j++)
 		{
 			if (matriz_distancias[i][j] != matriz_distancias[j][i])
 			{
@@ -119,7 +119,7 @@ bool checa_matriz_simetrica(vector<vector<string>> matriz_distancias)
 bool checa_matriz_diagonal(vector<vector<string>> matriz_distancias)
 {
 	bool diagonal_e_zero = true;
-	for (int i = 0; i < matriz_distancias.size(); i++)
+	for (unsigned int i = 0; i < matriz_distancias.size(); i++)
 	{
 		if (matriz_distancias[i][i] != "0")
 		{
@@ -136,7 +136,7 @@ vector<vector<string>> remove_elementos_desnecessarios(vector<vector<string>> ma
 	vector<vector<string>> nova_matriz_distancias = matriz_distancias;
 
 	// Remove a primeira coluna de todas as linhas
-	for (int i = 0; i < nova_matriz_distancias.size(); i++)
+	for (unsigned int i = 0; i < nova_matriz_distancias.size(); i++)
 	{
 		nova_matriz_distancias[i].erase(nova_matriz_distancias[i].begin());
 	}

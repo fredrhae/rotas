@@ -107,18 +107,18 @@ protected:
 TEST_F(RotasTest, validacaoCidades)
 {
 	cout << "Cidades testadas :" << endl;
-	for (int i = 0; i < cidades.size(); i++) {
+	for (unsigned int i = 0; i < cidades.size(); i++) {
 		cout << cidades[i].get_nome() << " ";
 	}
 	cout << endl;
 
 	cout << "---------------------------" << endl;
 
-	for (int i = 0; i < cidades.size(); i++) {
+	for (unsigned int i = 0; i < cidades.size(); i++) {
 		Cidade cidade = cidades[i];
 		vector<Rota> rotas = cidade.get_rotas();
 		cout << "Rotas partindo de " << cidade.get_nome() << ":" << endl;
-		for (int j = 0; j < rotas.size(); j++) {
+		for (unsigned int j = 0; j < rotas.size(); j++) {
 			Rota rota = rotas[j];
 			cout << rota.get_id_origem() << " até " << rota.get_id_destino() << " = " << rota.get_distancia() << endl;
 		}

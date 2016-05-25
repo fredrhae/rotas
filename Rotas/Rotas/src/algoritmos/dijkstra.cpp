@@ -71,7 +71,7 @@ namespace rotas
 			Caminho menores_distancias;
 
 			vector<Rota> rotas_menor_caminho;
-			for (int index = 0; index < cidades.size(); index++)
+			for (unsigned int index = 0; index < cidades.size(); index++)
 			{
 				Rota rota_atual = Rota(origem.get_id(),index, distancias[index]);
 				rotas_menor_caminho.push_back(rota_atual);
