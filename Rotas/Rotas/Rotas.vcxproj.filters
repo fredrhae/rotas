@@ -42,6 +42,9 @@
     <ClCompile Include="teitz_bart.cpp">
       <Filter>src\algoritmos</Filter>
     </ClCompile>
+    <ClCompile Include="src\domain\context.cpp">
+      <Filter>src\domain</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\cli\exibicao.h">
@@ -67,6 +70,9 @@
     </ClInclude>
     <ClInclude Include="teitz_bart.h">
       <Filter>src\algoritmos</Filter>
+    </ClInclude>
+    <ClInclude Include="src\domain\context.h">
+      <Filter>src\domain</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

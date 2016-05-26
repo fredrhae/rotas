@@ -5,15 +5,19 @@
 #include "algoritmos/gillet_johnson.h"
 #include "algoritmos/dijkstra.h"
 #include "domain/caminho.h"
+#include "cli/manipula_entrada.h"
+#include "domain/context.h"
 
 using namespace std;
 using namespace rotas;
 using namespace domain;
+using namespace cli;
 
 class RotasTest : public ::testing::Test {
 protected:
 	std::vector<domain::Caminho> caminhos;
 	std::vector<domain::Cidade> cidades;
+	Context rotas_context;
 
 	double graph[9][9] = {
 		{  0,  4,  0,  0,  0,  0,  0,  8,  0 },
@@ -124,6 +128,26 @@ TEST_F(RotasTest, validacaoCidades)
 		}
 		cout << endl;
 	}
+}
+
+TEST_F(RotasTest, validacaoInicializacaoDoCsv)
+{
+	cout << "Testando inicializacao dos dados a partir do CSV" << endl;
+
+	cout << endl;
+
+	string path_do_csv = "../../dados_entrada/cidades_atendidas.csv";
+	
+	rotas_context = ManipulaEntrada::inicializa_dados_partir_do_csv(path_do_csv);
+	
+	EXPECT_EQ(rotas_context.get_cidades_atendidas().size(),32);
+	
+	vector<vector<Rota>> matriz = rotas_context.get_matriz_distancias();
+	for (unsigned int i = 0; i < rotas_context.get_matriz_distancias().size(); i++)
+	{
+		EXPECT_EQ(matriz[i].size(),32);
+	}
+	cout << "---------------------------" << endl;
 }
 
 TEST_F(DijkstraTest, validacaoTrivial)

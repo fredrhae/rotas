@@ -2,8 +2,6 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
-#include "domain\cidade.h"
-#include "domain\caminho.h"
 #include "cli\manipula_entrada.h"
 
 using namespace rotas::domain;
@@ -11,7 +9,7 @@ using namespace rotas::cli;
 using namespace std;
 
 vector<Cidade> cidades;
-vector<Caminho> caminhos;
+vector<vector<Rota>> matriz_distancias;
 
 vector<string> extrai_colunas_matriz(string linha_matriz)
 {
@@ -30,14 +28,14 @@ vector<vector<string>> extrai_matriz_distancia(string path)
 {
 	ifstream infile(path);
 	string line = "";
-	vector<vector<string>> matriz_distancias;
+	vector<vector<string>> matriz_distancias_string;
 	while (getline(infile, line))
 	{
 		vector<string> colunas_matriz = extrai_colunas_matriz(line);
-		matriz_distancias.push_back(colunas_matriz);
+		matriz_distancias_string.push_back(colunas_matriz);
 	}
 
-	return matriz_distancias;
+	return matriz_distancias_string;
 }
 
 void inicializa_cidades(vector<string> vetor_nomes_cidades)
@@ -49,12 +47,11 @@ void inicializa_cidades(vector<string> vetor_nomes_cidades)
 		Cidade cidade_atual = Cidade(vetor_nomes_cidades.at(i), i);
 		cidades.push_back(cidade_atual);
 	}
-
 }
 
 void inicializa_rotas(vector<vector<string>> matriz_distancias_string)
 {
-	caminhos = vector<Caminho>();
+	matriz_distancias = vector<vector<Rota>>();
 
 	for (unsigned int i = 0; i < matriz_distancias_string.size(); i++)
 	{
@@ -66,9 +63,7 @@ void inicializa_rotas(vector<vector<string>> matriz_distancias_string)
 			rotas_cidade_atual.push_back(rota_para_cidade);
 		}
 
-		Cidade origem_rota = cidades[rotas_cidade_atual.front().get_id_origem()];
-		Cidade destino_rota = cidades[rotas_cidade_atual.back().get_id_destino()];
-		caminhos.push_back(Caminho(origem_rota,destino_rota,rotas_cidade_atual));
+		matriz_distancias.push_back(rotas_cidade_atual);
 	}
 }
 
@@ -143,31 +138,34 @@ vector<vector<string>> remove_elementos_desnecessarios(vector<vector<string>> ma
 	
 	return nova_matriz_distancias;
 }
-bool ManipulaEntrada::inicializa_dados_partir_do_csv(string path)
+Context ManipulaEntrada::inicializa_dados_partir_do_csv(string path)
 {
 
 	if(!checa_path_e_valido(path))
-		return false;
+		return Context();
 
-	vector<vector<string>> matriz_distancias = extrai_matriz_distancia(path);
+	vector<vector<string>> matriz_distancias_string = extrai_matriz_distancia(path);
 	
-	matriz_distancias =	remove_elementos_desnecessarios(matriz_distancias);
+	matriz_distancias_string =	remove_elementos_desnecessarios(matriz_distancias_string);
 
-	inicializa_cidades(matriz_distancias.front());
+	inicializa_cidades(matriz_distancias_string.front());
 
 	// Remove a primeira linha com os nomes das cidades
-	matriz_distancias.erase(matriz_distancias.begin());
+	matriz_distancias_string.erase(matriz_distancias_string.begin());
 
 	bool matriz_e_quadrada, matriz_e_simetrica, diagonal_e_zero;
 	
-	matriz_e_quadrada = checa_matriz_quadrada(matriz_distancias);
-	matriz_e_simetrica = checa_matriz_simetrica(matriz_distancias);
-	diagonal_e_zero = checa_matriz_diagonal(matriz_distancias);
+	matriz_e_quadrada = checa_matriz_quadrada(matriz_distancias_string);
+	matriz_e_simetrica = checa_matriz_simetrica(matriz_distancias_string);
+	diagonal_e_zero = checa_matriz_diagonal(matriz_distancias_string);
 
 	if(!matriz_e_quadrada || !matriz_e_simetrica || !diagonal_e_zero)
-		return false;
+		return Context();
 
-	inicializa_rotas(matriz_distancias);
-	return true;
+	inicializa_rotas(matriz_distancias_string);
+
+	Context context_inicializado = Context(cidades, matriz_distancias);
+	
+	return context_inicializado;
 }
 

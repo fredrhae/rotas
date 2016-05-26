@@ -3,6 +3,9 @@
 
 #include <string>
 #include <vector>
+#include "domain/context.h"
+
+using namespace rotas::domain;
 
 namespace rotas
 {
@@ -10,7 +13,7 @@ namespace rotas
 	{
 		class ManipulaEntrada {
 			public:
-				static bool inicializa_dados_partir_do_csv(std::string path);
+				static Context inicializa_dados_partir_do_csv(std::string path);
 		};
 	}
 }
