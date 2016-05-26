@@ -15,13 +15,13 @@ namespace rotas {
 			int id;
 			bool mediana = false;
 			int id_mediana;
-			vector<Rota> rotas_possiveis;
+			vector<Rota> rotas;
 
 		public:
 			Cidade() {};
 			Cidade(string nome, int id) : nome(nome), id(id) {};
 			Cidade(string nome, int id, vector<Rota> rotas_possiveis) : 
-				nome(nome), id(id), rotas_possiveis(rotas_possiveis) {};
+				nome(nome), id(id), rotas(rotas_possiveis) {};
 			
 			string get_nome();
 			int get_id();
@@ -32,6 +32,8 @@ namespace rotas {
 			void add_rota(Rota rota);
 			void set_rotas(vector<Rota> rotas);
 			vector<Rota> get_rotas();
+			
+			double diferenca;
 		};
 	} // domain
 } // rotas

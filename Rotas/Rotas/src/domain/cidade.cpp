@@ -32,17 +32,17 @@ namespace rotas
 
 		void Cidade::add_rota(Rota rota)
 		{
-			rotas_possiveis.push_back(rota);
+			rotas.push_back(rota);
 		}
 
 		void Cidade::set_rotas(vector<Rota> rotas)
 		{
-			rotas_possiveis = rotas;
+			rotas = rotas;
 		}
 
 		vector<Rota> Cidade::get_rotas()
 		{
-			return rotas_possiveis;
+			return rotas;
 		}
 
 	} // domain

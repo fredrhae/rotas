@@ -16,7 +16,7 @@ namespace rotas
 			GilletJohnson() {};
 			~GilletJohnson() {};
 
-			void atribui_medianas(std::vector<Caminho> distancias, std::vector<Cidade> cidades);
+			void encontra_medianas(std::vector<Cidade> cidades);
 		};
 	} // algoritmos
 } // rotas

@@ -158,7 +158,7 @@ protected:
 
 TEST_F(GilletJohnsonTest, validacaoTrivial)
 {
-	gillet_johnson.atribui_medianas(caminhos, cidades);
+	gillet_johnson.encontra_medianas(cidades);
 
 	EXPECT_EQ(a, 5);
 }
