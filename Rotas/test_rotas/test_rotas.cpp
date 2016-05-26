@@ -94,14 +94,15 @@ class DijkstraTest : public ::RotasTest {
 protected:
 	int a;
 	algoritmos::Dijkstra dijkstra;
+	Context rotas_context;
 
 	virtual void SetUp() {
 		RotasTest::SetUp();
 		inicializa_rotas(graph);
 
-		domain::Caminho *menor_caminho = new domain::Caminho[9];
+		vector<vector<Rota>> menor_caminho = vector<vector<Rota>>();
 		for (int i = 0; i < 9; i++) {
-			menor_caminho[i] = dijkstra.dijkstra_menor_caminho(caminhos, cidades.at(i), cidades);
+			menor_caminho.push_back(dijkstra.dijkstra_menor_caminho(rotas_context, cidades.at(i)));
 		}
 
 		a = 7;
@@ -145,6 +146,8 @@ TEST_F(RotasTest, validacaoInicializacaoDoCsv)
 	vector<vector<Rota>> matriz = rotas_context.get_matriz_distancias();
 	for (unsigned int i = 0; i < rotas_context.get_matriz_distancias().size(); i++)
 	{
+		cout << "Cidade " + rotas_context.get_cidades_atendidas()[i].get_nome()
+			<< " sendo validada..." << endl;
 		EXPECT_EQ(matriz[i].size(),32);
 	}
 	cout << "---------------------------" << endl;
@@ -152,12 +155,35 @@ TEST_F(RotasTest, validacaoInicializacaoDoCsv)
 
 TEST_F(DijkstraTest, validacaoTrivial)
 {
-	domain::Caminho *menor_caminho = new domain::Caminho[9];
-	for (int i = 0; i < 9; i++) {
-		menor_caminho[i] = dijkstra.dijkstra_menor_caminho(caminhos, cidades.at(i), cidades);
+
+	string path_do_csv = "../../dados_entrada/teste_1_simples.csv";
+
+	rotas_context = ManipulaEntrada::inicializa_dados_partir_do_csv(path_do_csv);
+
+	vector<vector<Rota>> menores_caminhos_todas_cidades = vector<vector<Rota>>();
+	for (int i = 0; i < rotas_context.get_cidades_atendidas().size() ; i++) {
+		menores_caminhos_todas_cidades.push_back(dijkstra.dijkstra_menor_caminho(rotas_context, cidades.at(i)));
 	}
 
 	EXPECT_EQ(a, 7);
+}
+
+TEST_F(DijkstraTest, validacaoDistanciasGrafoSimples)
+{
+	cout << "Validacao para verificar se distancias encontradas estao corretas." << endl;
+
+	string path_do_csv = "../../dados_entrada/teste_1_simples.csv";
+
+	rotas_context = ManipulaEntrada::inicializa_dados_partir_do_csv(path_do_csv);
+
+	vector<Rota> menores_caminhos_a = dijkstra.dijkstra_menor_caminho(rotas_context, cidades.at(0));
+
+	vector<double> distancias_origem_a = { 0,4,12,19,21,11,9,8,14 };
+	for (int i = 0; i < rotas_context.get_cidades_atendidas().size(); i++)
+	{
+		EXPECT_EQ(menores_caminhos_a[i].get_distancia(), distancias_origem_a[i]);
+	}
+	cout << "---------------------------" << endl;
 }
 
 class GilletJohnsonTest : public ::RotasTest {

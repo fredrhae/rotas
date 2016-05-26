@@ -24,6 +24,11 @@ double Context::get_distancia(Cidade origem, Cidade destino)
 	return matriz_distancias[origem.get_id()][destino.get_id()].get_distancia();
 }
 
+double Context::get_distancia(int id_cidade_origem, int id_cidade_destino)
+{
+	return matriz_distancias[id_cidade_origem][id_cidade_destino].get_distancia();
+}
+
 
 
 

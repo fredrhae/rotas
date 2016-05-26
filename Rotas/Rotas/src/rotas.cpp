@@ -24,10 +24,10 @@ int main()
 	Exibicao::exibe_instrucoes();
 
 	cout << "----- Dijkstra -------" << endl;
-	Caminho *menor_caminho = new Caminho[9];
-	for (int i = 0; i < 9; i++) {
-		menor_caminho[i] = dijkstra.dijkstra_menor_caminho(caminhos, cidades.at(i),cidades);
-	}
+	//Caminho *menor_caminho = new Caminho[9];
+	//for (int i = 0; i < 9; i++) {
+	//	menor_caminho[i] = dijkstra.dijkstra_menor_caminho(caminhos, cidades.at(i),cidades);
+	//}
 
 	cout << endl;
 	

@@ -23,6 +23,7 @@ namespace rotas
 				std::vector<std::vector<Rota>> get_matriz_distancias();
 				void set_matriz_distancias(std::vector<std::vector<Rota>> nova_matriz_distancias);
 				double get_distancia(Cidade origem, Cidade destino);
+				double get_distancia(int id_cidade_origem, int id_cidade_destino);
 		};
 	}
 }

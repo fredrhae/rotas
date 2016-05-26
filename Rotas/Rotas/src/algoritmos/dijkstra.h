@@ -3,7 +3,7 @@
 
 #include <limits>
 #include <vector>
-#include "domain/caminho.h"
+#include "domain/context.h"
 
 namespace rotas
 {
@@ -17,8 +17,8 @@ namespace rotas
 			double* inicializa_distancias_encontradas();
 		public:
 			Dijkstra() {};
-			void imprime_caminho_curto_dijkstra(Caminho menor_caminho);
-			Caminho dijkstra_menor_caminho(std::vector<Caminho> distancias, Cidade origem, std::vector<Cidade> cidades);
+			void imprime_caminho_curto_dijkstra(vector<Rota> menor_caminho);
+			vector<Rota> dijkstra_menor_caminho(Context dados_entrada, Cidade origem);
 		};
 	} // algoritmos
 } // rotas
