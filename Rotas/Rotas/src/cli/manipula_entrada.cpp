@@ -11,32 +11,6 @@ using namespace std;
 vector<Cidade> cidades;
 vector<vector<Rota>> matriz_distancias;
 
-vector<string> extrai_colunas_matriz(string linha_matriz)
-{
-	stringstream linha_matriz_stream(linha_matriz);
-	string word = "";
-	vector<string> colunas_da_linha;
-	while (getline(linha_matriz_stream, word, ';'))
-	{
-		colunas_da_linha.push_back(word);
-	}
-	
-	return colunas_da_linha;
-}
-
-vector<vector<string>> extrai_matriz_distancia(string path)
-{
-	ifstream infile(path);
-	string line = "";
-	vector<vector<string>> matriz_distancias_string;
-	while (getline(infile, line))
-	{
-		vector<string> colunas_matriz = extrai_colunas_matriz(line);
-		matriz_distancias_string.push_back(colunas_matriz);
-	}
-
-	return matriz_distancias_string;
-}
 
 void inicializa_cidades(vector<string> vetor_nomes_cidades)
 {
@@ -64,6 +38,14 @@ void inicializa_rotas(vector<vector<string>> matriz_distancias_string)
 		}
 
 		matriz_distancias.push_back(rotas_cidade_atual);
+	}
+}
+
+void inicializa_rotas_em_cidades()
+{
+	for (unsigned int i = 0; i < cidades.size(); i++)
+	{
+		cidades[i].set_rotas(matriz_distancias[i]);
 	}
 }
 
@@ -138,6 +120,32 @@ vector<vector<string>> remove_elementos_desnecessarios(vector<vector<string>> ma
 	
 	return nova_matriz_distancias;
 }
+vector<string> extrai_colunas_matriz(string linha_matriz)
+{
+	stringstream linha_matriz_stream(linha_matriz);
+	string word = "";
+	vector<string> colunas_da_linha;
+	while (getline(linha_matriz_stream, word, ';'))
+	{
+		colunas_da_linha.push_back(word);
+	}
+
+	return colunas_da_linha;
+}
+
+vector<vector<string>> extrai_matriz_distancia(string path)
+{
+	ifstream infile(path);
+	string line = "";
+	vector<vector<string>> matriz_distancias_string;
+	while (getline(infile, line))
+	{
+		vector<string> colunas_matriz = extrai_colunas_matriz(line);
+		matriz_distancias_string.push_back(colunas_matriz);
+	}
+
+	return matriz_distancias_string;
+}
 Context ManipulaEntrada::inicializa_dados_partir_do_csv(string path)
 {
 
@@ -164,8 +172,12 @@ Context ManipulaEntrada::inicializa_dados_partir_do_csv(string path)
 
 	inicializa_rotas(matriz_distancias_string);
 
+	inicializa_rotas_em_cidades();
+
 	Context context_inicializado = Context(cidades, matriz_distancias);
 	
+	vector<Rota> teste = context_inicializado.get_cidades_atendidas()[0].get_rotas();
+
 	return context_inicializado;
 }
 

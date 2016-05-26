@@ -13,9 +13,6 @@ using namespace rotas::algoritmos;
 using namespace rotas::domain;
 using namespace rotas::cli;
 
-extern vector<Cidade> cidades;
-extern vector<Caminho> caminhos;
-
 int main()
 {
 

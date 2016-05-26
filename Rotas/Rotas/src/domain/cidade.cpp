@@ -35,9 +35,9 @@ namespace rotas
 			rotas.push_back(rota);
 		}
 
-		void Cidade::set_rotas(vector<Rota> rotas)
+		void Cidade::set_rotas(vector<Rota> novas_rotas)
 		{
-			rotas = rotas;
+			rotas = novas_rotas;
 		}
 
 		vector<Rota> Cidade::get_rotas()
