@@ -15,7 +15,7 @@ namespace rotas
 				{
 					vertice_t vertice = para_analisar.at(i);
 
-					bool modificou = analisa_vertice(vertice, medianas);
+					bool modificou = analisa_vertice(vertice, medianas, para_analisar);
 
 					if (modificou == true)
 					{
@@ -69,11 +69,52 @@ namespace rotas
 			return true;
 		}
 
-		bool TeitzBart::analisa_vertice(vertice_t& vertice, lista_medianas_t& medianas)
+		bool TeitzBart::analisa_vertice(
+			vertice_t& vertice /* Vi */,
+			lista_medianas_t& medianas /* Conjunto 'S' */,
+			lista_vertices_t& para_analisar /* Conjunto { V - S } */)
 		{
 			// TODO
 
-			return false;
+			/// (a) selecione um vértice 'Vi' pertencente a { V - S }, "não analisado", 
+			///		e calcule a redução A do número de transmissão, para todo 'Vj'
+			///		pertencente a 'S': Aij = NT(S) - NT(S U{ Vi } -{Vj})
+			/// (b) faça Aij0 = Max[Aij];
+			/// (c) se Aij0 > 0 faça S = S U{ Vi } -{Vj0} e rotule Vj0 como "analisado";
+			/// (d) se Aij0 <= 0, rotule Vi como "analisado"
+
+			double * reducoes = new double[medianas.size()];
+			double maximo = 0; // Aij0
+
+			for (unsigned int i = 0; i < medianas.size(); i++)
+			{
+				mediana_t vj = medianas.at(i);
+				/// Número de Transmissão (NT): é a soma das menores distâncias existentes entre o vértice Vj e todos os outros vértices
+				/// TODO: Aij = NT(S) - NT(S U { Vi } - { Vj })
+				//reducoes[i] = TeitzBart::soma_menores_distancias(vertice.cidade, medianas) - TeitzBart::soma_menores_distancias(cidade, ); 
+
+				if (reducoes[i] > maximo)
+				{
+					// Faça Aij0 = Max[Aij];
+
+					maximo = reducoes[i];
+				}
+
+				if (maximo > 0)
+				{
+					// Se Aij0 > 0 faça S = S U { Vi } - { Vj0 } e rotule Vj0 como "analisado";
+
+					return true; // Houve modificação no conjunto 'S'
+				}
+				else
+				{
+					// Se Aij0 <= 0, rotule Vi como "analisado"
+
+					vertice.analisado = true;
+				}
+			}
+
+			return false; // O conjunto 'S' NÃO foi modificado
 		}
 
 		int TeitzBart::procura_mediana(const lista_medianas_t& medianas, const mediana_t& mediana)
@@ -91,6 +132,25 @@ namespace rotas
 			}
 
 			return -1;
+		}
+
+		double TeitzBart::soma_menores_distancias(const Cidade& cidade, const std::vector<Cidade>& cidades)
+		{
+			// TODO
+
+			return 0.0;
+		}
+
+		std::vector<Cidade> TeitzBart::vertices_para_cidades(const  lista_vertices_t& vertices)
+		{
+			std::vector<Cidade> cidades;
+
+			for (unsigned int i = 0; i < vertices.size(); i++)
+			{
+				cidades.push_back(vertices.at(i).cidade);
+			}
+
+			return cidades;
 		}
 	} // algoritmos
 } // rotas
