@@ -4,6 +4,7 @@
 #include <vector>
 #include "domain/caminho.h"
 #include "domain/cidade.h"
+#include "domain/context.h"
 
 namespace rotas
 {
@@ -39,7 +40,7 @@ namespace rotas
 			/**
 			 * Localizas as cidades que são medianas considerando a distância entre as demais.
 			 */
-			std::vector<Cidade> localiza_medianas(const std::vector<Cidade>& cidades);
+			std::vector<Cidade> localiza_medianas(Context& context);
 
 		private:
 
@@ -62,7 +63,7 @@ namespace rotas
 			/**
 			 * Analisa se é uma mediana melhor. Retorna true se houve modificações no conjunto 'S'.
 			 */
-			bool analisa_vertice(vertice_t& vertice, lista_medianas_t& medianas, lista_vertices_t& para_analisar);
+			bool analisa_vertice(vertice_t& vertice, lista_medianas_t& medianas, lista_vertices_t& para_analisar, Context& context);
 
 			/**
 			 * Procura uma mediana em uma lista. Retorna -1 se não encontrar.
@@ -72,7 +73,7 @@ namespace rotas
 			/**
 			 * É soma das menores distâncias existentes entre uma cidade e todos as outras.
 			 */
-			static double soma_menores_distancias(const Cidade& cidade, const std::vector<Cidade>& cidades);
+			static double soma_menores_distancias(Cidade& cidade, Context& context);
 
 			/**
 			 * Converte uma lista de vertices para uma lista de cidades;

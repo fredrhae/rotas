@@ -1,13 +1,18 @@
 #include "teitz_bart.h"
 
+#include <ctime>
+
+#include "dijkstra.h"
+
 namespace rotas
 {
 	namespace algoritmos
 	{
-		std::vector<Cidade> TeitzBart::localiza_medianas(const std::vector<Cidade>& cidades)
+		std::vector<Cidade> TeitzBart::localiza_medianas(Context& context)
 		{
-			lista_medianas_t medianas = seleciona_medianas_aleatoriamente(cidades); // conjunto 'S'
-			lista_vertices_t para_analisar = vertices_para_analisar(cidades, medianas); // { V - S }
+			std::vector<Cidade> cidades = context.get_cidades_atendidas(); // Conjunto 'V'
+			lista_medianas_t medianas = seleciona_medianas_aleatoriamente(cidades); // Conjunto 'S'
+			lista_vertices_t para_analisar = vertices_para_analisar(cidades, medianas); // Conjunto { V - S }
 
 			while (todos_foram_analisados(para_analisar) == false)
 			{
@@ -15,7 +20,7 @@ namespace rotas
 				{
 					vertice_t vertice = para_analisar.at(i);
 
-					bool modificou = analisa_vertice(vertice, medianas, para_analisar);
+					bool modificou = analisa_vertice(vertice, medianas, para_analisar, context);
 
 					if (modificou == true)
 					{
@@ -29,12 +34,23 @@ namespace rotas
 
 		lista_medianas_t TeitzBart::seleciona_medianas_aleatoriamente(const std::vector<Cidade>& cidades)
 		{
-			// TODO
+			srand((unsigned int)time(NULL));
 
-			return lista_medianas_t();
+			lista_medianas_t medianas;
+
+			unsigned int tamanho = rand() % cidades.size();
+
+			for (unsigned int i = 0; i < tamanho; i++)
+			{
+				unsigned int index = rand() % (cidades.size() - 1);
+
+				medianas.push_back(cidades.at(index));
+			}
+
+			return medianas;
 		}
 
-		lista_vertices_t TeitzBart::vertices_para_analisar(const std::vector<Cidade>& cidades, const lista_medianas_t& medianas)
+		lista_vertices_t TeitzBart::vertices_para_analisar(const std::vector<Cidade>& cidades /* Conjunto 'V' */, const lista_medianas_t& medianas /* Conjunto 'S' */)
 		{
 			lista_vertices_t vertices;
 
@@ -70,28 +86,22 @@ namespace rotas
 		}
 
 		bool TeitzBart::analisa_vertice(
-			vertice_t& vertice /* Vi */,
-			lista_medianas_t& medianas /* Conjunto 'S' */,
-			lista_vertices_t& para_analisar /* Conjunto { V - S } */)
+			vertice_t& vertice, /* Vi */
+			lista_medianas_t& medianas, /* Conjunto 'S' */
+			lista_vertices_t& para_analisar, /* Conjunto { V - S } */
+			Context& context)
 		{
-			// TODO
-
-			/// (a) selecione um vértice 'Vi' pertencente a { V - S }, "não analisado", 
-			///		e calcule a redução A do número de transmissão, para todo 'Vj'
-			///		pertencente a 'S': Aij = NT(S) - NT(S U{ Vi } -{Vj})
-			/// (b) faça Aij0 = Max[Aij];
-			/// (c) se Aij0 > 0 faça S = S U{ Vi } -{Vj0} e rotule Vj0 como "analisado";
-			/// (d) se Aij0 <= 0, rotule Vi como "analisado"
-
 			double * reducoes = new double[medianas.size()];
 			double maximo = 0; // Aij0
 
 			for (unsigned int i = 0; i < medianas.size(); i++)
 			{
 				mediana_t vj = medianas.at(i);
-				/// Número de Transmissão (NT): é a soma das menores distâncias existentes entre o vértice Vj e todos os outros vértices
-				/// TODO: Aij = NT(S) - NT(S U { Vi } - { Vj })
-				//reducoes[i] = TeitzBart::soma_menores_distancias(vertice.cidade, medianas) - TeitzBart::soma_menores_distancias(cidade, ); 
+				
+				// Número de Transmissão (NT): é a soma das menores distâncias existentes entre o vértice Vj e todos os outros vértices
+				// TODO: Aij = NT(S) - NT(S U { Vi } - { Vj })
+				// TODO: CORRETO?
+				reducoes[i] = TeitzBart::soma_menores_distancias(vertice.cidade, context) - TeitzBart::soma_menores_distancias(vj, context); 
 
 				if (reducoes[i] > maximo)
 				{
@@ -103,6 +113,8 @@ namespace rotas
 				if (maximo > 0)
 				{
 					// Se Aij0 > 0 faça S = S U { Vi } - { Vj0 } e rotule Vj0 como "analisado";
+
+					medianas.assign(i, vj); // TODO: CORRETO?
 
 					return true; // Houve modificação no conjunto 'S'
 				}
@@ -134,11 +146,18 @@ namespace rotas
 			return -1;
 		}
 
-		double TeitzBart::soma_menores_distancias(const Cidade& cidade, const std::vector<Cidade>& cidades)
+		double TeitzBart::soma_menores_distancias(Cidade& cidade, Context& context)
 		{
-			// TODO
+			Dijkstra dijkstra;
+			std::vector<Rota> rotas = dijkstra.dijkstra_menor_caminho(context, cidade);
+			double soma = 0.0;
 
-			return 0.0;
+			for (unsigned int i = 0; i < rotas.size(); i++)
+			{
+				soma += rotas.at(i).get_distancia();
+			}
+
+			return soma;
 		}
 
 		std::vector<Cidade> TeitzBart::vertices_para_cidades(const  lista_vertices_t& vertices)
