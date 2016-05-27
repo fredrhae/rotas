@@ -68,6 +68,16 @@ namespace rotas
 			 * Procura uma mediana em uma lista. Retorna -1 se não encontrar.
 			 */
 			int procura_mediana(const lista_medianas_t& medianas, const mediana_t& mediana);
+
+			/**
+			 * É soma das menores distâncias existentes entre uma cidade e todos as outras.
+			 */
+			static double soma_menores_distancias(const Cidade& cidade, const std::vector<Cidade>& cidades);
+
+			/**
+			 * Converte uma lista de vertices para uma lista de cidades;
+			 */
+			static std::vector<Cidade> vertices_para_cidades(const  lista_vertices_t& vertices);
 		};
 	} // algoritmos
 } // rotas
