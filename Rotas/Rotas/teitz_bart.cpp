@@ -15,7 +15,7 @@ namespace rotas
 				{
 					vertice_t vertice = para_analisar.at(i);
 
-					bool modificou = analisa_vertice(vertice, medianas);
+					bool modificou = analisa_vertice(vertice, medianas, para_analisar);
 
 					if (modificou == true)
 					{
@@ -69,11 +69,45 @@ namespace rotas
 			return true;
 		}
 
-		bool TeitzBart::analisa_vertice(vertice_t& vertice, lista_medianas_t& medianas)
+		bool TeitzBart::analisa_vertice(
+			vertice_t& vertice /* Vi */, 
+			lista_medianas_t& medianas /* Conjunto 'S' */, 
+			lista_vertices_t& para_analisar /* Conjunto { V - S } */)
 		{
+			// (a) selecione um vértice 'Vi' pertencente a { V - S }, "não analisado", 
+			//		e calcule a redução A do número de transmissão, para todo 'Vj'
+			//		pertencente a 'S': Aij = NT(S) - NT(S U{ Vi } -{Vj})
+			// (b) faça Aij0 = Max[Aij];
+			// (c) se Aij0 > 0 faça S = S U{ Vi } -{Vj0} e rotule Vj0 como "analisado";
+			// (d) se Aij0 <= 0, rotule Vi como "analisado"
+
 			// TODO
 
-			return false;
+			double * reducoes = new double[medianas.size()];
+			double maximo = 0;
+
+			for (unsigned int i = 0; i < medianas.size(); i++)
+			{
+				mediana_t vj = medianas.at(i);
+				// Número de Transmissão (NT): é a soma das menores distâncias existentes entre o vértice Vj e todos os outros vértices
+				reducoes[i] = 0; // TODO: Aij = NT(S) - NT(S U{ Vi } -{Vj})
+
+				if (reducoes[i] > maximo)
+				{
+					maximo = reducoes[i]; // faça Aij0 = Max[Aij];
+				}
+
+				if (maximo > 0)
+				{
+					// se Aij0 > 0 faça S = S U{ Vi } -{Vj0} e rotule Vj0 como "analisado";
+				}
+				else
+				{
+					// se Aij0 <= 0, rotule Vi como "analisado"
+				}
+			}
+
+			return (maximo > 0);
 		}
 
 		int TeitzBart::procura_mediana(const lista_medianas_t& medianas, const mediana_t& mediana)

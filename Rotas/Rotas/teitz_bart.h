@@ -36,6 +36,9 @@ namespace rotas
 			inline TeitzBart() { }
 			inline ~TeitzBart() { }
 
+			/**
+			 * Localizas as cidades que são medianas considerando a distância entre as demais.
+			 */
 			std::vector<Cidade> localiza_medianas(const std::vector<Cidade>& cidades);
 
 		private:
@@ -59,7 +62,7 @@ namespace rotas
 			/**
 			 * Analisa se é uma mediana melhor. Retorna true se houve modificações no conjunto 'S'.
 			 */
-			bool analisa_vertice(vertice_t& vertice, lista_medianas_t& medianas);
+			bool analisa_vertice(vertice_t& vertice, lista_medianas_t& medianas, lista_vertices_t& para_analisar);
 
 			/**
 			 * Procura uma mediana em uma lista. Retorna -1 se não encontrar.
