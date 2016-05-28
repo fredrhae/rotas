@@ -42,25 +42,64 @@ namespace rotas
 					}
 
 					//
-					// a) 'Vi' é um vértice "não-analisado. Calcular redução R do número de transmissão
+					// a) 'Vi' é um vértice "não-analisado". Calcular redução 'R' do número de transmissão
 					//	  para todo 'Vj' pertencente à { S }. Rij = NT(S) - NT(S u { Vi } - { Vj })
 
-					// TODO TODO TODO
+					double ntS = calcula_numero_transmissao(Vi, context);
+					double * reducoes = new double[medianas.size()];
+					int VjCidade_id = -1;
+					int VjMax_index = -1;
+					double max = std::numeric_limits<double>::min();
 
-					//
-					// b) Faça Rij0 = Max[Rij].
+					for (size_t j = 0; j < medianas.size(); j++)
+					{
+						vertice_t Vj = medianas[j];
 
-					// TODO TODO TODO
+						reducoes[j] = ntS - calcula_numero_transmissao(Vj, context, Vi, Vj);
 
-					//
-					// c) Se Rij0 > 0, faça: S = S u { Vi } - { Vj0 } e rotule Vj0 como "analisado".
+						if (reducoes[j] > max)
+						{
+							//
+							// b) Faça Rij0 = Max[Rij].
 
-					// TODO TODO TODO
+							VjCidade_id = Vj.cidade.get_id();
+							VjMax_index = j;
+							max = reducoes[j];
+						}
+					}
 
-					//
-					// d) Se Rij0 <= 0, rotule 'Vi' como "analisado".
+					if (VjMax_index > 0 && max > 0)
+					{
+						//
+						// c) Se Rij0 > 0, faça: S = S u { Vi } - { Vj0 } e rotule Vj0 como "analisado".
 
-					// TODO TODO TODO
+						// Remove Vj0
+						medianas.erase(medianas.begin() + VjMax_index);
+						
+						// Adiciona Vi
+						medianas.push_back(Vi);
+
+						// Rotula Vj0 como "analisado"
+						for (size_t aux = 0; aux < todos_os_vertices.size(); aux++)
+						{
+							vertice_t v = todos_os_vertices[aux];
+
+							if (v.cidade.get_id() == VjCidade_id)
+							{
+								v.analisado = true;
+								break;
+							}
+						}
+
+						modificou = true;
+					}
+					else
+					{
+						//
+						// d) Se Rij0 <= 0, rotule 'Vi' como "analisado".
+
+						Vi.analisado = true;
+					}
 				}
 
 				//
@@ -165,6 +204,37 @@ namespace rotas
 			}
 
 			return soma;
+		}
+
+		double TeitzBart::calcula_numero_transmissao(vertice_t& vertice, Context& context, vertice_t& adicionar, vertice_t& remover)
+		{
+			std::vector<std::vector<Rota>> matriz_distancias = context.get_matriz_distancias();
+			std::vector<Cidade> cidades_atendidas = context.get_cidades_atendidas();
+
+			int index = -1;
+
+			for (size_t i = 0; i < cidades_atendidas.size(); i++)
+			{
+				if (cidades_atendidas[i].get_id() == remover.cidade.get_id())
+				{
+					index = i;
+					break;
+				}
+			}
+
+			if (index >= 0)
+			{
+				cidades_atendidas.erase(cidades_atendidas.begin() + index);
+				cidades_atendidas.push_back(adicionar.cidade);
+			}
+			else
+			{
+				return 0.0;
+			}
+
+			Context copia(cidades_atendidas, matriz_distancias);
+
+			return calcula_numero_transmissao(vertice, copia);
 		}
 	} // algoritmos
 } // rotas

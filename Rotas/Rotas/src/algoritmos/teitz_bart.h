@@ -73,6 +73,11 @@ namespace rotas
 			 * Calcula o número de transmissão (soma das menores distâncias) entre um vértice e todos os demais.
 			 */
 			static double calcula_numero_transmissao(vertice_t& vertice, Context& context);
+
+			/**
+			 *
+			 */
+			static double calcula_numero_transmissao(vertice_t& vertice, Context& context, vertice_t& adicionar, vertice_t& remover);
 		};
 	} // algoritmos
 } // rotas
