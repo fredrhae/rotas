@@ -142,7 +142,7 @@ namespace rotas
 			menores_distancias = gera_menor_caminho_dijkstra(distancias_encontradas);
 
 			// print the constructed distance array
-			imprime_caminho_curto_dijkstra(menores_distancias);
+			//imprime_caminho_curto_dijkstra(menores_distancias);
 
 			// Libera memoria de vetores alocados
 			delete[] distancias_encontradas;

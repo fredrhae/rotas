@@ -10,7 +10,7 @@ namespace rotas
 {
 	namespace algoritmos
 	{	
-		double get_distancia(Cidade a, Cidade b) {
+		double GilletJohnson::get_distancia(Cidade a, Cidade b) {
 			vector<Rota> rotas_a = a.get_rotas();
 			for (unsigned int i = 0; i < rotas_a.size(); i++) {
 				if (rotas_a[i].get_id_destino() == b.get_id()) {
@@ -24,7 +24,7 @@ namespace rotas
 			return a.diferenca < b.diferenca;
 		}
 		
-		Cidade encontra_mais_proxima(Cidade origem, vector<Cidade> destinos) {
+		Cidade GilletJohnson::encontra_mais_proxima(Cidade origem, vector<Cidade> destinos) {
 			Cidade mais_proxima = destinos[0];
 			double menor_distancia = get_distancia(origem, mais_proxima);
 			
@@ -40,14 +40,15 @@ namespace rotas
 		}
 
 		//TODO testar esse método
-		vector<Cidade> ordena_por_distancia(Cidade origem, vector<Cidade> destinos) {
+		vector<Cidade> GilletJohnson::ordena_por_distancia(Cidade origem, vector<Cidade> destinos) {
 			vector<Cidade> cidades_em_ordem = vector<Cidade>();
 
 			cidades_em_ordem.push_back(destinos[0]);
 
 			struct _compara_distancia {
-				Cidade _origem;
-				bool operator() (Cidade a, Cidade b) { return get_distancia(_origem, a) < get_distancia(_origem, b); }
+				Cidade _origem;				
+				GilletJohnson gilletJohnson;
+				bool operator() (Cidade a, Cidade b) { return gilletJohnson.get_distancia(_origem, a) < gilletJohnson.get_distancia(_origem, b); }
 			} compara_distancia;
 			compara_distancia._origem = origem;
 

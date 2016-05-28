@@ -15,132 +15,20 @@ using namespace cli;
 
 class RotasTest : public ::testing::Test {
 protected:
-	std::vector<domain::Caminho> caminhos;
-	std::vector<domain::Cidade> cidades;
+	//std::vector<domain::Caminho> caminhos;
+	//std::vector<domain::Cidade> cidades;
 	Context rotas_context;
-
-	double graph[9][9] = {
-		{  0,  4,  0,  0,  0,  0,  0,  8,  0 },
-		{  4,  0,  8,  0,  0,  0,  0, 11,  0 },
-		{  0,  8,  0,  7,  0,  4,  0,  0,  2 },
-		{  0,  0,  7,  0,  9, 14,  0,  0,  0 },
-		{  0,  0,  0,  9,  0, 10,  0,  0,  0 },
-		{  0,  0,  4,  0, 10,  0,  2,  0,  0 },
-		{  0,  0,  0, 14,  0,  2,  0,  1,  6 },
-		{  8, 11,  0,  0,  0,  0,  1,  0,  7 },
-		{  0,  0,  2,  0,  0,  0,  6,  7,  0 }
-	};
-
-	double graph2[9][9] = {
-		{  0, 18,  3, 22,  4, 23, 27,  1, 25 },
-		{ 18,  0, 23,  6, 20,  8, 12, 24,  7 },
-		{  3, 23,  0, 22,  1, 20, 26,  2, 23 },
-		{ 22,  6, 22,  0, 22,  2,  5, 24,  4 },
-		{  4, 20,  1, 22,  0, 20, 20,  3, 21 },
-		{ 23,  8, 20,  2, 20,  0,  7, 22,  3 },
-		{ 27, 12, 26,  5, 20,  7,  0, 23,  4 },
-		{  1, 24,  2, 24,  3, 22, 23,  0, 25 },
-		{ 25,  7, 23,  4, 21,  3,  4, 25,  0 }
-	};
-
-	void init_cidades() {
-		cidades = std::vector<domain::Cidade>();
-
-		cidades.push_back(domain::Cidade("A", 0));
-		cidades.push_back(domain::Cidade("B", 1));
-		cidades.push_back(domain::Cidade("C", 2));
-		cidades.push_back(domain::Cidade("D", 3));
-		cidades.push_back(domain::Cidade("E", 4));
-		cidades.push_back(domain::Cidade("F", 5));
-		cidades.push_back(domain::Cidade("G", 6));
-		cidades.push_back(domain::Cidade("H", 7));
-		cidades.push_back(domain::Cidade("I", 8));
-	}
-
-	void inicializa_rotas(double distancias[9][9]) {
-
-		caminhos = std::vector<domain::Caminho>();
-		init_cidades();
-
-		for (int i = 0; i < 9; i++)
-		{
-			std::vector<domain::Rota> rotas_cidade_atual = std::vector<domain::Rota>();
-			for (int j = 0; j < 9; j++)
-			{
-				domain::Rota rota_para_cidade = domain::Rota(i, j, distancias[i][j]);
-				rotas_cidade_atual.push_back(rota_para_cidade);
-			}
-			Cidade origem_rota = cidades[rotas_cidade_atual.front().get_id_origem()];
-			Cidade destino_rota = cidades[rotas_cidade_atual.back().get_id_destino()];
-			caminhos.push_back(Caminho(origem_rota, destino_rota, rotas_cidade_atual));
-		}
-	}
+	
 	virtual void SetUp() {
 		//Inicializa as cidades		
-		string nomes[] = { "A", "B", "C", "D", "E", "F", "G", "H", "I" };
-		for (unsigned int i = 0; i < 9; i++) {
-			vector<Rota> rotas = vector<Rota>();
-			for (unsigned int j = 0; j < 9; j++) {
-				Rota nova_rota = Rota(i, j, graph2[i][j]);
-				rotas.push_back(nova_rota);
-			}
-			Cidade nova_cidade = Cidade(nomes[i], i, rotas);
-			cidades.push_back(nova_cidade);
-		}
+		string path_do_csv = "../../dados_entrada/cidades_atendidas.csv";
+		rotas_context = ManipulaEntrada::inicializa_dados_partir_do_csv(path_do_csv);
+
 	}
 };
-
-class DijkstraTest : public ::RotasTest {
-protected:
-	int a;
-	algoritmos::Dijkstra dijkstra;
-	Context rotas_context;
-
-	virtual void SetUp() {
-		RotasTest::SetUp();
-		inicializa_rotas(graph);
-
-		vector<vector<Rota>> menor_caminho = vector<vector<Rota>>();
-		for (int i = 0; i < 9; i++) {
-			menor_caminho.push_back(dijkstra.dijkstra_menor_caminho(rotas_context, cidades.at(i)));
-		}
-
-		a = 7;
-	}
-};
-
-TEST_F(RotasTest, validacaoCidades)
-{
-	cout << "Cidades testadas :" << endl;
-	for (unsigned int i = 0; i < cidades.size(); i++) {
-		cout << cidades[i].get_nome() << " ";
-	}
-	cout << endl;
-
-	cout << "---------------------------" << endl;
-
-	for (unsigned int i = 0; i < cidades.size(); i++) {
-		Cidade cidade = cidades[i];
-		vector<Rota> rotas = cidade.get_rotas();
-		cout << "Rotas partindo de " << cidade.get_nome() << ":" << endl;
-		for (unsigned int j = 0; j < rotas.size(); j++) {
-			Rota rota = rotas[j];
-			cout << rota.get_id_origem() << " até " << rota.get_id_destino() << " = " << rota.get_distancia() << endl;
-		}
-		cout << endl;
-	}
-}
 
 TEST_F(RotasTest, validacaoInicializacaoDoCsv)
-{
-	cout << "Testando inicializacao dos dados a partir do CSV" << endl;
-
-	cout << endl;
-
-	string path_do_csv = "../../dados_entrada/cidades_atendidas.csv";
-	
-	rotas_context = ManipulaEntrada::inicializa_dados_partir_do_csv(path_do_csv);
-	
+{		
 	EXPECT_EQ(rotas_context.get_cidades_atendidas().size(),32);
 	
 	vector<vector<Rota>> matriz = rotas_context.get_matriz_distancias();
@@ -153,47 +41,56 @@ TEST_F(RotasTest, validacaoInicializacaoDoCsv)
 	cout << "---------------------------" << endl;
 }
 
-TEST_F(DijkstraTest, validacaoTrivial)
-{
+class DijkstraTest : public ::RotasTest {
+protected:
+	int a;
+	algoritmos::Dijkstra dijkstra;	
 
-	string path_do_csv = "../../dados_entrada/teste_1_simples.csv";
+	virtual void SetUp() {
+		RotasTest::SetUp();
 
-	rotas_context = ManipulaEntrada::inicializa_dados_partir_do_csv(path_do_csv);
+		vector<vector<Rota>> menor_caminho = vector<vector<Rota>>();
+		vector<Cidade> cidades_atendidas = rotas_context.get_cidades_atendidas();
+		for (int i = 0; i < 9; i++) {			
+			menor_caminho.push_back(dijkstra.dijkstra_menor_caminho(rotas_context, cidades_atendidas[i]));
+		}
 
-	vector<vector<Rota>> menores_caminhos_todas_cidades = vector<vector<Rota>>();
-	for (int i = 0; i < rotas_context.get_cidades_atendidas().size() ; i++) {
-		menores_caminhos_todas_cidades.push_back(dijkstra.dijkstra_menor_caminho(rotas_context, cidades.at(i)));
+		a = 7;
 	}
+};
 
+TEST_F(DijkstraTest, validacaoTrivial)
+{	
 	EXPECT_EQ(a, 7);
 }
 
 TEST_F(DijkstraTest, validacaoDistanciasGrafoSimples)
 {
-	cout << "Validacao para verificar se distancias encontradas estao corretas." << endl;
+	vector<Cidade> cidades = rotas_context.get_cidades_atendidas();
+	vector<Rota> menores_caminhos_a = dijkstra.dijkstra_menor_caminho(rotas_context, cidades[0]);
 
-	string path_do_csv = "../../dados_entrada/teste_1_simples.csv";
-
-	rotas_context = ManipulaEntrada::inicializa_dados_partir_do_csv(path_do_csv);
-
-	vector<Rota> menores_caminhos_a = dijkstra.dijkstra_menor_caminho(rotas_context, cidades.at(0));
-
-	vector<double> distancias_origem_a = { 0,4,12,19,21,11,9,8,14 };
+	vector<double> distancias_origem_a = { 0, 406, 499, 234, 139, 364, 180, 178, 
+		                                 429, 566, 627, 248, 318, 169, 731, 626, 
+		                                 450, 709, 720, 800, 340, 410, 376, 439, 
+		                                 519, 893, 664, 792, 687, 903, 797, 774 };
+	
+	
 	for (int i = 0; i < rotas_context.get_cidades_atendidas().size(); i++)
 	{
+		cout << "Validando distância de " << cidades[0].get_nome() << " até " << cidades[i].get_nome() << "..." << endl;
 		EXPECT_EQ(menores_caminhos_a[i].get_distancia(), distancias_origem_a[i]);
-	}
-	cout << "---------------------------" << endl;
+	}	
+	cout << endl;
 }
-
 class GilletJohnsonTest : public ::RotasTest {
 protected:
 	int a;
+	vector<Cidade> cidades;
 	algoritmos::GilletJohnson gillet_johnson;
 
 	virtual void SetUp() {
 		RotasTest::SetUp();
-		inicializa_rotas(graph2);
+		cidades = rotas_context.get_cidades_atendidas();
 
 		//A e C são as medianas do graph2
 		domain::Cidade cidade_C = cidades.at(2);
@@ -206,10 +103,10 @@ protected:
 	}
 };
 
+
 TEST_F(GilletJohnsonTest, validacaoTrivial)
 {
 	gillet_johnson.encontra_medianas(cidades);
 
 	EXPECT_EQ(a, 5);
 }
-
