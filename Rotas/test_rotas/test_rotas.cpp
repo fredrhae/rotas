@@ -16,25 +16,25 @@ using namespace cli;
 class RotasTest : public ::testing::Test {
 protected:
 	//std::vector<domain::Caminho> caminhos;
-	//std::vector<domain::Cidade> cidades;
+	std::vector<domain::Cidade> cidades;
 	Context rotas_context;
 	
 	virtual void SetUp() {
 		//Inicializa as cidades		
 		string path_do_csv = "../../dados_entrada/cidades_atendidas.csv";
 		rotas_context = ManipulaEntrada::inicializa_dados_partir_do_csv(path_do_csv);
-
+		cidades = rotas_context.get_cidades_atendidas();
 	}
 };
 
 TEST_F(RotasTest, validacaoInicializacaoDoCsv)
 {		
-	EXPECT_EQ(rotas_context.get_cidades_atendidas().size(),32);
+	EXPECT_EQ(cidades.size(),32);
 	
 	vector<vector<Rota>> matriz = rotas_context.get_matriz_distancias();
 	for (unsigned int i = 0; i < rotas_context.get_matriz_distancias().size(); i++)
 	{
-		cout << "Cidade " + rotas_context.get_cidades_atendidas()[i].get_nome()
+		cout << "Cidade " + cidades[i].get_nome()
 			<< " sendo validada..." << endl;
 		EXPECT_EQ(matriz[i].size(),32);
 	}
@@ -48,11 +48,10 @@ protected:
 
 	virtual void SetUp() {
 		RotasTest::SetUp();
-
-		vector<vector<Rota>> menor_caminho = vector<vector<Rota>>();
-		vector<Cidade> cidades_atendidas = rotas_context.get_cidades_atendidas();
-		for (int i = 0; i < 9; i++) {			
-			menor_caminho.push_back(dijkstra.dijkstra_menor_caminho(rotas_context, cidades_atendidas[i]));
+		
+		for (int i = 0; i < 9; i++) {	
+			cout << "Calculando as menores rotas partindo de " << cidades[i].get_nome() << "... " << endl;
+			dijkstra.dijkstra_menor_caminho(rotas_context, cidades[i]);
 		}
 
 		a = 7;
@@ -66,9 +65,6 @@ TEST_F(DijkstraTest, validacaoTrivial)
 
 TEST_F(DijkstraTest, validacaoDistanciasGrafoSimples)
 {
-	vector<Cidade> cidades = rotas_context.get_cidades_atendidas();
-	vector<Rota> menores_caminhos_a = dijkstra.dijkstra_menor_caminho(rotas_context, cidades[0]);
-
 	vector<double> distancias_origem_a = { 0, 406, 499, 234, 139, 364, 180, 178, 
 		                                 429, 566, 627, 248, 318, 169, 731, 626, 
 		                                 450, 709, 720, 800, 340, 410, 376, 439, 
@@ -78,14 +74,13 @@ TEST_F(DijkstraTest, validacaoDistanciasGrafoSimples)
 	for (int i = 0; i < rotas_context.get_cidades_atendidas().size(); i++)
 	{
 		cout << "Validando distância de " << cidades[0].get_nome() << " até " << cidades[i].get_nome() << "..." << endl;
-		EXPECT_EQ(menores_caminhos_a[i].get_distancia(), distancias_origem_a[i]);
+		EXPECT_EQ(distancias_origem_a[i], cidades[0].get_rotas()[i].get_distancia());
 	}	
 	cout << endl;
 }
 class GilletJohnsonTest : public ::RotasTest {
 protected:
 	int a;
-	vector<Cidade> cidades;
 	algoritmos::GilletJohnson gillet_johnson;
 
 	virtual void SetUp() {

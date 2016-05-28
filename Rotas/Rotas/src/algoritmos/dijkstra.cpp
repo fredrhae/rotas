@@ -84,7 +84,7 @@ namespace rotas
 
 		// Funcao que implementa algoritmo de menor caminho de origem única do Dijkstra
 		// para um grafo dado representado como matriz de adjacência
-		vector<Rota> Dijkstra::dijkstra_menor_caminho(Context dados_entrada, Cidade origem_entrada)
+		vector<Rota> Dijkstra::dijkstra_menor_caminho(Context dados_entrada, Cidade &origem_entrada)
 		{
 			vector<vector<Rota>> distancias = dados_entrada.get_matriz_distancias();
 			vector<Rota> menores_distancias = vector<Rota>();
@@ -140,6 +140,9 @@ namespace rotas
 
 			// Gera o caminho com as rotas encontradas
 			menores_distancias = gera_menor_caminho_dijkstra(distancias_encontradas);
+			
+			//Atualiza a Cidade de entrada com as distâncias otimizadas
+			origem_entrada.set_rotas(menores_distancias);
 
 			// print the constructed distance array
 			//imprime_caminho_curto_dijkstra(menores_distancias);

@@ -37,6 +37,7 @@ namespace rotas
 
 		void Cidade::set_rotas(vector<Rota> novas_rotas)
 		{
+			rotas.clear();
 			rotas = novas_rotas;
 		}
 

@@ -18,7 +18,7 @@ namespace rotas
 		public:
 			Dijkstra() {};
 			void imprime_caminho_curto_dijkstra(vector<Rota> menor_caminho);
-			vector<Rota> dijkstra_menor_caminho(Context dados_entrada, Cidade origem);
+			vector<Rota> dijkstra_menor_caminho(Context dados_entrada, Cidade &origem);
 		};
 	} // algoritmos
 } // rotas
