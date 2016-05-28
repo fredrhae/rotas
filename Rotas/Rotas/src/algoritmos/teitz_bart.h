@@ -17,15 +17,10 @@ namespace rotas
 				domain::Cidade cidade;
 				bool analisado;
 
-				vertice_t() : analisado(false) {}
-				vertice_t(const domain::Cidade& c, bool a = false) : cidade(c), analisado(a) {}
+				vertice_t(domain::Cidade& c, bool a = true) : cidade(c), analisado(a) {}
 			} vertice_t;
 
 			typedef std::vector<vertice_t> lista_vertices_t;
-
-			typedef domain::Cidade mediana_t;
-
-			typedef std::vector<mediana_t> lista_medianas_t;
 		}
 
 		using namespace domain;
@@ -43,42 +38,41 @@ namespace rotas
 			std::vector<Cidade> localiza_medianas(Context& context);
 
 		private:
-
 			/**
 			 * Seleciona aleatoriamente um conjunto 'S', com tamanho 'p' (número de cidades utilizadas como medianas)
 			 * para formar uma aproximação inicial para as p-medianas.
 			 */
-			lista_medianas_t seleciona_medianas_aleatoriamente(const std::vector<Cidade>& cidades);
+			lista_vertices_t seleciona_medianas_aleatoriamente(lista_vertices_t& vertices);
+			
+			/**
+			 * Rotula todos os vértices que não são medianas como "não-analisados".
+			 */
+			void rotula_nao_analisados(lista_vertices_t& todos_os_vertices, lista_vertices_t& medianas);
 
 			/**
-			 * Recupera a lista de vértices para serem analisadas pelo algoritmo.
+			 * Informa se existe vértices não analisados.
 			 */
-			lista_vertices_t vertices_para_analisar(const std::vector<Cidade>& cidades, const lista_medianas_t& medianas);
+			bool existe_nao_analisados(lista_vertices_t& vertices);
 
 			/**
-			 * Informa se todos os vértices foram analisados.
+			 * Inicializa uma lista de vértices.
 			 */
-			bool todos_foram_analisados(const lista_vertices_t& vertices);
-
-			/**
-			 * Analisa se é uma mediana melhor. Retorna true se houve modificações no conjunto 'S'.
-			 */
-			bool analisa_vertice(vertice_t& vertice, lista_medianas_t& medianas, lista_vertices_t& para_analisar, Context& context);
-
-			/**
-			 * Procura uma mediana em uma lista. Retorna -1 se não encontrar.
-			 */
-			int procura_mediana(const lista_medianas_t& medianas, const mediana_t& mediana);
-
-			/**
-			 * É soma das menores distâncias existentes entre uma cidade e todos as outras.
-			 */
-			static double soma_menores_distancias(Cidade& cidade, Context& context);
+			static lista_vertices_t inicializa_vertices(Context& context);
 
 			/**
 			 * Converte uma lista de vertices para uma lista de cidades;
 			 */
-			static std::vector<Cidade> vertices_para_cidades(const  lista_vertices_t& vertices);
+			static std::vector<Cidade> vertices_para_cidades(const lista_vertices_t& vertices);
+
+			/**
+			 * Verifica se uma lista de vértice possui um vértice específico.
+			 */
+			static bool contem_vertice(const lista_vertices_t& vertices, vertice_t& vertice);
+
+			/**
+			 * Calcula o número de transmissão (soma das menores distâncias) entre um vértice e todos os demais.
+			 */
+			static double calcula_numero_transmissao(vertice_t& vertice, Context& context);
 		};
 	} // algoritmos
 } // rotas

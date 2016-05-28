@@ -1,5 +1,6 @@
 #include "teitz_bart.h"
 
+#include <algorithm>
 #include <ctime>
 
 #include "dijkstra.h"
@@ -10,154 +11,121 @@ namespace rotas
 	{
 		std::vector<Cidade> TeitzBart::localiza_medianas(Context& context)
 		{
-			std::vector<Cidade> cidades = context.get_cidades_atendidas(); // Conjunto 'V'
-			lista_medianas_t medianas = seleciona_medianas_aleatoriamente(cidades); // Conjunto 'S'
-			lista_vertices_t para_analisar = vertices_para_analisar(cidades, medianas); // Conjunto { V - S }
+			lista_vertices_t todos_os_vertices /* { V } */ = TeitzBart::inicializa_vertices(context);
 
-			while (todos_foram_analisados(para_analisar) == false)
+			//
+			// Passo 1: Contruir um conjunto inicial 'S', com 'p' elementos de 'V'
+
+			lista_vertices_t medianas /* { S } */ = seleciona_medianas_aleatoriamente(todos_os_vertices);
+
+			bool modificou;
+
+			do
 			{
-				for (unsigned int i = 0; i < para_analisar.size(); i++)
+				//
+				// Passo 2: Rotular todos os pontos 'Vi' não pertencentes à { S } como "não-analisados"
+
+				rotula_nao_analisados(todos_os_vertices, medianas);
+
+				//
+				// Passo 3: Enquanto existirem pontos "não-analisados" no conjunto { V - S }, faça:
+
+				modificou = false;
+
+				for (size_t i = 0; i < todos_os_vertices.size(); i++)
 				{
-					vertice_t vertice = para_analisar.at(i);
+					vertice_t Vi = todos_os_vertices[i];
 
-					bool modificou = analisa_vertice(vertice, medianas, para_analisar, context);
-
-					if (modificou == true)
+					if (Vi.analisado == true)
 					{
-						para_analisar = vertices_para_analisar(cidades, medianas);
+						continue;
 					}
-				}
-			}
 
-			return medianas;
+					//
+					// a) 'Vi' é um vértice "não-analisado. Calcular redução R do número de transmissão
+					//	  para todo 'Vj' pertencente à { S }. Rij = NT(S) - NT(S u { Vi } - { Vj })
+
+					// TODO TODO TODO
+
+					//
+					// b) Faça Rij0 = Max[Rij].
+
+					// TODO TODO TODO
+
+					//
+					// c) Se Rij0 > 0, faça: S = S u { Vi } - { Vj0 } e rotule Vj0 como "analisado".
+
+					// TODO TODO TODO
+
+					//
+					// d) Se Rij0 <= 0, rotule 'Vi' como "analisado".
+
+					// TODO TODO TODO
+				}
+
+				//
+				// Passo 4: Se durante a execução do passo 3 ocorrer modificações no conjunto S, volte para o passo 2.
+				//          Caso contrário PARE. O conjunto { S } será uma aproximação para o problema das p-medianas.
+			} while (
+				existe_nao_analisados(todos_os_vertices) /* 'existe_nao_analisados()' pertence ao Passo 3 */ ||
+				modificou == true /* 'modificou' pertence ao Passo 4 */);
+
+			return vertices_para_cidades(medianas);
 		}
 
-		lista_medianas_t TeitzBart::seleciona_medianas_aleatoriamente(const std::vector<Cidade>& cidades)
+		lista_vertices_t TeitzBart::seleciona_medianas_aleatoriamente(lista_vertices_t& vertices)
 		{
 			srand((unsigned int)time(NULL));
 
-			lista_medianas_t medianas;
+			lista_vertices_t medianas;
 
-			unsigned int tamanho = rand() % cidades.size();
+			unsigned int tamanho = rand() % vertices.size();
 
 			for (unsigned int i = 0; i < tamanho; i++)
 			{
-				unsigned int index = rand() % (cidades.size() - 1);
+				unsigned int index = rand() % (vertices.size() - 1);
 
-				medianas.push_back(cidades.at(index));
+				medianas.push_back(medianas[index]);
 			}
 
 			return medianas;
 		}
 
-		lista_vertices_t TeitzBart::vertices_para_analisar(const std::vector<Cidade>& cidades /* Conjunto 'V' */, const lista_medianas_t& medianas /* Conjunto 'S' */)
+		void TeitzBart::rotula_nao_analisados(lista_vertices_t& todos_os_vertices, lista_vertices_t& medianas)
 		{
+			for each (vertice_t vertice in todos_os_vertices)
+			{
+				if (TeitzBart::contem_vertice(medianas, vertice) == false)
+				{
+					vertice.analisado = false;
+				}
+			}
+		}
+
+		bool TeitzBart::existe_nao_analisados(lista_vertices_t& vertices)
+		{
+			for (size_t i = 0; i < vertices.size(); i++)
+			{
+				if (vertices[i].analisado == false)
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		lista_vertices_t TeitzBart::inicializa_vertices(Context& context)
+		{
+			std::vector<Cidade> cidades = context.get_cidades_atendidas();
 			lista_vertices_t vertices;
 
-			for (unsigned int i = 0; i < cidades.size(); i++)
+			for (size_t i = 0; i < cidades.size(); i++)
 			{
-				Cidade cidade = cidades.at(i);
-
-				if (procura_mediana(medianas, cidade) < 0)
-				{
-					//
-					// Se a cidade não está presente nas medianas, deve ser analisada.
-
-					vertices.push_back(vertice_t(cidade));
-				}
+				vertices.push_back(vertice_t(cidades.at(i)));
 			}
 
 			return vertices;
-		}
-
-		bool TeitzBart::todos_foram_analisados(const lista_vertices_t& vertices)
-		{
-			for (unsigned int i = 0; i < vertices.size(); i++)
-			{
-				vertice_t v = vertices.at(i);
-
-				if (v.analisado == false)
-				{
-					return false;
-				}
-			}
-
-			return true;
-		}
-
-		bool TeitzBart::analisa_vertice(
-			vertice_t& vertice, /* Vi */
-			lista_medianas_t& medianas, /* Conjunto 'S' */
-			lista_vertices_t& para_analisar, /* Conjunto { V - S } */
-			Context& context)
-		{
-			double * reducoes = new double[medianas.size()];
-			double maximo = 0; // Aij0
-
-			for (unsigned int i = 0; i < medianas.size(); i++)
-			{
-				mediana_t vj = medianas.at(i);
-				
-				// Número de Transmissão (NT): é a soma das menores distâncias existentes entre o vértice Vj e todos os outros vértices
-				// TODO: Aij = NT(S) - NT(S U { Vi } - { Vj })
-				// TODO: CORRETO?
-				reducoes[i] = TeitzBart::soma_menores_distancias(vertice.cidade, context) - TeitzBart::soma_menores_distancias(vj, context); 
-
-				if (reducoes[i] > maximo)
-				{
-					// Faça Aij0 = Max[Aij];
-
-					maximo = reducoes[i];
-				}
-
-				if (maximo > 0)
-				{
-					// Se Aij0 > 0 faça S = S U { Vi } - { Vj0 } e rotule Vj0 como "analisado";
-
-					medianas.assign(i, vj); // TODO: CORRETO?
-
-					return true; // Houve modificação no conjunto 'S'
-				}
-				else
-				{
-					// Se Aij0 <= 0, rotule Vi como "analisado"
-
-					vertice.analisado = true;
-				}
-			}
-
-			return false; // O conjunto 'S' NÃO foi modificado
-		}
-
-		int TeitzBart::procura_mediana(const lista_medianas_t& medianas, const mediana_t& mediana)
-		{
-			Cidade cidade_mediana = (Cidade)mediana;
-
-			for (unsigned int i = 0; i < medianas.size(); i++)
-			{
-				Cidade c = medianas.at(i);
-
-				if (cidade_mediana.get_id() == c.get_id() && (cidade_mediana.get_nome().compare(c.get_nome()) == 0))
-				{
-					return i;
-				}
-			}
-
-			return -1;
-		}
-
-		double TeitzBart::soma_menores_distancias(Cidade& cidade, Context& context)
-		{
-			Dijkstra dijkstra;
-			std::vector<Rota> rotas = dijkstra.dijkstra_menor_caminho(context, cidade);
-			double soma = 0.0;
-
-			for (unsigned int i = 0; i < rotas.size(); i++)
-			{
-				soma += rotas.at(i).get_distancia();
-			}
-
-			return soma;
 		}
 
 		std::vector<Cidade> TeitzBart::vertices_para_cidades(const  lista_vertices_t& vertices)
@@ -166,10 +134,37 @@ namespace rotas
 
 			for (unsigned int i = 0; i < vertices.size(); i++)
 			{
-				cidades.push_back(vertices.at(i).cidade);
+				cidades.push_back(vertices[i].cidade);
 			}
 
 			return cidades;
+		}
+
+		bool TeitzBart::contem_vertice(const lista_vertices_t& vertices, vertice_t& vertice)
+		{
+			for each (vertice_t v in vertices)
+			{
+				if (v.cidade.get_id() == vertice.cidade.get_id())
+				{
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		double TeitzBart::calcula_numero_transmissao(vertice_t& vertice, Context& context)
+		{
+			Dijkstra dijkstra;
+			std::vector<Rota> rotas = dijkstra.dijkstra_menor_caminho(context, vertice.cidade);
+			double soma = 0.0;
+
+			for (unsigned int i = 0; i < rotas.size(); i++)
+			{
+				soma += rotas.at(i).get_distancia();
+			}
+
+			return soma;
 		}
 	} // algoritmos
 } // rotas
