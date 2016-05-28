@@ -16,7 +16,7 @@ namespace rotas
 			GilletJohnson() {};
 			~GilletJohnson() {};
 			vector<Cidade> ordena_por_distancia(Cidade origem, vector<Cidade> destinos);
-			void encontra_medianas(std::vector<Cidade> cidades);
+			void encontra_medianas(std::vector<Cidade> & cidades);
 
 			//FIXME Métodos tornados publicos apenas para teste, apagar
 			double get_distancia(Cidade a, Cidade b);

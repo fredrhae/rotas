@@ -52,7 +52,7 @@ namespace rotas
 			} compara_distancia;
 			compara_distancia._origem = origem;
 
-			for (unsigned int i = 0; i < destinos.size(); i++) {
+			for (unsigned int i = 1; i < destinos.size(); i++) {
 				auto it = upper_bound(cidades_em_ordem.begin(), cidades_em_ordem.end(), destinos[i], compara_distancia);
 				cidades_em_ordem.insert(it, destinos[i]);
 				
@@ -61,7 +61,7 @@ namespace rotas
 			return cidades_em_ordem;
 		}
 
-		void GilletJohnson::encontra_medianas(vector<Cidade> cidades) {
+		void GilletJohnson::encontra_medianas(vector<Cidade> & cidades) {
 
 			vector<Cidade> pontos_atendimento = vector<Cidade>();
 			vector<Cidade> pontos_demanda = vector<Cidade>();
@@ -114,6 +114,11 @@ namespace rotas
 					Cidade ponto_atendimento_mais_prox = encontra_mais_proxima(lista_designacao[i], pontos_atendimento);
 					lista_designacao[i].set_id_mediana(ponto_atendimento_mais_prox.get_id());
 				}				
+
+				for (unsigned i = 0; i < lista_designacao.size(); i++) {
+					Cidade cidade = lista_designacao[i];					
+					cidades[cidade.get_id()].set_id_mediana(cidade.get_id_mediana());
+				}
 			
 				break;
 			}			

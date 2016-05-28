@@ -12,6 +12,7 @@ using namespace std;
 using namespace rotas;
 using namespace domain;
 using namespace cli;
+using namespace algoritmos;
 
 class RotasTest : public ::testing::Test {
 protected:
@@ -71,7 +72,7 @@ TEST_F(DijkstraTest, validacaoDistanciasGrafoSimples)
 		                                 519, 893, 664, 792, 687, 903, 797, 774 };
 	
 	
-	for (int i = 0; i < rotas_context.get_cidades_atendidas().size(); i++)
+	for (int i = 0; i < cidades.size(); i++)
 	{
 		cout << "Validando distância de " << cidades[0].get_nome() << " até " << cidades[i].get_nome() << "..." << endl;
 		EXPECT_EQ(distancias_origem_a[i], cidades[0].get_rotas()[i].get_distancia());
@@ -84,8 +85,7 @@ protected:
 	algoritmos::GilletJohnson gillet_johnson;
 
 	virtual void SetUp() {
-		RotasTest::SetUp();
-		cidades = rotas_context.get_cidades_atendidas();
+		RotasTest::SetUp();		
 
 		//A e C são as medianas do graph2
 		domain::Cidade cidade_C = cidades.at(2);
@@ -101,7 +101,107 @@ protected:
 
 TEST_F(GilletJohnsonTest, validacaoTrivial)
 {
-	gillet_johnson.encontra_medianas(cidades);
-
 	EXPECT_EQ(a, 5);
+}
+
+TEST_F(GilletJohnsonTest, testGetDistancia) 
+{
+	//double get_distancia(Cidade a, Cidade b);
+	Cidade cidade_a = cidades[0];
+	Cidade cidade_b = cidades[1];
+	double distancia_encontrada = gillet_johnson.get_distancia(cidade_a, cidade_b);
+
+	EXPECT_EQ(406, distancia_encontrada);
+
+	cidade_a = cidades[6];
+	cidade_b = cidades[22];
+
+	distancia_encontrada = gillet_johnson.get_distancia(cidade_a, cidade_b);
+	EXPECT_EQ(211, distancia_encontrada);
+}
+
+TEST_F(GilletJohnsonTest, testEncontraMaisProxima)
+{
+	Cidade origem = cidades[10];
+	Cidade destino1 = cidades[21];
+	Cidade destino2 = cidades[12];
+	Cidade destino3 = cidades[30];
+	Cidade destino4 = cidades[20];
+	Cidade destino5 = cidades[0];
+
+	vector<Cidade> destinos = vector<Cidade>();
+	
+	destinos.push_back(cidades[21]);
+	destinos.push_back(cidades[12]);
+	destinos.push_back(cidades[30]);
+	destinos.push_back(cidades[20]);
+	destinos.push_back(cidades[0]);
+	
+	Cidade mais_proxima = gillet_johnson.encontra_mais_proxima(origem, destinos);
+
+	EXPECT_EQ(21, mais_proxima.get_id());
+}
+
+TEST_F(GilletJohnsonTest, testOrdenaPorDistancia)
+{
+	Cidade origem = cidades[10];
+	Cidade destino1 = cidades[21];
+	Cidade destino2 = cidades[12];
+	Cidade destino3 = cidades[30];
+	Cidade destino4 = cidades[20];
+	Cidade destino5 = cidades[0];
+
+	vector<Cidade> destinos = vector<Cidade>();
+
+	destinos.push_back(cidades[21]);
+	destinos.push_back(cidades[12]);
+	destinos.push_back(cidades[30]);
+	destinos.push_back(cidades[20]);
+	destinos.push_back(cidades[0]);
+
+	vector<Cidade> cidades_ordenadas = gillet_johnson.ordena_por_distancia(origem, destinos);
+
+	EXPECT_EQ(21, cidades_ordenadas[0].get_id());
+	EXPECT_EQ(20, cidades_ordenadas[1].get_id());
+	EXPECT_EQ(0, cidades_ordenadas[2].get_id());
+	EXPECT_EQ(12, cidades_ordenadas[3].get_id());
+	EXPECT_EQ(30, cidades_ordenadas[4].get_id());	
+}
+
+TEST_F(GilletJohnsonTest, testDesignaMedianas)
+{
+	//Escolhe 3 medianas ao acaso
+	cidades[10].set_mediana(true);
+	cidades[20].set_mediana(true);
+	cidades[30].set_mediana(true);
+	
+	gillet_johnson.encontra_medianas(cidades);
+	
+	cout << "Cidades atendidas por " << cidades[10].get_nome() << ": " << endl;
+	for (unsigned int i = 0; i < cidades.size(); i++) {
+		if (cidades[i].get_id_mediana() == 10) {
+			cout << cidades[i].get_nome() << ", Distancia: " << gillet_johnson.get_distancia(cidades[10], cidades[i]) << "km"  << endl;
+		}
+	}
+
+	cout << "-------------------------------------" << endl;
+
+	cout << "Cidades atendidas por " << cidades[20].get_nome() << ": " << endl;
+	for (unsigned int i = 0; i < cidades.size(); i++) {
+		if (cidades[i].get_id_mediana() == 20) {
+			cout << cidades[i].get_nome() << ", Distancia: " << gillet_johnson.get_distancia(cidades[20], cidades[i]) << "km" << endl;
+		}
+	}
+
+	cout << "-------------------------------------" << endl;
+
+	cout << "Cidades atendidas por " << cidades[30].get_nome() << ": " << endl;
+	for (unsigned int i = 0; i < cidades.size(); i++) {
+		if (cidades[i].get_id_mediana() == 30) {
+			cout << cidades[i].get_nome() << ", Distancia: " << gillet_johnson.get_distancia(cidades[30], cidades[i]) << "km" << endl;
+		}
+	}
+
+	//TODO verificar quais cidades deveriam ser atendidas por quais sedes
+	EXPECT_EQ(0, 0);
 }
