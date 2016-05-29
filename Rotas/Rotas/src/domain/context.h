@@ -1,5 +1,5 @@
-#ifndef _ROTAS_DOMAIN_CONTEXT_H_
-#define _ROTAS_DOMAIN_CONTEXT_H_
+#ifndef ROTAS_DOMAIN_CONTEXT_H_
+#define ROTAS_DOMAIN_CONTEXT_H_
 
 #include <vector>
 #include "domain/cidade.h"
@@ -28,4 +28,4 @@ namespace rotas
 	}
 }
 
-#endif// _ROTAS_DOMAIN_CONTEXT_H_
+#endif// ROTAS_DOMAIN_CONTEXT_H_

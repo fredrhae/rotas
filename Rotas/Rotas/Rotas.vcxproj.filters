@@ -39,10 +39,13 @@
     <ClCompile Include="src\algoritmos\gillet_johnson.cpp">
       <Filter>src\algoritmos</Filter>
     </ClCompile>
+    <ClCompile Include="teitz_bart.cpp">
+      <Filter>src\algoritmos</Filter>
+    </ClCompile>
     <ClCompile Include="src\domain\context.cpp">
       <Filter>src\domain</Filter>
     </ClCompile>
-    <ClCompile Include="src\algoritmos\teitz_bart.cpp">
+    <ClCompile Include="src\algoritmos\clarke_wright.cpp">
       <Filter>src\algoritmos</Filter>
     </ClCompile>
   </ItemGroup>
@@ -68,10 +71,13 @@
     <ClInclude Include="src\algoritmos\gillet_johnson.h">
       <Filter>src\algoritmos</Filter>
     </ClInclude>
+    <ClInclude Include="teitz_bart.h">
+      <Filter>src\algoritmos</Filter>
+    </ClInclude>
     <ClInclude Include="src\domain\context.h">
       <Filter>src\domain</Filter>
     </ClInclude>
-    <ClInclude Include="src\algoritmos\teitz_bart.h">
+    <ClInclude Include="src\algoritmos\clarke_wright.h">
       <Filter>src\algoritmos</Filter>
     </ClInclude>
   </ItemGroup>
