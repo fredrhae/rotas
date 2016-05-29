@@ -18,7 +18,9 @@ namespace rotas
 			vector<Cidade> ordena_por_distancia(Cidade origem, vector<Cidade> destinos);
 			void encontra_medianas(std::vector<Cidade> & cidades);
 
-			//FIXME Métodos tornados publicos apenas para teste, apagar
+#ifndef GTEST
+		private:
+#endif //!GTEST
 			double get_distancia(Cidade a, Cidade b);
 			Cidade encontra_mais_proxima(Cidade origem, vector<Cidade> destinos);
 		};

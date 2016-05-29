@@ -36,8 +36,10 @@ namespace rotas
 			 * Localizas as cidades que são medianas considerando a distância entre as demais.
 			 */
 			std::vector<Cidade> localiza_medianas(Context& context);
-
+		
+#ifndef GTEST
 		private:
+#endif // !GTEST
 			/**
 			 * Seleciona aleatoriamente um conjunto 'S', com tamanho 'p' (número de cidades utilizadas como medianas)
 			 * para formar uma aproximação inicial para as p-medianas.
