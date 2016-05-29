@@ -1,12 +1,13 @@
 // test_rotas.cpp : Defines the entry point for the console application.
 //
 
-#include "gtest/gtest.h"
 #include "algoritmos/gillet_johnson.h"
 #include "algoritmos/dijkstra.h"
-#include "domain/caminho.h"
+#include "algoritmos/teitz_bart.h"
 #include "cli/manipula_entrada.h"
+#include "domain/caminho.h"
 #include "domain/context.h"
+#include "gtest/gtest.h"
 
 using namespace std;
 using namespace rotas;
@@ -19,7 +20,7 @@ protected:
 	//std::vector<domain::Caminho> caminhos;
 	std::vector<domain::Cidade> cidades;
 	Context rotas_context;
-	
+
 	virtual void SetUp() {
 		//Inicializa as cidades		
 		string path_do_csv = "../../dados_entrada/cidades_atendidas.csv";
@@ -29,15 +30,15 @@ protected:
 };
 
 TEST_F(RotasTest, validacaoInicializacaoDoCsv)
-{		
-	EXPECT_EQ(cidades.size(),32);
-	
+{
+	EXPECT_EQ(cidades.size(), 32);
+
 	vector<vector<Rota>> matriz = rotas_context.get_matriz_distancias();
 	for (unsigned int i = 0; i < rotas_context.get_matriz_distancias().size(); i++)
 	{
 		cout << "Cidade " + cidades[i].get_nome()
 			<< " sendo validada..." << endl;
-		EXPECT_EQ(matriz[i].size(),32);
+		EXPECT_EQ(matriz[i].size(), 32);
 	}
 	cout << "---------------------------" << endl;
 }
@@ -45,12 +46,12 @@ TEST_F(RotasTest, validacaoInicializacaoDoCsv)
 class DijkstraTest : public ::RotasTest {
 protected:
 	int a;
-	algoritmos::Dijkstra dijkstra;	
+	algoritmos::Dijkstra dijkstra;
 
 	virtual void SetUp() {
 		RotasTest::SetUp();
-		
-		for (int i = 0; i < 9; i++) {	
+
+		for (int i = 0; i < 9; i++) {
 			cout << "Calculando as menores rotas partindo de " << cidades[i].get_nome() << "... " << endl;
 			dijkstra.dijkstra_menor_caminho(rotas_context, cidades[i]);
 		}
@@ -60,23 +61,23 @@ protected:
 };
 
 TEST_F(DijkstraTest, validacaoTrivial)
-{	
+{
 	EXPECT_EQ(a, 7);
 }
 
 TEST_F(DijkstraTest, validacaoDistanciasGrafoSimples)
 {
-	vector<double> distancias_origem_a = { 0, 406, 499, 234, 139, 364, 180, 178, 
-		                                 429, 566, 627, 248, 318, 169, 731, 626, 
-		                                 450, 709, 720, 800, 340, 410, 376, 439, 
-		                                 519, 893, 664, 792, 687, 903, 797, 774 };
-	
-	
+	vector<double> distancias_origem_a = { 0, 406, 499, 234, 139, 364, 180, 178,
+										 429, 566, 627, 248, 318, 169, 731, 626,
+										 450, 709, 720, 800, 340, 410, 376, 439,
+										 519, 893, 664, 792, 687, 903, 797, 774 };
+
+
 	for (int i = 0; i < cidades.size(); i++)
 	{
 		cout << "Validando distância de " << cidades[0].get_nome() << " até " << cidades[i].get_nome() << "..." << endl;
 		EXPECT_EQ(distancias_origem_a[i], cidades[0].get_rotas()[i].get_distancia());
-	}	
+	}
 	cout << endl;
 }
 class GilletJohnsonTest : public ::RotasTest {
@@ -85,7 +86,7 @@ protected:
 	algoritmos::GilletJohnson gillet_johnson;
 
 	virtual void SetUp() {
-		RotasTest::SetUp();		
+		RotasTest::SetUp();
 
 		//A e C são as medianas do graph2
 		domain::Cidade cidade_C = cidades.at(2);
@@ -104,7 +105,7 @@ TEST_F(GilletJohnsonTest, validacaoTrivial)
 	EXPECT_EQ(a, 5);
 }
 
-TEST_F(GilletJohnsonTest, testGetDistancia) 
+TEST_F(GilletJohnsonTest, testGetDistancia)
 {
 	//double get_distancia(Cidade a, Cidade b);
 	Cidade cidade_a = cidades[0];
@@ -130,13 +131,13 @@ TEST_F(GilletJohnsonTest, testEncontraMaisProxima)
 	Cidade destino5 = cidades[0];
 
 	vector<Cidade> destinos = vector<Cidade>();
-	
+
 	destinos.push_back(cidades[21]);
 	destinos.push_back(cidades[12]);
 	destinos.push_back(cidades[30]);
 	destinos.push_back(cidades[20]);
 	destinos.push_back(cidades[0]);
-	
+
 	Cidade mais_proxima = gillet_johnson.encontra_mais_proxima(origem, destinos);
 
 	EXPECT_EQ(21, mais_proxima.get_id());
@@ -165,7 +166,7 @@ TEST_F(GilletJohnsonTest, testOrdenaPorDistancia)
 	EXPECT_EQ(20, cidades_ordenadas[1].get_id());
 	EXPECT_EQ(0, cidades_ordenadas[2].get_id());
 	EXPECT_EQ(12, cidades_ordenadas[3].get_id());
-	EXPECT_EQ(30, cidades_ordenadas[4].get_id());	
+	EXPECT_EQ(30, cidades_ordenadas[4].get_id());
 }
 
 TEST_F(GilletJohnsonTest, testDesignaMedianas)
@@ -174,13 +175,13 @@ TEST_F(GilletJohnsonTest, testDesignaMedianas)
 	cidades[10].set_mediana(true);
 	cidades[20].set_mediana(true);
 	cidades[30].set_mediana(true);
-	
+
 	gillet_johnson.encontra_medianas(cidades);
-	
+
 	cout << "Cidades atendidas por " << cidades[10].get_nome() << ": " << endl;
 	for (unsigned int i = 0; i < cidades.size(); i++) {
 		if (cidades[i].get_id_mediana() == 10) {
-			cout << cidades[i].get_nome() << ", Distancia: " << gillet_johnson.get_distancia(cidades[10], cidades[i]) << "km"  << endl;
+			cout << cidades[i].get_nome() << ", Distancia: " << gillet_johnson.get_distancia(cidades[10], cidades[i]) << "km" << endl;
 		}
 	}
 
@@ -204,4 +205,26 @@ TEST_F(GilletJohnsonTest, testDesignaMedianas)
 
 	//TODO verificar quais cidades deveriam ser atendidas por quais sedes
 	EXPECT_EQ(0, 0);
+}
+
+class TeitzBartTest : public ::RotasTest
+{
+protected:
+	algoritmos::TeitzBart teitz_bart;
+
+	virtual void SetUp()
+	{
+		RotasTest::SetUp();
+
+		teitz_bart = algoritmos::TeitzBart();
+	}
+};
+
+TEST_F(TeitzBartTest, inicializaVertices)
+{
+	using namespace teitz_bart;
+
+	lista_vertices_t vertices = algoritmos::TeitzBart::inicializa_vertices(rotas_context);
+
+	ASSERT_EQ(cidades.size(), vertices.size());
 }
