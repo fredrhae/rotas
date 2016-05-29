@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <ctime>
+#include <iostream>
 
 #include "dijkstra.h"
 
@@ -117,14 +118,13 @@ namespace rotas
 			srand((unsigned int)time(NULL));
 
 			lista_vertices_t medianas;
-
 			unsigned int tamanho = rand() % vertices.size();
 
 			for (unsigned int i = 0; i < tamanho; i++)
 			{
 				unsigned int index = rand() % (vertices.size() - 1);
 
-				medianas.push_back(medianas[index]);
+				medianas.push_back(vertices[index]);
 			}
 
 			return medianas;
@@ -132,8 +132,10 @@ namespace rotas
 
 		void TeitzBart::rotula_nao_analisados(lista_vertices_t& todos_os_vertices, lista_vertices_t& medianas)
 		{
-			for each (vertice_t vertice in todos_os_vertices)
+			for (size_t i = 0; i < todos_os_vertices.size(); i++)
 			{
+				vertice_t& vertice = todos_os_vertices[i];
+
 				if (TeitzBart::contem_vertice(medianas, vertice) == false)
 				{
 					vertice.analisado = false;

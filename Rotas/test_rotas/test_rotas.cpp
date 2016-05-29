@@ -15,8 +15,8 @@ using namespace domain;
 using namespace cli;
 using namespace algoritmos;
 
-#define DIJKSTRA true
-#define GILLET_JOHNSON true
+#define DIJKSTRA false
+#define GILLET_JOHNSON false
 #define TEITZ_BART true
 
 class RotasTest : public ::testing::Test {
@@ -224,8 +224,6 @@ class TeitzBartTest : public ::RotasTest
 {
 protected:
 	algoritmos::TeitzBart teitz_bart;
-	lista_vertices_t todos_os_vertices;
-	lista_vertices_t medianas;
 
 	virtual void SetUp()
 	{
@@ -239,19 +237,86 @@ TEST_F(TeitzBartTest, inicializaVertices)
 {
 	using namespace teitz_bart;
 
-	todos_os_vertices = algoritmos::TeitzBart::inicializa_vertices(rotas_context);
+	lista_vertices_t todos_os_vertices = algoritmos::TeitzBart::inicializa_vertices(rotas_context);
+	cout << "Numero total de vertices: " << todos_os_vertices.size() << endl;
 
-	EXPECT_EQ(cidades.size(), todos_os_vertices.size());
+	ASSERT_EQ(cidades.size(), todos_os_vertices.size());
 }
-
 
 TEST_F(TeitzBartTest, selecionaMedianasAleatoriamente)
 {
 	using namespace teitz_bart;
 
-	medianas = teitz_bart.seleciona_medianas_aleatoriamente(todos_os_vertices);
+	lista_vertices_t todos_os_vertices = algoritmos::TeitzBart::inicializa_vertices(rotas_context);
+	cout << "Numero total de vertices: " << todos_os_vertices.size() << endl;
 
-	cout << "Quantidade aleatória de medianas: " << medianas.size() << endl;
+	lista_vertices_t medianas = teitz_bart.seleciona_medianas_aleatoriamente(todos_os_vertices);
+	cout << "Quantidade aleatoria de medianas: " << medianas.size() << endl;
+
+	ASSERT_LE(medianas.size(), todos_os_vertices.size());
+}
+
+TEST_F(TeitzBartTest, contemVertice)
+{
+	using namespace teitz_bart;
+
+	lista_vertices_t todos_os_vertices;
+
+	vertice_t v1(Cidade("c1", 1));
+	vertice_t v2(Cidade("c2", 2));
+	vertice_t v3(Cidade("c3", 3));
+	vertice_t v4(Cidade("c4", 4));
+	vertice_t v5(Cidade("c5", 5));
+
+	todos_os_vertices.push_back(v1);
+	todos_os_vertices.push_back(v2);
+	todos_os_vertices.push_back(v3);
+	todos_os_vertices.push_back(v4);
+	todos_os_vertices.push_back(v5);
+
+	lista_vertices_t medianas;
+
+	medianas.push_back(v1);
+	medianas.push_back(v2);
+
+	ASSERT_TRUE(algoritmos::TeitzBart::contem_vertice(todos_os_vertices, v1));
+	ASSERT_TRUE(algoritmos::TeitzBart::contem_vertice(todos_os_vertices, v2));
+	ASSERT_TRUE(algoritmos::TeitzBart::contem_vertice(todos_os_vertices, v3));
+	ASSERT_TRUE(algoritmos::TeitzBart::contem_vertice(todos_os_vertices, v4));
+	ASSERT_TRUE(algoritmos::TeitzBart::contem_vertice(todos_os_vertices, v5));
+
+	ASSERT_TRUE(algoritmos::TeitzBart::contem_vertice(medianas, v1));
+	ASSERT_TRUE(algoritmos::TeitzBart::contem_vertice(medianas, v2));
+	ASSERT_FALSE(algoritmos::TeitzBart::contem_vertice(medianas, v3));
+	ASSERT_FALSE(algoritmos::TeitzBart::contem_vertice(medianas, v4));
+	ASSERT_FALSE(algoritmos::TeitzBart::contem_vertice(medianas, v5));
+}
+
+TEST_F(TeitzBartTest, rotulaNaoAnalisados)
+{
+	using namespace teitz_bart;
+
+	lista_vertices_t todos_os_vertices = algoritmos::TeitzBart::inicializa_vertices(rotas_context);
+
+	lista_vertices_t medianas = teitz_bart.seleciona_medianas_aleatoriamente(todos_os_vertices);
+
+	teitz_bart.rotula_nao_analisados(todos_os_vertices, medianas);
+
+	int qtd_nao_analisados = 0;
+
+	for (size_t i = 0; i < todos_os_vertices.size(); i++)
+	{
+		if (todos_os_vertices.at(i).analisado == false)
+		{
+			qtd_nao_analisados++;
+		}
+	}
+
+	cout << "Numero total de vertices: " << todos_os_vertices.size() << endl;
+	cout << "Quantidade aleatoria de medianas: " << medianas.size() << endl;
+	cout << "Quantidade de vertices nao analisados: " << qtd_nao_analisados << endl;
+
+	ASSERT_EQ(qtd_nao_analisados, (todos_os_vertices.size() - medianas.size()));
 }
 
 #endif // TEITZ_BART
