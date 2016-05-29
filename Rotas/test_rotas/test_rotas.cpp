@@ -15,9 +15,9 @@ using namespace domain;
 using namespace cli;
 using namespace algoritmos;
 
-#define DIJKSTRA false
-#define GILLET_JOHNSON false
-#define TEITZ_BART true
+#define DIJKSTRA true
+#define GILLET_JOHNSON true
+#define TEITZ_BART false
 
 class RotasTest : public ::testing::Test {
 protected:
