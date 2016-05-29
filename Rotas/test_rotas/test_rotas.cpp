@@ -228,3 +228,4 @@ TEST_F(TeitzBartTest, inicializaVertices)
 
 	ASSERT_EQ(cidades.size(), vertices.size());
 }
+

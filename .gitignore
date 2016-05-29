@@ -235,3 +235,10 @@ _Pvt_Extensions
 # FAKE - F# Make
 .fake/
 /Rotas/Rotas.VC.db
+/Rotas/Google Tests/test_Rotas.exe
+/Rotas/Google Tests/Rotas.lib
+/Rotas/Google Tests/GoogleTest.lib
+/Rotas/GoogleTest/Google Tests/GoogleTest.tlog
+*.idb
+/Rotas/Rotas/Google Tests/Rotas.tlog
+/Rotas/test_rotas/Google Tests/test_Rotas.tlog
