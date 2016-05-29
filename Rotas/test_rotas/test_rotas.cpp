@@ -15,6 +15,10 @@ using namespace domain;
 using namespace cli;
 using namespace algoritmos;
 
+#define DIJKSTRA true
+#define GILLET_JOHNSON true
+#define TEITZ_BART true
+
 class RotasTest : public ::testing::Test {
 protected:
 	//std::vector<domain::Caminho> caminhos;
@@ -42,6 +46,7 @@ TEST_F(RotasTest, validacaoInicializacaoDoCsv)
 	}
 	cout << "---------------------------" << endl;
 }
+#if DIJKSTRA
 
 class DijkstraTest : public ::RotasTest {
 protected:
@@ -80,6 +85,11 @@ TEST_F(DijkstraTest, validacaoDistanciasGrafoSimples)
 	}
 	cout << endl;
 }
+
+#endif // DIJKSTRA
+
+#if GILLET_JOHNSON
+
 class GilletJohnsonTest : public ::RotasTest {
 protected:
 	int a;
@@ -98,7 +108,6 @@ protected:
 		a = 5;
 	}
 };
-
 
 TEST_F(GilletJohnsonTest, validacaoTrivial)
 {
@@ -207,10 +216,16 @@ TEST_F(GilletJohnsonTest, testDesignaMedianas)
 	EXPECT_EQ(0, 0);
 }
 
+#endif //GILLET_JOHNSON
+
+#if TEITZ_BART
+
 class TeitzBartTest : public ::RotasTest
 {
 protected:
 	algoritmos::TeitzBart teitz_bart;
+	lista_vertices_t todos_os_vertices;
+	lista_vertices_t medianas;
 
 	virtual void SetUp()
 	{
@@ -224,8 +239,20 @@ TEST_F(TeitzBartTest, inicializaVertices)
 {
 	using namespace teitz_bart;
 
-	lista_vertices_t vertices = algoritmos::TeitzBart::inicializa_vertices(rotas_context);
+	todos_os_vertices = algoritmos::TeitzBart::inicializa_vertices(rotas_context);
 
-	ASSERT_EQ(cidades.size(), vertices.size());
+	EXPECT_EQ(cidades.size(), todos_os_vertices.size());
 }
+
+
+TEST_F(TeitzBartTest, selecionaMedianasAleatoriamente)
+{
+	using namespace teitz_bart;
+
+	medianas = teitz_bart.seleciona_medianas_aleatoriamente(todos_os_vertices);
+
+	cout << "Quantidade aleatória de medianas: " << medianas.size() << endl;
+}
+
+#endif // TEITZ_BART
 
