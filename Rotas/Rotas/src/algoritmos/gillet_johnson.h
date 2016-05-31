@@ -21,7 +21,6 @@ namespace rotas
 #ifndef GTEST
 		private:
 #endif //!GTEST
-			double get_distancia(Cidade a, Cidade b);
 			Cidade encontra_mais_proxima(Cidade origem, vector<Cidade> destinos);
 		};
 	} // algoritmos

@@ -32,6 +32,7 @@ namespace rotas {
 			void add_rota(Rota rota);
 			void set_rotas(vector<Rota> rotas);
 			vector<Rota> get_rotas();
+			double get_distancia(Cidade destino);
 			
 			double diferenca;
 		};
