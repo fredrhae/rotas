@@ -17,7 +17,7 @@ using namespace algoritmos;
 
 #define DIJKSTRA true
 #define GILLET_JOHNSON true
-#define TEITZ_BART false
+#define TEITZ_BART true
 #define CLARKE_WRIGHT true
 
 class RotasTest : public ::testing::Test {
@@ -250,10 +250,10 @@ TEST_F(TeitzBartTest, selecionaMedianasAleatoriamente)
 	lista_vertices_t todos_os_vertices = algoritmos::TeitzBart::inicializa_vertices(rotas_context);
 	cout << "Numero total de vertices: " << todos_os_vertices.size() << endl;
 
-	lista_vertices_t medianas = teitz_bart.seleciona_medianas_aleatoriamente(todos_os_vertices);
+	lista_vertices_t medianas = teitz_bart.seleciona_medianas_aleatoriamente(todos_os_vertices, 10);
 	cout << "Quantidade aleatoria de medianas: " << medianas.size() << endl;
 
-	ASSERT_LE(medianas.size(), todos_os_vertices.size());
+	ASSERT_EQ(medianas.size(), 10);
 }
 
 TEST_F(TeitzBartTest, contemVertice)
@@ -298,7 +298,7 @@ TEST_F(TeitzBartTest, rotulaNaoAnalisados)
 
 	lista_vertices_t todos_os_vertices = algoritmos::TeitzBart::inicializa_vertices(rotas_context);
 
-	lista_vertices_t medianas = teitz_bart.seleciona_medianas_aleatoriamente(todos_os_vertices);
+	lista_vertices_t medianas = teitz_bart.seleciona_medianas_aleatoriamente(todos_os_vertices, 5);
 
 	teitz_bart.rotula_nao_analisados(todos_os_vertices, medianas);
 

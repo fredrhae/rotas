@@ -17,7 +17,10 @@ namespace rotas
 			//
 			// Passo 1: Contruir um conjunto inicial 'S', com 'p' elementos de 'V'
 
-			lista_vertices_t medianas /* { S } */ = seleciona_medianas_aleatoriamente(todos_os_vertices);
+			srand((unsigned int)time(NULL));
+			unsigned int p = rand() % todos_os_vertices.size(); // TODO: deve receber como parâmetro
+
+			lista_vertices_t medianas /* { S } */ = seleciona_medianas_aleatoriamente(todos_os_vertices, p);
 
 			bool modificou;
 
@@ -113,18 +116,25 @@ namespace rotas
 			return vertices_para_cidades(medianas);
 		}
 
-		lista_vertices_t TeitzBart::seleciona_medianas_aleatoriamente(lista_vertices_t& vertices)
+		lista_vertices_t TeitzBart::seleciona_medianas_aleatoriamente(lista_vertices_t& vertices, const unsigned int& p)
 		{
 			srand((unsigned int)time(NULL));
 
 			lista_vertices_t medianas;
-			unsigned int tamanho = rand() % vertices.size();
 
-			for (unsigned int i = 0; i < tamanho; i++)
+			for (unsigned int i = 0; i < p; i++)
 			{
 				unsigned int index = rand() % (vertices.size() - 1);
 
-				medianas.push_back(vertices[index]);
+				vertice_t& vertice = vertices[index];
+
+				if (TeitzBart::contem_vertice(medianas, vertice) == true)
+				{
+					i--;
+					continue;
+				}
+
+				medianas.push_back(vertice);
 			}
 
 			return medianas;

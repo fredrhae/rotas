@@ -43,7 +43,7 @@ namespace rotas
 			 * Seleciona aleatoriamente um conjunto 'S', com tamanho 'p' (número de cidades utilizadas como medianas)
 			 * para formar uma aproximação inicial para as p-medianas.
 			 */
-			lista_vertices_t seleciona_medianas_aleatoriamente(lista_vertices_t& vertices);
+			lista_vertices_t seleciona_medianas_aleatoriamente(lista_vertices_t& vertices, const unsigned int& p);
 			
 			/**
 			 * Rotula todos os vértices que não são medianas como "não-analisados".
