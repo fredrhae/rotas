@@ -34,7 +34,7 @@ namespace rotas
 			/**
 			 * Localizas as cidades que são medianas considerando a distância entre as demais.
 			 */
-			std::vector<Cidade> localiza_medianas(Context& context);
+			std::vector<Cidade> localiza_medianas(Context& context, const unsigned int& p);
 		
 #ifndef GTEST
 		private:

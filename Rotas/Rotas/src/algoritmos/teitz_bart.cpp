@@ -10,15 +10,12 @@ namespace rotas
 {
 	namespace algoritmos
 	{
-		std::vector<Cidade> TeitzBart::localiza_medianas(Context& context)
+		std::vector<Cidade> TeitzBart::localiza_medianas(Context& context, const unsigned int& p)
 		{
 			lista_vertices_t todos_os_vertices /* { V } */ = TeitzBart::inicializa_vertices(context);
 
 			//
 			// Passo 1: Contruir um conjunto inicial 'S', com 'p' elementos de 'V'
-
-			srand((unsigned int)time(NULL));
-			unsigned int p = rand() % todos_os_vertices.size(); // TODO: deve receber como parâmetro
 
 			lista_vertices_t medianas /* { S } */ = seleciona_medianas_aleatoriamente(todos_os_vertices, p);
 
@@ -124,7 +121,7 @@ namespace rotas
 
 			for (unsigned int i = 0; i < p; i++)
 			{
-				unsigned int index = rand() % (vertices.size() - 1);
+				unsigned int index = rand() % vertices.size();
 
 				vertice_t& vertice = vertices[index];
 
@@ -149,6 +146,10 @@ namespace rotas
 				if (TeitzBart::contem_vertice(medianas, vertice) == false)
 				{
 					vertice.analisado = false;
+				}
+				else
+				{
+					vertice.analisado = true;
 				}
 			}
 		}
