@@ -119,14 +119,14 @@ TEST_F(GilletJohnsonTest, testGetDistancia)
 	//double get_distancia(Cidade a, Cidade b);
 	Cidade cidade_a = cidades[0];
 	Cidade cidade_b = cidades[1];
-	double distancia_encontrada = gillet_johnson.get_distancia(cidade_a, cidade_b);
+	double distancia_encontrada = cidade_a.get_distancia(cidade_b);
 
 	EXPECT_EQ(406, distancia_encontrada);
 
 	cidade_a = cidades[6];
 	cidade_b = cidades[22];
 
-	distancia_encontrada = gillet_johnson.get_distancia(cidade_a, cidade_b);
+	distancia_encontrada = cidade_a.get_distancia(cidade_b);
 	EXPECT_EQ(211, distancia_encontrada);
 }
 
@@ -190,7 +190,7 @@ TEST_F(GilletJohnsonTest, testDesignaMedianas)
 	cout << "Cidades atendidas por " << cidades[10].get_nome() << ": " << endl;
 	for (unsigned int i = 0; i < cidades.size(); i++) {
 		if (cidades[i].get_id_mediana() == 10) {
-			cout << cidades[i].get_nome() << ", Distancia: " << gillet_johnson.get_distancia(cidades[10], cidades[i]) << "km" << endl;
+			cout << cidades[i].get_nome() << ", Distancia: " << cidades[10].get_distancia(cidades[i]) << "km" << endl;
 		}
 	}
 
@@ -199,7 +199,7 @@ TEST_F(GilletJohnsonTest, testDesignaMedianas)
 	cout << "Cidades atendidas por " << cidades[20].get_nome() << ": " << endl;
 	for (unsigned int i = 0; i < cidades.size(); i++) {
 		if (cidades[i].get_id_mediana() == 20) {
-			cout << cidades[i].get_nome() << ", Distancia: " << gillet_johnson.get_distancia(cidades[20], cidades[i]) << "km" << endl;
+			cout << cidades[i].get_nome() << ", Distancia: " << cidades[20].get_distancia(cidades[i]) << "km" << endl;
 		}
 	}
 
@@ -208,7 +208,7 @@ TEST_F(GilletJohnsonTest, testDesignaMedianas)
 	cout << "Cidades atendidas por " << cidades[30].get_nome() << ": " << endl;
 	for (unsigned int i = 0; i < cidades.size(); i++) {
 		if (cidades[i].get_id_mediana() == 30) {
-			cout << cidades[i].get_nome() << ", Distancia: " << gillet_johnson.get_distancia(cidades[30], cidades[i]) << "km" << endl;
+			cout << cidades[i].get_nome() << ", Distancia: " << cidades[30].get_distancia(cidades[i]) << "km" << endl;
 		}
 	}
 
@@ -400,14 +400,14 @@ TEST_F(ClarkeWrightTest, testGetDistancia)
 {
 	Cidade cidade_a = cidades[0];
 	Cidade cidade_b = cidades[1];
-	double distancia_encontrada = clarke_wright.get_distancia(cidade_a, cidade_b);
+	double distancia_encontrada = cidade_a.get_distancia(cidade_b);
 
 	EXPECT_EQ(406, distancia_encontrada);
 
 	cidade_a = cidades[6];
 	cidade_b = cidades[22];
 
-	distancia_encontrada = clarke_wright.get_distancia(cidade_a, cidade_b);
+	distancia_encontrada = cidade_a.get_distancia(cidade_b);
 	EXPECT_EQ(211, distancia_encontrada);
 
 }

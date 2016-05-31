@@ -10,15 +10,6 @@ namespace rotas
 {
 	namespace algoritmos
 	{	
-		double GilletJohnson::get_distancia(Cidade a, Cidade b) {
-			vector<Rota> rotas_a = a.get_rotas();
-			for (unsigned int i = 0; i < rotas_a.size(); i++) {
-				if (rotas_a[i].get_id_destino() == b.get_id()) {
-					return rotas_a[i].get_distancia();
-				}
-			}
-			return 0.0;
-		}
 
 		bool compara_diferencas(Cidade a, Cidade b) {
 			return a.diferenca < b.diferenca;
@@ -26,10 +17,10 @@ namespace rotas
 		
 		Cidade GilletJohnson::encontra_mais_proxima(Cidade origem, vector<Cidade> destinos) {
 			Cidade mais_proxima = destinos[0];
-			double menor_distancia = get_distancia(origem, mais_proxima);
+			double menor_distancia = origem.get_distancia(mais_proxima);
 			
 			for (unsigned int i = 0; i < destinos.size(); i++) {
-				double distancia = get_distancia(origem, destinos[i]);
+				double distancia = origem.get_distancia(destinos[i]);
 				if (distancia < menor_distancia) {
 					menor_distancia = distancia;
 					mais_proxima = destinos[i];
@@ -48,7 +39,7 @@ namespace rotas
 			struct _compara_distancia {
 				Cidade _origem;				
 				GilletJohnson gilletJohnson;
-				bool operator() (Cidade a, Cidade b) { return gilletJohnson.get_distancia(_origem, a) < gilletJohnson.get_distancia(_origem, b); }
+				bool operator() (Cidade a, Cidade b) { return _origem.get_distancia(a) < _origem.get_distancia(b); }
 			} compara_distancia;
 			compara_distancia._origem = origem;
 
@@ -97,8 +88,8 @@ namespace rotas
 					//L2 -> cidades_ordenadas[1]
 
 					//Passo 2: calcular a razão r = |L2| - |L1|
-					double d1 = get_distancia(ponto_demanda, pontos_atendimento_ordenados[0]);
-					double d2 = get_distancia(ponto_demanda, pontos_atendimento_ordenados[1]);
+					double d1 = ponto_demanda.get_distancia(pontos_atendimento_ordenados[0]);
+					double d2 = ponto_demanda.get_distancia(pontos_atendimento_ordenados[1]);
 					double d = d2 - d1;
 					ponto_demanda.diferenca = d;
 
