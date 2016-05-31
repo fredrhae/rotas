@@ -18,9 +18,6 @@
     <ClCompile Include="src\rotas.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="src\domain\caminho.cpp">
-      <Filter>src\domain</Filter>
-    </ClCompile>
     <ClCompile Include="src\domain\rota.cpp">
       <Filter>src\domain</Filter>
     </ClCompile>
@@ -55,9 +52,6 @@
     </ClInclude>
     <ClInclude Include="src\cli\manipula_entrada.h">
       <Filter>src\cli</Filter>
-    </ClInclude>
-    <ClInclude Include="src\domain\caminho.h">
-      <Filter>src\domain</Filter>
     </ClInclude>
     <ClInclude Include="src\domain\cidade.h">
       <Filter>src\domain</Filter>

@@ -2,7 +2,7 @@
 #define ROTAS_ALGORITMOS_GILLET_H_
 
 #include <vector>
-#include "domain/caminho.h"
+#include "domain/cidade.h"
 
 namespace rotas
 {

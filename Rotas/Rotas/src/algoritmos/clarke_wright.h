@@ -1,14 +1,21 @@
 #ifndef _ROTAS_ALGORITMOS_CLARKE_WRIGHT_H_
 #define _ROTAS_ALGORITMOS_CLARKE_WRIGHT_H_
 
+#include <vector>
+#include "domain/cidade.h"
+
 namespace rotas 
 {
 	namespace algoritmos 
 	{
-		class ClarkeWright {
+		using namespace domain;
 
+		class ClarkeWright {
+				
 			public:
-				ClarkeWright(){};				
+				ClarkeWright(){};
+				vector<vector<Rota>> encontra_roteamentos(std::vector<Cidade> & cidades);
+				double get_distancia(Cidade a, Cidade b);		
 		};
 	}
 }

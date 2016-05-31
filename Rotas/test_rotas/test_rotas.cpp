@@ -4,8 +4,8 @@
 #include "algoritmos/gillet_johnson.h"
 #include "algoritmos/dijkstra.h"
 #include "algoritmos/teitz_bart.h"
+#include "algoritmos/clarke_wright.h"
 #include "cli/manipula_entrada.h"
-#include "domain/caminho.h"
 #include "domain/context.h"
 #include "gtest/gtest.h"
 
@@ -18,10 +18,10 @@ using namespace algoritmos;
 #define DIJKSTRA true
 #define GILLET_JOHNSON true
 #define TEITZ_BART false
+#define CLARKE_WRIGHT true
 
 class RotasTest : public ::testing::Test {
 protected:
-	//std::vector<domain::Caminho> caminhos;
 	std::vector<domain::Cidade> cidades;
 	Context rotas_context;
 
@@ -320,4 +320,71 @@ TEST_F(TeitzBartTest, rotulaNaoAnalisados)
 }
 
 #endif // TEITZ_BART
+
+#if CLARKE_WRIGHT
+
+class ClarkeWrightTest : public ::RotasTest {
+protected:
+	int a;
+	algoritmos::ClarkeWright clarke_wright;
+	algoritmos::GilletJohnson gillet_johnson;
+
+	virtual void SetUp() {
+		RotasTest::SetUp();
+		clarke_wright = algoritmos::ClarkeWright();
+		gillet_johnson = algoritmos::GilletJohnson();
+		a = 10;
+	}
+};
+
+TEST_F(ClarkeWrightTest, validacaoTrivial)
+{
+	EXPECT_EQ(a, 10);
+}
+
+TEST_F(ClarkeWrightTest, testGetDistancia)
+{
+	Cidade cidade_a = cidades[0];
+	Cidade cidade_b = cidades[1];
+	double distancia_encontrada = clarke_wright.get_distancia(cidade_a, cidade_b);
+
+	EXPECT_EQ(406, distancia_encontrada);
+
+	cidade_a = cidades[6];
+	cidade_b = cidades[22];
+
+	distancia_encontrada = clarke_wright.get_distancia(cidade_a, cidade_b);
+	EXPECT_EQ(211, distancia_encontrada);
+
+}
+
+TEST_F(ClarkeWrightTest, testOrdenaSavingsMaiorProMenor)
+{
+	EXPECT_EQ(a, 10);
+}
+
+TEST_F(ClarkeWrightTest, testEncontraRoteamentos)
+{
+	//Escolhe 3 medianas ao acaso
+	cidades[10].set_mediana(true);
+	cidades[20].set_mediana(true);
+	cidades[30].set_mediana(true);
+
+	gillet_johnson.encontra_medianas(cidades);
+
+	vector<vector<Rota>> savings = clarke_wright.encontra_roteamentos(cidades);
+
+	cout << "Savings extraidos da cidade sede " << cidades[10].get_nome() << ": " << endl;
+	for (unsigned int i = 0; i < savings[0].size(); i++) {
+			cout <<"S"<< savings[0][i].get_id_origem() << "," << savings[0][i].get_id_destino() <<
+				"= " << savings[0][i].get_distancia() << "km" << endl;
+		
+	}
+
+	cout << "-------------------------------------" << endl;
+
+	EXPECT_EQ(0, 0);
+}
+	
+#endif // CLARKE_WRIGHT
 
