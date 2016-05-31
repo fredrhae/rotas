@@ -17,7 +17,7 @@ using namespace algoritmos;
 
 #define DIJKSTRA true
 #define GILLET_JOHNSON true
-#define TEITZ_BART true
+#define TEITZ_BART false
 #define CLARKE_WRIGHT true
 
 class RotasTest : public ::testing::Test {
@@ -325,10 +325,43 @@ TEST_F(TeitzBartTest, existeNaoAnalisados)
 	lista_vertices_t medianas = teitz_bart.seleciona_medianas_aleatoriamente(todos_os_vertices, 5);
 	teitz_bart.rotula_nao_analisados(todos_os_vertices, medianas);
 	ASSERT_TRUE(teitz_bart.existe_nao_analisados(todos_os_vertices));
-	
+
 	medianas = teitz_bart.seleciona_medianas_aleatoriamente(todos_os_vertices, todos_os_vertices.size());
 	teitz_bart.rotula_nao_analisados(todos_os_vertices, medianas);
 	ASSERT_FALSE(teitz_bart.existe_nao_analisados(todos_os_vertices));
+}
+
+TEST_F(TeitzBartTest, verticesParaCidades)
+{
+	using namespace teitz_bart;
+
+	lista_vertices_t todos_os_vertices = algoritmos::TeitzBart::inicializa_vertices(rotas_context);
+	std::vector<Cidade> cidades = TeitzBart::vertices_para_cidades(todos_os_vertices);
+
+	ASSERT_EQ(cidades.size(), todos_os_vertices.size());
+}
+
+TEST_F(TeitzBartTest, calculaNumeroTransmissaoPadrao)
+{
+	using namespace teitz_bart;
+
+	// TODO
+}
+
+TEST_F(TeitzBartTest, calculaNumeroTransmissaoAlterandoVetor)
+{
+	using namespace teitz_bart;
+
+	// TODO
+}
+
+TEST_F(TeitzBartTest, localizaMedianas)
+{
+	using namespace teitz_bart;
+
+	std::vector<Cidade> cidades = teitz_bart.localiza_medianas(rotas_context, 10);
+
+	ASSERT_EQ(cidades.size(), 10);
 }
 
 #endif // TEITZ_BART

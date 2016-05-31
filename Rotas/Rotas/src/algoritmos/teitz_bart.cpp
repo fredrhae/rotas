@@ -35,6 +35,8 @@ namespace rotas
 
 				for (size_t i = 0; i < todos_os_vertices.size(); i++)
 				{
+					std::cout << "debug:" << i << std::endl;
+
 					vertice_t Vi = todos_os_vertices[i];
 
 					if (Vi.analisado == true)
@@ -45,12 +47,12 @@ namespace rotas
 					//
 					// a) 'Vi' é um vértice "não-analisado". Calcular redução 'R' do número de transmissão
 					//	  para todo 'Vj' pertencente à { S }. Rij = NT(S) - NT(S u { Vi } - { Vj })
-
 					double ntS = calcula_numero_transmissao(Vi, context);
 					double * reducoes = new double[medianas.size()];
 					int VjCidade_id = -1;
 					int VjMax_index = -1;
 					double max = std::numeric_limits<double>::min();
+
 
 					for (size_t j = 0; j < medianas.size(); j++)
 					{
