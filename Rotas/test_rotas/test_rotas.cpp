@@ -15,10 +15,10 @@ using namespace domain;
 using namespace cli;
 using namespace algoritmos;
 
-#define DIJKSTRA false
-#define GILLET_JOHNSON false
+#define DIJKSTRA true
+#define GILLET_JOHNSON true
 #define TEITZ_BART true
-#define CLARKE_WRIGHT false
+#define CLARKE_WRIGHT true
 
 class RotasTest : public ::testing::Test {
 protected:
@@ -228,8 +228,6 @@ protected:
 	virtual void SetUp()
 	{
 		RotasTest::SetUp();
-
-		teitz_bart = algoritmos::TeitzBart();
 	}
 };
 
@@ -237,7 +235,7 @@ TEST_F(TeitzBartTest, inicializaVertices)
 {
 	using namespace teitz_bart;
 
-	lista_vertices_t todos_os_vertices = algoritmos::TeitzBart::inicializa_vertices(rotas_context);
+	lista_vertices_t todos_os_vertices = algoritmos::TeitzBart::inicializa_vertices(cidades);
 	cout << "Numero total de vertices: " << todos_os_vertices.size() << endl;
 
 	ASSERT_EQ(cidades.size(), todos_os_vertices.size());
@@ -247,7 +245,7 @@ TEST_F(TeitzBartTest, selecionaMedianasAleatoriamente)
 {
 	using namespace teitz_bart;
 
-	lista_vertices_t todos_os_vertices = algoritmos::TeitzBart::inicializa_vertices(rotas_context);
+	lista_vertices_t todos_os_vertices = algoritmos::TeitzBart::inicializa_vertices(cidades);
 	lista_vertices_t medianas = teitz_bart.seleciona_medianas_aleatoriamente(todos_os_vertices, 10);
 
 	ASSERT_EQ(medianas.size(), 10);
@@ -293,7 +291,7 @@ TEST_F(TeitzBartTest, rotulaNaoAnalisados)
 {
 	using namespace teitz_bart;
 
-	lista_vertices_t todos_os_vertices = algoritmos::TeitzBart::inicializa_vertices(rotas_context);
+	lista_vertices_t todos_os_vertices = algoritmos::TeitzBart::inicializa_vertices(cidades);
 
 	lista_vertices_t medianas = teitz_bart.seleciona_medianas_aleatoriamente(todos_os_vertices, 10);
 
@@ -320,7 +318,7 @@ TEST_F(TeitzBartTest, existeNaoAnalisados)
 {
 	using namespace teitz_bart;
 
-	lista_vertices_t todos_os_vertices = algoritmos::TeitzBart::inicializa_vertices(rotas_context);
+	lista_vertices_t todos_os_vertices = algoritmos::TeitzBart::inicializa_vertices(cidades);
 
 	lista_vertices_t medianas = teitz_bart.seleciona_medianas_aleatoriamente(todos_os_vertices, 5);
 	teitz_bart.rotula_nao_analisados(todos_os_vertices, medianas);
@@ -335,7 +333,7 @@ TEST_F(TeitzBartTest, verticesParaCidades)
 {
 	using namespace teitz_bart;
 
-	lista_vertices_t todos_os_vertices = algoritmos::TeitzBart::inicializa_vertices(rotas_context);
+	lista_vertices_t todos_os_vertices = algoritmos::TeitzBart::inicializa_vertices(cidades);
 	std::vector<Cidade> cidades = TeitzBart::vertices_para_cidades(todos_os_vertices);
 
 	ASSERT_EQ(cidades.size(), todos_os_vertices.size());
@@ -359,9 +357,20 @@ TEST_F(TeitzBartTest, localizaMedianas)
 {
 	using namespace teitz_bart;
 
-	std::vector<Cidade> cidades = teitz_bart.localiza_medianas(rotas_context, 1);
+	unsigned int p = 1;
 
-	ASSERT_EQ(cidades.size(), 1);
+	cout << "Total de cidades: " << cidades.size() << endl;
+
+	std::vector<Cidade> cidades = teitz_bart.localiza_medianas(rotas_context.get_cidades_atendidas(), p);
+
+	cout << "Cidades sedes: " << endl;
+
+	for (size_t i = 0; i < cidades.size(); i++)
+	{
+		cout << "\t* " << cidades.at(i).get_nome() << endl;
+	}
+
+	ASSERT_EQ(cidades.size(), p);
 }
 
 #endif // TEITZ_BART

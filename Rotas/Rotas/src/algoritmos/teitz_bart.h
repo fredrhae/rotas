@@ -34,7 +34,7 @@ namespace rotas
 			/**
 			 * Localizas as cidades que são medianas considerando a distância entre as demais.
 			 */
-			std::vector<Cidade> localiza_medianas(Context& context, const unsigned int& p);
+			std::vector<Cidade> localiza_medianas(std::vector<Cidade> cidades, const unsigned int& p);
 		
 #ifndef GTEST
 		private:
@@ -58,7 +58,7 @@ namespace rotas
 			/**
 			 * Inicializa uma lista de vértices.
 			 */
-			static lista_vertices_t inicializa_vertices(Context& context);
+			static lista_vertices_t inicializa_vertices(std::vector<Cidade>& cidades);
 
 			/**
 			 * Converte uma lista de vertices para uma lista de cidades;
@@ -71,14 +71,19 @@ namespace rotas
 			static bool contem_vertice(const lista_vertices_t& vertices, vertice_t& vertice);
 
 			/**
+			 *Verifica se uma lista de vértice possui um id específico.
+			 */
+			static bool contem_id(const lista_vertices_t& vertices, const int& id);
+
+			/**
 			 * Calcula o número de transmissão (soma das menores distâncias) entre um vértice e todos os demais.
 			 */
-			static double calcula_numero_transmissao(vertice_t& vertice, Context& context);
+			static double calcula_numero_transmissao(vertice_t& vertice, lista_vertices_t& grafo);
 
 			/**
 			 *
 			 */
-			static double calcula_numero_transmissao(vertice_t& vertice, Context& context, vertice_t& adicionar, vertice_t& remover);
+			static double calcula_numero_transmissao(vertice_t& vertice, lista_vertices_t& vertices, vertice_t& adicionar, vertice_t& remover);
 		};
 	} // algoritmos
 } // rotas
