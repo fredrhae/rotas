@@ -35,9 +35,7 @@ namespace rotas
 
 				for (size_t i = 0; i < todos_os_vertices.size(); i++)
 				{
-					std::cout << "debug:" << i << std::endl;
-
-					vertice_t Vi = todos_os_vertices[i];
+					vertice_t& Vi = todos_os_vertices[i];
 
 					if (Vi.analisado == true)
 					{
@@ -53,10 +51,9 @@ namespace rotas
 					int VjMax_index = -1;
 					double max = std::numeric_limits<double>::min();
 
-
 					for (size_t j = 0; j < medianas.size(); j++)
 					{
-						vertice_t Vj = medianas[j];
+						vertice_t& Vj = medianas[j];
 
 						reducoes[j] = ntS - calcula_numero_transmissao(Vj, context, Vi, Vj);
 
@@ -85,7 +82,7 @@ namespace rotas
 						// Rotula Vj0 como "analisado"
 						for (size_t aux = 0; aux < todos_os_vertices.size(); aux++)
 						{
-							vertice_t v = todos_os_vertices[aux];
+							vertice_t& v = todos_os_vertices[aux];
 
 							if (v.cidade.get_id() == VjCidade_id)
 							{

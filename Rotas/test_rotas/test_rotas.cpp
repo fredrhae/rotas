@@ -15,10 +15,10 @@ using namespace domain;
 using namespace cli;
 using namespace algoritmos;
 
-#define DIJKSTRA true
-#define GILLET_JOHNSON true
-#define TEITZ_BART false
-#define CLARKE_WRIGHT true
+#define DIJKSTRA false
+#define GILLET_JOHNSON false
+#define TEITZ_BART true
+#define CLARKE_WRIGHT false
 
 class RotasTest : public ::testing::Test {
 protected:
@@ -359,9 +359,9 @@ TEST_F(TeitzBartTest, localizaMedianas)
 {
 	using namespace teitz_bart;
 
-	std::vector<Cidade> cidades = teitz_bart.localiza_medianas(rotas_context, 10);
+	std::vector<Cidade> cidades = teitz_bart.localiza_medianas(rotas_context, 1);
 
-	ASSERT_EQ(cidades.size(), 10);
+	ASSERT_EQ(cidades.size(), 1);
 }
 
 #endif // TEITZ_BART
