@@ -36,16 +36,6 @@ namespace rotas {
 			return facilidades;
 		}
 
-		double ClarkeWright::get_distancia(Cidade a, Cidade b) {
-			vector<Rota> rotas_a = a.get_rotas();
-			for (unsigned int i = 0; i < rotas_a.size(); i++) {
-				if (rotas_a[i].get_id_destino() == b.get_id()) {
-					return rotas_a[i].get_distancia();
-				}
-			}
-			return 0.0;
-		}
-
 		vector<Rota> inicializa_savings(Cidade facilidade)
 		{
 			vector<Cidade> pontos_demanda = encontra_pontos_demandas(facilidade);
@@ -62,9 +52,9 @@ namespace rotas {
 					if (i != j)
 					{	
 						int id_cidade_destino = pontos_demanda[j].get_id();
-						double distancia_origem_facilidade = clarke.get_distancia(cidades_entrada[id_cidade_origem_atual],facilidade);
-						double distancia_facilidade_destino = clarke.get_distancia(facilidade,cidades_entrada[id_cidade_destino]);
-						double distancia_origem_destino = clarke.get_distancia(cidades_entrada[id_cidade_origem_atual], cidades_entrada[id_cidade_destino]);
+						double distancia_origem_facilidade = cidades_entrada[id_cidade_origem_atual].get_distancia(facilidade);
+						double distancia_facilidade_destino = facilidade.get_distancia(cidades_entrada[id_cidade_destino]);
+						double distancia_origem_destino = cidades_entrada[id_cidade_origem_atual].get_distancia(cidades_entrada[id_cidade_destino]);
 						double distancia_saving_atual = distancia_origem_facilidade + distancia_facilidade_destino - distancia_origem_destino;
 
 						savings.push_back(Rota(id_cidade_origem_atual,id_cidade_destino,distancia_saving_atual));

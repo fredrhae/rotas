@@ -15,7 +15,6 @@ namespace rotas
 			public:
 				ClarkeWright(){};
 				vector<vector<Rota>> encontra_roteamentos(std::vector<Cidade> & cidades);
-				double get_distancia(Cidade a, Cidade b);		
 		};
 	}
 }

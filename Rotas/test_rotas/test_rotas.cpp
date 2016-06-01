@@ -400,14 +400,14 @@ TEST_F(ClarkeWrightTest, testGetDistancia)
 {
 	Cidade cidade_a = cidades[0];
 	Cidade cidade_b = cidades[1];
-	double distancia_encontrada = clarke_wright.get_distancia(cidade_a, cidade_b);
+	double distancia_encontrada = cidade_a.get_distancia(cidade_b);
 
 	EXPECT_EQ(406, distancia_encontrada);
 
 	cidade_a = cidades[6];
 	cidade_b = cidades[22];
 
-	distancia_encontrada = clarke_wright.get_distancia(cidade_a, cidade_b);
+	distancia_encontrada = cidade_a.get_distancia(cidade_b);
 	EXPECT_EQ(211, distancia_encontrada);
 
 }
