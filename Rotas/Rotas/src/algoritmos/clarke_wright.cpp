@@ -111,8 +111,8 @@ namespace rotas {
 			{
 				if (saving_e_valido(savings_atual[i]))
 				{
-					adiciona_saving_na_rota(savings_atual[i], melhor_rota_encontrada);
-					incrementa_demandas_cobertas(melhor_rota_encontrada, demandas_cobertas);
+					//adiciona_saving_na_rota(savings_atual[i], melhor_rota_encontrada);
+					//incrementa_demandas_cobertas(melhor_rota_encontrada, demandas_cobertas);
 				}
 			}
 
@@ -140,14 +140,14 @@ namespace rotas {
 				todos_savings.push_back(saving_atual);
 			}
 
-			for (unsigned int i = 0; i < todos_savings.size(); i ++)
-			{
-				vector<Rota> melhor_rota_atual = vector<Rota>();
+			//for (unsigned int i = 0; i < todos_savings.size(); i ++)
+			//{
+			//	vector<Rota> melhor_rota_atual = vector<Rota>();
 
-				melhor_rota_atual = encontra_rota_partindo_dos_savings(todos_savings[i], facilidades[i]);
-				
-				melhores_rotas_encontradas.push_back(melhor_rota_atual);
-			}
+			//	melhor_rota_atual = encontra_rota_partindo_dos_savings(todos_savings[i], facilidades[i]);
+			//	
+			//	melhores_rotas_encontradas.push_back(melhor_rota_atual);
+			//}
 
 			return todos_savings;
 		}
