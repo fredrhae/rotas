@@ -181,39 +181,31 @@ TEST_F(GilletJohnsonTest, testOrdenaPorDistancia)
 TEST_F(GilletJohnsonTest, testDesignaMedianas)
 {
 	//Escolhe 3 medianas ao acaso
-	cidades[10].set_mediana(true);
-	cidades[20].set_mediana(true);
-	cidades[30].set_mediana(true);
+	vector<Cidade*> medianas = vector<Cidade*>();
+	medianas.push_back(&cidades[10]);
+	medianas.push_back(&cidades[20]);
+	medianas.push_back(&cidades[30]);
+
+	for (unsigned int i = 0; i < medianas.size(); i++) {
+		medianas[i]->set_mediana(true);
+	}
 
 	gillet_johnson.encontra_medianas(cidades);
 
-	cout << "Cidades atendidas por " << cidades[10].get_nome() << ": " << endl;
-	for (unsigned int i = 0; i < cidades.size(); i++) {
-		if (cidades[i].get_id_mediana() == 10) {
-			cout << cidades[i].get_nome() << ", Distancia: " << cidades[10].get_distancia(cidades[i]) << "km" << endl;
+	for (unsigned int i = 0; i < medianas.size(); i++) {
+		cout << "Cidades atendidas por " << medianas[i]->get_nome() << ": " << endl;
+		for (unsigned int j = 0; j < cidades.size(); j++) {
+			if (cidades[j].get_id_mediana() == medianas[i]->get_id()) {
+				cout << cidades[j].get_nome() << ", Distancia: " << medianas[i]->get_distancia(cidades[j]) << "km" << endl;
+			}
 		}
+
+		cout << "-------------------------------------" << endl;
 	}
-
-	cout << "-------------------------------------" << endl;
-
-	cout << "Cidades atendidas por " << cidades[20].get_nome() << ": " << endl;
-	for (unsigned int i = 0; i < cidades.size(); i++) {
-		if (cidades[i].get_id_mediana() == 20) {
-			cout << cidades[i].get_nome() << ", Distancia: " << cidades[20].get_distancia(cidades[i]) << "km" << endl;
-		}
-	}
-
-	cout << "-------------------------------------" << endl;
-
-	cout << "Cidades atendidas por " << cidades[30].get_nome() << ": " << endl;
-	for (unsigned int i = 0; i < cidades.size(); i++) {
-		if (cidades[i].get_id_mediana() == 30) {
-			cout << cidades[i].get_nome() << ", Distancia: " << cidades[30].get_distancia(cidades[i]) << "km" << endl;
-		}
-	}
-
+	
 	//TODO verificar quais cidades deveriam ser atendidas por quais sedes
-	EXPECT_EQ(0, 0);
+	ASSERT_TRUE(cidades[19].get_id_mediana() != 0);
+	ASSERT_TRUE(cidades[29].get_id_mediana() != 0);
 }
 
 #endif //GILLET_JOHNSON
