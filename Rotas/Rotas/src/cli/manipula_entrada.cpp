@@ -161,10 +161,9 @@ Context ManipulaEntrada::inicializa_dados_partir_do_csv(string path)
 	// Remove a primeira linha com os nomes das cidades
 	matriz_distancias_string.erase(matriz_distancias_string.begin());
 
-	bool matriz_e_quadrada, matriz_e_simetrica, diagonal_e_zero;
+	bool matriz_e_quadrada, diagonal_e_zero;
 	
 	matriz_e_quadrada = checa_matriz_quadrada(matriz_distancias_string);
-	//matriz_e_simetrica = checa_matriz_simetrica(matriz_distancias_string);
 	diagonal_e_zero = checa_matriz_diagonal(matriz_distancias_string);
 
 	if(!matriz_e_quadrada || !diagonal_e_zero)
