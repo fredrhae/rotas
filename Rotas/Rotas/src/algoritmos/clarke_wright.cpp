@@ -3,6 +3,7 @@
 #include "domain/rota.h"
 #include <vector>
 #include <algorithm>
+#include <set>
 
 using namespace std;
 using namespace rotas::algoritmos;
@@ -84,14 +85,41 @@ namespace rotas {
 			return true;
 		}
 
-		void adiciona_saving_na_rota(Rota saving, vector<Rota> &rota_encontradas)
+		bool cidade_existe_na_rota(int id_cidade, vector<Rota> rotas_encontradas)
 		{
-
+			for each(Rota rota_atual in rotas_encontradas)
+			{
+				if(rota_atual.rota_contem_cidade(id_cidade))
+					return true;
+			}
+			return false;
 		}
 
-		void incrementa_demandas_cobertas(vector<Rota> &rota_encontrada, int *contador_atual)
+		void adiciona_cidade_na_rota(int id_cidade, vector<Rota> &rotas_encontradas)
 		{
+			int id_origem = rotas_encontradas.back().get_id_destino();
+			Cidade origem = cidades_entrada[id_origem];
+			Cidade destino = cidades_entrada[id_cidade];
 
+			rotas_encontradas.push_back(Rota(id_origem, id_cidade, origem.get_distancia(destino)));
+		}
+
+		int adiciona_saving_na_rota(Rota saving, vector<Rota> &rotas_encontradas)
+		{
+			int contador_demandas = 0;
+
+			if (!cidade_existe_na_rota(saving.get_id_origem(), rotas_encontradas))
+			{
+				adiciona_cidade_na_rota(saving.get_id_origem(), rotas_encontradas);
+				contador_demandas ++;
+			}
+			if (!cidade_existe_na_rota(saving.get_id_destino(), rotas_encontradas))
+			{
+				adiciona_cidade_na_rota(saving.get_id_destino(), rotas_encontradas);
+				contador_demandas ++;
+			}
+			
+			return contador_demandas;
 		}
 
 		vector<Rota> encontra_rota_partindo_dos_savings(vector<Rota> &savings_atual, Cidade facilidade)
@@ -107,18 +135,19 @@ namespace rotas {
 			
 			int demandas_cobertas = 1;
 			
-			for (unsigned int i = 0; demandas_cobertas < total_demandas || i < savings_atual.size(); i++)
+			for (unsigned int i = 0; demandas_cobertas < total_demandas && i < savings_atual.size(); i++)
 			{
 				if (saving_e_valido(savings_atual[i]))
 				{
-					//adiciona_saving_na_rota(savings_atual[i], melhor_rota_encontrada);
-					//incrementa_demandas_cobertas(melhor_rota_encontrada, demandas_cobertas);
+					demandas_cobertas += adiciona_saving_na_rota(savings_atual[i], melhor_rota_encontrada);
 				}
 			}
 
 			// Adiciona a rota da ultima cidade de destino retornando pra facilidade
 			Cidade ultima_cidade_demanda = cidades_entrada[melhor_rota_encontrada.back().get_id_destino()];
 			melhor_rota_encontrada.push_back(Rota(ultima_cidade_demanda.get_id(), facilidade.get_id(), ultima_cidade_demanda.get_distancia(facilidade)));
+			
+			return melhor_rota_encontrada;
 		}
 
 		vector<vector<Rota>> ClarkeWright::encontra_roteamentos(std::vector<Cidade> & cidades)
@@ -140,14 +169,14 @@ namespace rotas {
 				todos_savings.push_back(saving_atual);
 			}
 
-			//for (unsigned int i = 0; i < todos_savings.size(); i ++)
-			//{
-			//	vector<Rota> melhor_rota_atual = vector<Rota>();
+			for (unsigned int i = 0; i < todos_savings.size(); i ++)
+			{
+				vector<Rota> melhor_rota_atual = vector<Rota>();
 
-			//	melhor_rota_atual = encontra_rota_partindo_dos_savings(todos_savings[i], facilidades[i]);
-			//	
-			//	melhores_rotas_encontradas.push_back(melhor_rota_atual);
-			//}
+				melhor_rota_atual = encontra_rota_partindo_dos_savings(todos_savings[i], facilidades[i]);
+				
+				melhores_rotas_encontradas.push_back(melhor_rota_atual);
+			}
 
 			return todos_savings;
 		}
