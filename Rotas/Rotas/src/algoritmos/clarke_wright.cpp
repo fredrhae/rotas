@@ -2,6 +2,7 @@
 #include "algoritmos/gillet_johnson.h"
 #include "domain/rota.h"
 #include <vector>
+#include <algorithm>
 
 using namespace std;
 using namespace rotas::algoritmos;
@@ -36,6 +37,16 @@ namespace rotas {
 			return facilidades;
 		}
 
+		bool compara_rotas(Rota rota_a, Rota rota_b)
+		{
+			return rota_a.get_distancia() > rota_b.get_distancia();
+		}
+
+		void ordena_maior_pro_menor(vector<Rota> &savings)
+		{
+			sort(savings.begin(), savings.end(), compara_rotas);
+		}
+
 		vector<Rota> inicializa_savings(Cidade facilidade)
 		{
 			vector<Cidade> pontos_demanda = encontra_pontos_demandas(facilidade);
@@ -61,7 +72,7 @@ namespace rotas {
 					}
 				}
 			}
-			
+
 			return savings;
 		}
 
@@ -75,12 +86,17 @@ namespace rotas {
 
 			for (unsigned int i = 0; i < facilidades.size(); i++)
 			{
-				todos_savings.push_back(inicializa_savings(facilidades[i]));
-			}
-			
-			// TODO: Ordenar os savings do maior pro menor
+				vector<Rota> saving_atual = inicializa_savings(facilidades[i]);
+				
+				ordena_maior_pro_menor(saving_atual);
 
-			// TODO: Fazer a rota de acordo com os savings
+				todos_savings.push_back(saving_atual);
+			}
+
+			for each (vector<Rota> savings_atual in todos_savings)
+			{
+				
+			}
 
 			return todos_savings;
 		}
