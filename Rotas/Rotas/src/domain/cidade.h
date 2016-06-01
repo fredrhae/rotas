@@ -16,6 +16,9 @@ namespace rotas {
 			bool mediana = false;
 			int id_mediana;
 			vector<Rota> rotas;
+			double demanda;
+			double capacidade;
+			bool compara_distancia(Cidade destino_a, Cidade destino_b);
 
 		public:
 			Cidade() {};
@@ -31,10 +34,16 @@ namespace rotas {
 			void set_id_mediana(int id);
 			void add_rota(Rota rota);
 			void set_rotas(vector<Rota> rotas);
+			void set_demanda(double demanda);
+			void set_capacidade(double capacidade);
 			vector<Rota> get_rotas();
 			double get_distancia(Cidade destino);
-			
+			double get_demanda();
+			double get_capacidade();
+			vector<Cidade> ordena_por_distancia(vector<Cidade> destinos);
+			Cidade encontra_mais_proxima(vector<Cidade> destinos);
 			double diferenca;
+			bool aloca_demanda(double demanda);
 		};
 	} // domain
 } // rotas

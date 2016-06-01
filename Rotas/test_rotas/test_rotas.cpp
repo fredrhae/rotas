@@ -147,7 +147,7 @@ TEST_F(GilletJohnsonTest, testEncontraMaisProxima)
 	destinos.push_back(cidades[20]);
 	destinos.push_back(cidades[0]);
 
-	Cidade mais_proxima = gillet_johnson.encontra_mais_proxima(origem, destinos);
+	Cidade mais_proxima = origem.encontra_mais_proxima(destinos);
 
 	EXPECT_EQ(21, mais_proxima.get_id());
 }
@@ -169,7 +169,7 @@ TEST_F(GilletJohnsonTest, testOrdenaPorDistancia)
 	destinos.push_back(cidades[20]);
 	destinos.push_back(cidades[0]);
 
-	vector<Cidade> cidades_ordenadas = gillet_johnson.ordena_por_distancia(origem, destinos);
+	vector<Cidade> cidades_ordenadas = origem.ordena_por_distancia(destinos);
 
 	EXPECT_EQ(21, cidades_ordenadas[0].get_id());
 	EXPECT_EQ(20, cidades_ordenadas[1].get_id());

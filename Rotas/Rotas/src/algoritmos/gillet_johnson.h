@@ -15,13 +15,12 @@ namespace rotas
 		public:
 			GilletJohnson() {};
 			~GilletJohnson() {};
-			vector<Cidade> ordena_por_distancia(Cidade origem, vector<Cidade> destinos);
 			void encontra_medianas(std::vector<Cidade> & cidades);
 
 #ifndef GTEST
 		private:
 #endif //!GTEST
-			Cidade encontra_mais_proxima(Cidade origem, vector<Cidade> destinos);
+			
 		};
 	} // algoritmos
 } // rotas

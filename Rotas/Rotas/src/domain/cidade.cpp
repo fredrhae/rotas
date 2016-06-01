@@ -1,4 +1,4 @@
-
+#include <algorithm>
 #include "cidade.h"
 using namespace std;
 
@@ -41,11 +41,21 @@ namespace rotas
 			rotas = novas_rotas;
 		}
 
+		void Cidade::set_demanda(double demanda)
+		{
+			this->demanda = demanda;
+		}
+
+		void Cidade::set_capacidade(double capacidade)
+		{
+			this->capacidade = capacidade;
+		}
+
 		vector<Rota> Cidade::get_rotas()
 		{
 			return rotas;
 		}
-
+		
 		double Cidade::get_distancia(Cidade destino) {			
 			for (unsigned int i = 0; i < rotas.size(); i++) {
 				if (rotas[i].get_id_destino() == destino.get_id()) {
@@ -53,6 +63,68 @@ namespace rotas
 				}
 			}
 			return 0.0;
+		}
+
+		double Cidade::get_demanda()
+		{
+			return demanda;
+		}
+
+		double Cidade::get_capacidade()
+		{
+			return capacidade;
+		}
+
+		bool Cidade::compara_distancia(Cidade destino_a, Cidade destino_b) {
+			return this->get_distancia(destino_a) < this->get_distancia(destino_b);
+		}
+
+		vector<Cidade> Cidade::ordena_por_distancia(vector<Cidade> destinos) {
+			vector<Cidade> cidades_em_ordem = vector<Cidade>();
+
+			cidades_em_ordem.push_back(destinos[0]);
+
+			struct _compara_distancia {
+				Cidade *origem;
+				bool operator() (Cidade a, Cidade b) { return origem->get_distancia(a) < origem->get_distancia(b); }
+			} compara_distancia;
+			compara_distancia.origem = this;
+
+			for (unsigned int i = 1; i < destinos.size(); i++) {
+				auto it = upper_bound(cidades_em_ordem.begin(), cidades_em_ordem.end(), destinos[i], compara_distancia);
+				cidades_em_ordem.insert(it, destinos[i]);
+
+			}
+
+			return cidades_em_ordem;
+		}
+
+		Cidade Cidade::encontra_mais_proxima(vector<Cidade> destinos)
+		{
+			Cidade mais_proxima = destinos[0];
+			double menor_distancia = this->get_distancia(mais_proxima);
+
+			for (unsigned int i = 0; i < destinos.size(); i++) {
+				double distancia = this->get_distancia(destinos[i]);
+				if (distancia < menor_distancia) {
+					menor_distancia = distancia;
+					mais_proxima = destinos[i];
+				}
+			}
+
+			return mais_proxima;
+		}
+
+		bool Cidade::aloca_demanda(double demanda)
+		{
+			if (demanda > capacidade) {
+				return false;
+			}
+			else {
+				capacidade -= demanda;
+				return true;
+			}
+
 		}
 
 	} // domain
