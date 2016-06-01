@@ -17,6 +17,7 @@ namespace rotas
 			int get_id_origem();
 			int get_id_destino();
 			double get_distancia();
+			bool rota_contem_cidade(int id_cidade);
 		};
 	} // domain
 } // rotas

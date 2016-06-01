@@ -11,6 +11,7 @@ namespace rotas {
 	namespace algoritmos {
 
 		static vector<Cidade> cidades_entrada;
+		static vector<vector<Rota>> todos_savings;
 
 		vector<Cidade> encontra_pontos_demandas(Cidade facilidade)
 		{
@@ -76,13 +77,59 @@ namespace rotas {
 			return savings;
 		}
 
+		bool saving_e_valido(Rota rota_saving)
+		{
+			if(rota_saving.get_distancia() < 0)
+				return false;
+			return true;
+		}
+
+		void adiciona_saving_na_rota(Rota saving, vector<Rota> &rota_encontradas)
+		{
+
+		}
+
+		void incrementa_demandas_cobertas(vector<Rota> &rota_encontrada, int *contador_atual)
+		{
+
+		}
+
+		vector<Rota> encontra_rota_partindo_dos_savings(vector<Rota> &savings_atual, Cidade facilidade)
+		{
+			vector<Rota> melhor_rota_encontrada = vector<Rota>();
+
+			size_t total_demandas = encontra_pontos_demandas(facilidade).size();
+
+			Cidade destino = cidades_entrada[savings_atual[0].get_id_origem()];
+			
+			// Adiciona a rota da origem pra primeira cidade do saving
+			melhor_rota_encontrada.push_back(Rota(facilidade.get_id(),destino.get_id(),facilidade.get_distancia(destino)));
+			
+			int demandas_cobertas = 1;
+			
+			for (unsigned int i = 0; demandas_cobertas < total_demandas || i < savings_atual.size(); i++)
+			{
+				if (saving_e_valido(savings_atual[i]))
+				{
+					adiciona_saving_na_rota(savings_atual[i], melhor_rota_encontrada);
+					incrementa_demandas_cobertas(melhor_rota_encontrada, demandas_cobertas);
+				}
+			}
+
+			// Adiciona a rota da ultima cidade de destino retornando pra facilidade
+			Cidade ultima_cidade_demanda = cidades_entrada[melhor_rota_encontrada.back().get_id_destino()];
+			melhor_rota_encontrada.push_back(Rota(ultima_cidade_demanda.get_id(), facilidade.get_id(), ultima_cidade_demanda.get_distancia(facilidade)));
+		}
+
 		vector<vector<Rota>> ClarkeWright::encontra_roteamentos(std::vector<Cidade> & cidades)
 		{
 			cidades_entrada = cidades;
 
 			vector<Cidade> facilidades = encontra_facilidades();
 			
-			vector<vector<Rota>> todos_savings = vector<vector<Rota>>();
+			vector<vector<Rota>> melhores_rotas_encontradas = vector<vector<Rota>>();
+
+			todos_savings = vector<vector<Rota>>();
 
 			for (unsigned int i = 0; i < facilidades.size(); i++)
 			{
@@ -93,9 +140,13 @@ namespace rotas {
 				todos_savings.push_back(saving_atual);
 			}
 
-			for each (vector<Rota> savings_atual in todos_savings)
+			for (unsigned int i = 0; i < todos_savings.size(); i ++)
 			{
+				vector<Rota> melhor_rota_atual = vector<Rota>();
+
+				melhor_rota_atual = encontra_rota_partindo_dos_savings(todos_savings[i], facilidades[i]);
 				
+				melhores_rotas_encontradas.push_back(melhor_rota_atual);
 			}
 
 			return todos_savings;
