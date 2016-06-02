@@ -245,17 +245,19 @@ namespace rotas
 			return soma;
 		}
 
-		double TeitzBart::calcula_numero_transmissao(vertice_t& vertice, lista_vertices_t& vertices, vertice_t& adicionar, vertice_t& remover)
+		double TeitzBart::calcula_numero_transmissao(vertice_t& vertice, lista_vertices_t& grafo, vertice_t& adicionar, vertice_t& remover)
 		{
-			lista_vertices_t copia = lista_vertices_t(vertices);
+			lista_vertices_t copia = lista_vertices_t(grafo);
 			int index = -1;
 
 			//
 			// Remove um vertice
 
-			for (size_t i = 0; i < vertices.size(); i++)
+			for (size_t i = 0; i < grafo.size(); i++)
 			{
-				if (vertices.at(i).cidade.get_id() == remover.cidade.get_id())
+				vertice_t& v = grafo[i];
+
+				if (v.cidade.get_id() == remover.cidade.get_id())
 				{
 					index = i;
 					break;

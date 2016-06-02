@@ -83,7 +83,7 @@ namespace rotas
 			/**
 			 *
 			 */
-			static double calcula_numero_transmissao(vertice_t& vertice, lista_vertices_t& vertices, vertice_t& adicionar, vertice_t& remover);
+			static double calcula_numero_transmissao(vertice_t& vertice, lista_vertices_t& grafo, vertice_t& adicionar, vertice_t& remover);
 		};
 	} // algoritmos
 } // rotas
