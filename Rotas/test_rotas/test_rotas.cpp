@@ -15,10 +15,10 @@ using namespace domain;
 using namespace cli;
 using namespace algoritmos;
 
-#define DIJKSTRA false
+#define DIJKSTRA true
 #define GILLET_JOHNSON true
-#define TEITZ_BART false
-#define CLARKE_WRIGHT false
+#define TEITZ_BART true
+#define CLARKE_WRIGHT true
 
 class RotasTest : public ::testing::Test {
 protected:
@@ -61,7 +61,7 @@ protected:
 
 		cout << "---------------------------" << endl;
 		cout << "Calculando Dijkstra todas as cidades teste completo..." << endl;
-		
+
 		for (unsigned int i = 0; i < cidades.size(); i++) {
 			cout << "Calculando as menores rotas partindo de " << cidades[i].get_nome() << "... " << endl;
 			dijkstra.dijkstra_menor_caminho(rotas_context, cidades[i]);
@@ -112,7 +112,7 @@ TEST_F(DijkstraTest, validacaoDistanciasPoucasCidades)
 
 class GilletJohnsonTest : public ::RotasTest {
 protected:
-	int a;	
+	int a;
 	unsigned int num_atribuidas = 0;
 	unsigned int num_pontos_demanda = 0;
 	vector<Cidade*> medianas = vector<Cidade*>();
@@ -120,13 +120,13 @@ protected:
 	algoritmos::GilletJohnson gillet_johnson;
 
 	void set_demandas() {
-		double demandas[] = {403.20, 152, 646.2, 639.8, 1159.7, 49.2, 110.5, 231.5, 150, 328.8, 604, 343, 61.85, 156, 225.7, 
-			                 505.85, 238, 356.98, 77.4, 597, 70, 882.25, 795.5, 300, 207.6, 127.8, 302.9, 194.5, 77.5, 150.5, 
-			                 137.8, 105, 297.2, 409.4, 427.1, 216, 661.4, 1520, 649.5, 614.5, 60, 200.6, 839.95, 568.95, 3762.9, 
-			                 292.2, 397.9, 589.8, 95.4, 696.55, 211.6, 217.4, 141, 531.82, 570.1, 91, 132, 551, 145.1, 260.63, 
-			                 267.9, 46.2, 253, 1034.5, 486.2, 207.9, 910.5, 269.55, 225.1, 377.3, 133.8, 242.3, 337.5, 192.0, 
-			                 105.7, 1446.5, 618.4, 506.2, 385.35, 532.55, 226.6, 398, 323.5, 90.6, 360.4, 282, 631, 2013.2, 94.8, 
-			                 250.6, 160.8, 87.5};
+		double demandas[] = { 403.20, 152, 646.2, 639.8, 1159.7, 49.2, 110.5, 231.5, 150, 328.8, 604, 343, 61.85, 156, 225.7,
+							 505.85, 238, 356.98, 77.4, 597, 70, 882.25, 795.5, 300, 207.6, 127.8, 302.9, 194.5, 77.5, 150.5,
+							 137.8, 105, 297.2, 409.4, 427.1, 216, 661.4, 1520, 649.5, 614.5, 60, 200.6, 839.95, 568.95, 3762.9,
+							 292.2, 397.9, 589.8, 95.4, 696.55, 211.6, 217.4, 141, 531.82, 570.1, 91, 132, 551, 145.1, 260.63,
+							 267.9, 46.2, 253, 1034.5, 486.2, 207.9, 910.5, 269.55, 225.1, 377.3, 133.8, 242.3, 337.5, 192.0,
+							 105.7, 1446.5, 618.4, 506.2, 385.35, 532.55, 226.6, 398, 323.5, 90.6, 360.4, 282, 631, 2013.2, 94.8,
+							 250.6, 160.8, 87.5 };
 
 		for (unsigned int i = 0; i < cidades.size(); i++) {
 			cidades[i].set_demanda(demandas[i]);
@@ -151,7 +151,7 @@ protected:
 
 		gillet_johnson = algoritmos::GilletJohnson();
 		set_demandas();
-		
+
 		a = 5;
 
 	}
@@ -241,11 +241,11 @@ TEST_F(GilletJohnsonTest, testTodasCidadesAtribuidas)
 
 	EXPECT_NE(0, num_pontos_demanda);
 	EXPECT_EQ(num_pontos_demanda, num_atribuidas);
-	EXPECT_LT(num_pontos_demanda,cidades.size());
+	EXPECT_LT(num_pontos_demanda, cidades.size());
 }
 
 TEST_F(GilletJohnsonTest, testDesignaMedianas)
-{	
+{
 	gillet_johnson.encontra_medianas(cidades);
 
 	for (unsigned int i = 0; i < medianas.size(); i++) {
@@ -258,7 +258,7 @@ TEST_F(GilletJohnsonTest, testDesignaMedianas)
 
 		cout << "-------------------------------------" << endl;
 	}
-	
+
 	//TODO verificar quais cidades deveriam ser atendidas por quais sedes
 	ASSERT_TRUE(cidades[19].get_id_mediana() != 0);
 	ASSERT_TRUE(cidades[29].get_id_mediana() != 0);
@@ -272,6 +272,7 @@ class TeitzBartTest : public ::RotasTest
 {
 protected:
 	algoritmos::TeitzBart teitz_bart;
+	algoritmos::Dijkstra dijkstra;
 
 	virtual void SetUp()
 	{
@@ -405,20 +406,39 @@ TEST_F(TeitzBartTest, localizaMedianas)
 {
 	using namespace teitz_bart;
 
-	unsigned int p = 1;
+	unsigned int p = 6;
 
 	cout << "Total de cidades: " << cidades.size() << endl;
 
-	std::vector<Cidade> cidades = teitz_bart.localiza_medianas(rotas_context.get_cidades_atendidas(), p);
-
-	cout << "Cidades sedes: " << endl;
+	std::vector<Cidade> cidades_dijkstra;
 
 	for (size_t i = 0; i < cidades.size(); i++)
 	{
-		cout << "\t* " << cidades.at(i).get_nome() << endl;
+		Cidade c = cidades.at(i);
+
+		c.set_rotas(dijkstra.dijkstra_menor_caminho(rotas_context, c));
+
+		cidades_dijkstra.push_back(c);
 	}
 
-	ASSERT_EQ(cidades.size(), p);
+	teitz_bart.define_medianas(cidades_dijkstra, p);
+
+	cout << "Cidades sedes: " << endl;
+
+	unsigned int qtd_medianas = 0;
+
+	for (size_t i = 0; i < cidades_dijkstra.size(); i++)
+	{
+		Cidade& c = cidades_dijkstra[i];
+
+		if (c.is_mediana())
+		{
+			cout << "\t* " << c.get_nome() << endl;
+			qtd_medianas++;
+		}
+	}
+
+	ASSERT_EQ(qtd_medianas, p);
 }
 
 #endif // TEITZ_BART
@@ -492,6 +512,6 @@ TEST_F(ClarkeWrightTest, testEncontraRoteamentos)
 
 	EXPECT_EQ(0, 0);
 }
-	
+
 #endif // CLARKE_WRIGHT
 
