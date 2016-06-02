@@ -194,10 +194,12 @@ namespace rotas
 			return cidades;
 		}
 
-		bool TeitzBart::contem_vertice(const lista_vertices_t& vertices, vertice_t& vertice)
+		bool TeitzBart::contem_vertice(lista_vertices_t& vertices, vertice_t& vertice)
 		{
-			for each (vertice_t v in vertices)
+			for (size_t i = 0; i < vertices.size(); i++)
 			{
+				vertice_t& v = vertices[i];
+
 				if (v.cidade.get_id() == vertice.cidade.get_id())
 				{
 					return true;
@@ -207,10 +209,12 @@ namespace rotas
 			return false;
 		}
 
-		bool TeitzBart::contem_id(const lista_vertices_t& vertices, const int& id)
+		bool TeitzBart::contem_id(lista_vertices_t& vertices, const int& id)
 		{
-			for each (vertice_t v in vertices)
+			for (size_t i = 0; i < vertices.size(); i++)
 			{
+				vertice_t& v = vertices[i];
+
 				if (v.cidade.get_id() == id)
 				{
 					return true;

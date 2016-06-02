@@ -354,7 +354,7 @@ TEST_F(TeitzBartTest, localizaMedianas)
 {
 	using namespace teitz_bart;
 
-	unsigned int p = 1;
+	unsigned int p = 6;
 
 	cout << "Total de cidades: " << cidades.size() << endl;
 

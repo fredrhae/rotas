@@ -68,12 +68,12 @@ namespace rotas
 			/**
 			 * Verifica se uma lista de vértice possui um vértice específico.
 			 */
-			static bool contem_vertice(const lista_vertices_t& vertices, vertice_t& vertice);
+			static bool contem_vertice(lista_vertices_t& vertices, vertice_t& vertice);
 
 			/**
 			 *Verifica se uma lista de vértice possui um id específico.
 			 */
-			static bool contem_id(const lista_vertices_t& vertices, const int& id);
+			static bool contem_id(lista_vertices_t& vertices, const int& id);
 
 			/**
 			 * Calcula o número de transmissão (soma das menores distâncias) entre um vértice e todos os demais.
