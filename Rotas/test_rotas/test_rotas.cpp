@@ -52,14 +52,34 @@ class DijkstraTest : public ::RotasTest {
 protected:
 	int a;
 	algoritmos::Dijkstra dijkstra;
+	string path_do_csv_simples = "../../dados_entrada/cidades_atendidas.csv";
+	std::vector<domain::Cidade> cidades_teste_pequeno;
+	Context rotas_context_teste_pequeno;
 
 	virtual void SetUp() {
 		RotasTest::SetUp();
 
+		cout << "---------------------------" << endl;
+		cout << "Calculando Dijkstra todas as cidades teste completo..." << endl;
+		
 		for (unsigned int i = 0; i < cidades.size(); i++) {
 			cout << "Calculando as menores rotas partindo de " << cidades[i].get_nome() << "... " << endl;
 			dijkstra.dijkstra_menor_caminho(rotas_context, cidades[i]);
 		}
+
+		cout << "---------------------------" << endl;
+
+		cout << "Calculando Dijkstra todas as cidades teste pequeno..." << endl;
+
+		rotas_context_teste_pequeno = ManipulaEntrada::inicializa_dados_partir_do_csv(path_do_csv_simples);
+		cidades_teste_pequeno = rotas_context_teste_pequeno.get_cidades_atendidas();
+
+		for (unsigned int i = 0; i < cidades_teste_pequeno.size(); i++) {
+			cout << "Calculando as menores rotas partindo de " << cidades_teste_pequeno[i].get_nome() << "... " << endl;
+			dijkstra.dijkstra_menor_caminho(rotas_context_teste_pequeno, cidades_teste_pequeno[i]);
+		}
+
+		cout << "---------------------------" << endl;
 
 		a = 7;
 	}
@@ -70,23 +90,18 @@ TEST_F(DijkstraTest, validacaoTrivial)
 	EXPECT_EQ(a, 7);
 }
 
-TEST_F(DijkstraTest, validacaoDistanciasGrafoSimples)
+TEST_F(DijkstraTest, validacaoDistanciasPoucasCidades)
 {
-	vector<double> distancias_origem_a = { 0, 406, 499, 234, 139, 364, 180, 178,
+	vector<double> distancias_origem_primeira_cidade = { 0, 406, 499, 234, 139, 364, 180, 178,
 										 429, 566, 627, 248, 318, 169, 731, 626,
 										 450, 709, 720, 800, 340, 410, 376, 439,
 										 519, 893, 664, 792, 687, 903, 797, 774 };
 
-	string path_grafo_simples = "../../dados_entrada/teste_1_simples.csv";
-	Context rotas_context_grafo_simples = ManipulaEntrada::inicializa_dados_partir_do_csv(path_grafo_simples);
 
-	std::vector<domain::Cidade> cidades_grafo_simples = rotas_context.get_cidades_atendidas();
-
-
-	for (unsigned int i = 0; i < cidades_grafo_simples.size(); i++)
+	for (unsigned int i = 0; i < cidades_teste_pequeno.size(); i++)
 	{
-		cout << "Validando distância de " << cidades_grafo_simples[0].get_nome() << " até " << cidades_grafo_simples[i].get_nome() << "..." << endl;
-		EXPECT_EQ(distancias_origem_a[i], cidades_grafo_simples[0].get_rotas()[i].get_distancia());
+		cout << "Validando distância de " << cidades_teste_pequeno[0].get_nome() << " até " << cidades_teste_pequeno[i].get_nome() << "..." << endl;
+		EXPECT_EQ(distancias_origem_primeira_cidade[i], cidades_teste_pequeno[0].get_rotas()[i].get_distancia());
 	}
 	cout << endl;
 }
@@ -221,7 +236,6 @@ class TeitzBartTest : public ::RotasTest
 {
 protected:
 	algoritmos::TeitzBart teitz_bart;
-	algoritmos::Dijkstra dijkstra;
 
 	virtual void SetUp()
 	{
@@ -355,31 +369,20 @@ TEST_F(TeitzBartTest, localizaMedianas)
 {
 	using namespace teitz_bart;
 
-	unsigned int p = 6;
+	unsigned int p = 1;
 
 	cout << "Total de cidades: " << cidades.size() << endl;
 
-	std::vector<Cidade> cidades_dijkstra;
-
-	for (size_t i = 0; i < cidades.size(); i++)
-	{
-		Cidade c = cidades.at(i);
-
-		c.set_rotas(dijkstra.dijkstra_menor_caminho(rotas_context, c));
-
-		cidades_dijkstra.push_back(c);
-	}
-
-	std::vector<Cidade> medianas = teitz_bart.localiza_medianas(cidades_dijkstra, p);
+	std::vector<Cidade> cidades = teitz_bart.localiza_medianas(rotas_context.get_cidades_atendidas(), p);
 
 	cout << "Cidades sedes: " << endl;
 
-	for (size_t i = 0; i < medianas.size(); i++)
+	for (size_t i = 0; i < cidades.size(); i++)
 	{
-		cout << "\t* " << medianas.at(i).get_nome() << endl;
+		cout << "\t* " << cidades.at(i).get_nome() << endl;
 	}
 
-	ASSERT_EQ(medianas.size(), p);
+	ASSERT_EQ(cidades.size(), p);
 }
 
 #endif // TEITZ_BART
@@ -411,13 +414,13 @@ TEST_F(ClarkeWrightTest, testGetDistancia)
 	Cidade cidade_b = cidades[1];
 	double distancia_encontrada = cidade_a.get_distancia(cidade_b);
 
-	EXPECT_EQ(406, distancia_encontrada);
+	EXPECT_EQ(638, distancia_encontrada);
 
 	cidade_a = cidades[6];
 	cidade_b = cidades[22];
 
 	distancia_encontrada = cidade_a.get_distancia(cidade_b);
-	EXPECT_EQ(211, distancia_encontrada);
+	EXPECT_EQ(158, distancia_encontrada);
 
 }
 

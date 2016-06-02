@@ -146,9 +146,9 @@ namespace rotas {
 			int index_ciclo_origem = acha_rota_com_cidade(saving.get_id_origem(),rotas_encontradas);
 			int index_ciclo_destino = acha_rota_com_cidade(saving.get_id_destino(), rotas_encontradas);
 
-			bool pertence_rotas_diferentes;
-			bool origem_esta_apta_ser_adicionada;
-			bool destino_esta_apto_ser_adicionado;
+			bool pertence_rotas_diferentes = false;
+			bool origem_esta_apta_ser_adicionada = false;
+			bool destino_esta_apto_ser_adicionado = false;
 
 			if(index_ciclo_origem > -1)
 			{
