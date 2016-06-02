@@ -22,9 +22,9 @@ namespace rotas {
 
 		public:
 			Cidade() {};
-			Cidade(string nome, int id) : nome(nome), id(id) {};
+			Cidade(string nome, int id) : nome(nome), id(id), id_mediana(-1) {};
 			Cidade(string nome, int id, vector<Rota> rotas_possiveis) : 
-				nome(nome), id(id), rotas(rotas_possiveis) {};
+				nome(nome), id(id), rotas(rotas_possiveis), id_mediana(-1) {};
 			
 			string get_nome();
 			int get_id();
