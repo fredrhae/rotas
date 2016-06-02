@@ -56,7 +56,7 @@ protected:
 	virtual void SetUp() {
 		RotasTest::SetUp();
 
-		for (unsigned int i = 0; i < 9; i++) {
+		for (unsigned int i = 0; i < cidades.size(); i++) {
 			cout << "Calculando as menores rotas partindo de " << cidades[i].get_nome() << "... " << endl;
 			dijkstra.dijkstra_menor_caminho(rotas_context, cidades[i]);
 		}
