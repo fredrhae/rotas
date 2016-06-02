@@ -90,7 +90,7 @@ namespace rotas
 			vector<Rota> menores_distancias = vector<Rota>();
 
 			// Se matriz de adjacencia for vazia, nao ha nada a fazer
-			if (dados_entrada.get_matriz_distancias().size() < 1)
+			if (distancias.size() < 1)
 				return menores_distancias;
 			
 			//Inicializa as variaveis globais
@@ -107,7 +107,7 @@ namespace rotas
 			distancias_encontradas[origem.get_id()] = 0;
 
 			// Acha menor caminho para todas as cidades
-			for (unsigned int count = 0; count < dados_entrada.get_matriz_distancias().size() - 1; count++)
+			for (unsigned int count = 0; count < distancias.size() - 1; count++)
 			{
 				// Pega a menor distancia para a cidade do conjunto de cidades ainda nao processados.
 				// u e igual a origem na primeira iteracao
@@ -117,7 +117,7 @@ namespace rotas
 				marcador_distancia_encontrada[u] = true;
 
 				// Atualiza o valor da distancia das cidades adjacentes a cidade escolhida nessa iteracao
-				for (unsigned int v = 0; v < dados_entrada.get_matriz_distancias().size(); v++)
+				for (unsigned int v = 0; v < distancias.size(); v++)
 				{
 					// Atualiza distancias encontradas apenas se ela tiver marcada como 
 					// como nao encontrada, se tiver um caminho da cidade u para v, e a distancia
