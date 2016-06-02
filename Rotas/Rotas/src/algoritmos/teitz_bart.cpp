@@ -197,18 +197,6 @@ namespace rotas
 			return vertices;
 		}
 
-		std::vector<Cidade> TeitzBart::vertices_para_cidades(const  lista_vertices_t& vertices)
-		{
-			std::vector<Cidade> cidades;
-
-			for (unsigned int i = 0; i < vertices.size(); i++)
-			{
-				cidades.push_back(vertices[i].cidade);
-			}
-
-			return cidades;
-		}
-
 		bool TeitzBart::contem_vertice(lista_vertices_t& vertices, vertice_t& vertice)
 		{
 			for (size_t i = 0; i < vertices.size(); i++)

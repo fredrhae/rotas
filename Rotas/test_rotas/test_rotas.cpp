@@ -378,16 +378,6 @@ TEST_F(TeitzBartTest, existeNaoAnalisados)
 	ASSERT_FALSE(teitz_bart.existe_nao_analisados(todos_os_vertices));
 }
 
-TEST_F(TeitzBartTest, verticesParaCidades)
-{
-	using namespace teitz_bart;
-
-	lista_vertices_t todos_os_vertices = algoritmos::TeitzBart::inicializa_vertices(cidades);
-	std::vector<Cidade> cidades = TeitzBart::vertices_para_cidades(todos_os_vertices);
-
-	ASSERT_EQ(cidades.size(), todos_os_vertices.size());
-}
-
 TEST_F(TeitzBartTest, calculaNumeroTransmissaoPadrao)
 {
 	using namespace teitz_bart;
