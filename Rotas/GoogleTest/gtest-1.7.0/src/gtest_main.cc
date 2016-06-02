@@ -32,7 +32,12 @@
 #include "gtest/gtest.h"
 
 GTEST_API_ int main(int argc, char **argv) {
-  printf("Running main() from gtest_main.cc\n");
-  testing::InitGoogleTest(&argc, argv);
-  return RUN_ALL_TESTS();
+	printf("Running main() from gtest_main.cc\n");
+
+	testing::InitGoogleTest(&argc, argv);
+
+	// testing::GTEST_FLAG(filter) = "TeitzBartTest*"; // exemplo para filtrar os testes unitários - Todos os testes do Teitz & Bart
+	// testing::GTEST_FLAG(filter) = "TeitzBartTest.inicializaVertices"; // exemplo para filtrar os testes unitários - Teste específico
+
+	return RUN_ALL_TESTS();
 }
