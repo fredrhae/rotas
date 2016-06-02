@@ -370,16 +370,24 @@ TEST_F(TeitzBartTest, localizaMedianas)
 		cidades_dijkstra.push_back(c);
 	}
 
-	std::vector<Cidade> medianas = teitz_bart.localiza_medianas(cidades_dijkstra, p);
+	teitz_bart.define_medianas(cidades_dijkstra, p);
 
 	cout << "Cidades sedes: " << endl;
 
-	for (size_t i = 0; i < medianas.size(); i++)
+	unsigned int qtd_medianas = 0;
+
+	for (size_t i = 0; i < cidades_dijkstra.size(); i++)
 	{
-		cout << "\t* " << medianas.at(i).get_nome() << endl;
+		Cidade& c = cidades_dijkstra[i];
+
+		if (c.is_mediana())
+		{
+			cout << "\t* " << c.get_nome() << endl;
+			qtd_medianas++;
+		}
 	}
 
-	ASSERT_EQ(medianas.size(), p);
+	ASSERT_EQ(qtd_medianas, p);
 }
 
 #endif // TEITZ_BART

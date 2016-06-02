@@ -10,7 +10,7 @@ namespace rotas
 {
 	namespace algoritmos
 	{
-		std::vector<Cidade> TeitzBart::localiza_medianas(std::vector<Cidade> cidades, const unsigned int& p)
+		void TeitzBart::define_medianas(std::vector<Cidade>& cidades, const unsigned int& p)
 		{
 			lista_vertices_t todos_os_vertices /* { V } */ = TeitzBart::inicializa_vertices(cidades);
 
@@ -110,7 +110,22 @@ namespace rotas
 				existe_nao_analisados(todos_os_vertices) /* 'existe_nao_analisados()' pertence ao Passo 3 */ ||
 				modificou == true /* 'modificou' pertence ao Passo 4 */);
 
-			return vertices_para_cidades(medianas);
+			//
+			// Marca quem são as medianas
+
+			for (size_t i = 0; i < cidades.size(); i++)
+			{
+				Cidade& c = cidades[i];
+
+				if (contem_id(medianas, c.get_id()))
+				{
+					c.set_mediana(true);
+				}
+				else
+				{
+					c.set_mediana(false);
+				}
+			}
 		}
 
 		lista_vertices_t TeitzBart::seleciona_medianas_aleatoriamente(lista_vertices_t& vertices, const unsigned int& p)
