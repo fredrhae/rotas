@@ -221,6 +221,7 @@ class TeitzBartTest : public ::RotasTest
 {
 protected:
 	algoritmos::TeitzBart teitz_bart;
+	algoritmos::Dijkstra dijkstra;
 
 	virtual void SetUp()
 	{
@@ -358,16 +359,27 @@ TEST_F(TeitzBartTest, localizaMedianas)
 
 	cout << "Total de cidades: " << cidades.size() << endl;
 
-	std::vector<Cidade> cidades = teitz_bart.localiza_medianas(rotas_context.get_cidades_atendidas(), p);
-
-	cout << "Cidades sedes: " << endl;
+	std::vector<Cidade> cidades_dijkstra;
 
 	for (size_t i = 0; i < cidades.size(); i++)
 	{
-		cout << "\t* " << cidades.at(i).get_nome() << endl;
+		Cidade c = cidades.at(i);
+
+		c.set_rotas(dijkstra.dijkstra_menor_caminho(rotas_context, c));
+
+		cidades_dijkstra.push_back(c);
 	}
 
-	ASSERT_EQ(cidades.size(), p);
+	std::vector<Cidade> medianas = teitz_bart.localiza_medianas(cidades_dijkstra, p);
+
+	cout << "Cidades sedes: " << endl;
+
+	for (size_t i = 0; i < medianas.size(); i++)
+	{
+		cout << "\t* " << medianas.at(i).get_nome() << endl;
+	}
+
+	ASSERT_EQ(medianas.size(), p);
 }
 
 #endif // TEITZ_BART
