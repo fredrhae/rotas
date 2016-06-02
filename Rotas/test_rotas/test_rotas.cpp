@@ -418,13 +418,18 @@ TEST_F(ClarkeWrightTest, testEncontraRoteamentos)
 
 	gillet_johnson.encontra_medianas(cidades);
 
-	vector<vector<Rota>> savings = clarke_wright.encontra_roteamentos(cidades);
+	vector<vector<vector<Rota>>> savings = clarke_wright.encontra_roteamentos(cidades);
 
-	cout << "Savings extraidos da cidade sede " << cidades[10].get_nome() << ": " << endl;
-	for (unsigned int i = 0; i < savings[0].size(); i++) {
-			cout <<"S"<< savings[0][i].get_id_origem() << "," << savings[0][i].get_id_destino() <<
-				"= " << savings[0][i].get_distancia() << "km" << endl;
-		
+	for (unsigned int w = 0; w < savings.size(); w++)
+	{
+		cout << "Savings extraidos da cidade sede :" << endl;
+		for (unsigned int i = 0; i < savings[w].size(); i++) {
+			for (unsigned int j = 0; j < savings[w][i].size(); j++)
+			{
+				cout << "S" << savings[w][i][j].get_id_origem() << "," << savings[w][i][j].get_id_destino() <<
+					"= " << savings[w][i][j].get_distancia() << "km" << endl;
+			}
+		}
 	}
 
 	cout << "-------------------------------------" << endl;
