@@ -36,8 +36,8 @@ GTEST_API_ int main(int argc, char **argv) {
 
 	testing::InitGoogleTest(&argc, argv);
 
-	// testing::GTEST_FLAG(filter) = "TeitzBartTest*"; // exemplo para filtrar os testes unitários - Todos os testes do Teitz & Bart
-	// testing::GTEST_FLAG(filter) = "TeitzBartTest.inicializaVertices"; // exemplo para filtrar os testes unitários - Teste específico
+	//testing::GTEST_FLAG(filter) = "IntegracaoTest*"; // exemplo para filtrar os testes unitários - Todos os testes do Teitz & Bart
+	//testing::GTEST_FLAG(filter) = "IntegracaoTest.testIntegracao"; // exemplo para filtrar os testes unitários - Teste específico
 
 	return RUN_ALL_TESTS();
 }

@@ -19,6 +19,7 @@ using namespace algoritmos;
 #define GILLET_JOHNSON true
 #define TEITZ_BART true
 #define CLARKE_WRIGHT true
+#define INTEGRACAO true
 
 class RotasTest : public ::testing::Test {
 protected:
@@ -504,4 +505,98 @@ TEST_F(ClarkeWrightTest, testEncontraRoteamentos)
 }
 
 #endif // CLARKE_WRIGHT
+
+#if INTEGRACAO
+
+class IntegracaoTest : public ::RotasTest
+{
+protected:
+	algoritmos::Dijkstra dijkstra;
+	algoritmos::TeitzBart teitz_bart;
+	algoritmos::GilletJohnson gillet_johnson;
+	algoritmos::ClarkeWright clarke_wright;
+
+	virtual void SetUp()
+	{
+		RotasTest::SetUp();
+	}
+};
+
+TEST_F(IntegracaoTest, testIntegracao)
+{
+	using namespace teitz_bart;
+
+	unsigned int qtd_sedes = 10; // Quantidade de medianas (cidades sede)
+
+	//
+	// Dijkstra
+
+	size_t qtd_cidades = cidades.size();
+
+	cout << "[Dijkstra] Carregando rotas mais curtas para " << qtd_cidades << " cidades..." << endl;
+
+	for (size_t i = 0; i < qtd_cidades; i++)
+	{
+		Cidade& c = cidades[i];
+
+		c.set_rotas(dijkstra.dijkstra_menor_caminho(rotas_context, c));
+
+		ASSERT_EQ(c.get_rotas().size(), qtd_cidades);
+	}
+
+	//
+	// Teitz & Bart
+
+	cout << "[Teitz & Bart] Definindo " << qtd_sedes << " sedes..." << endl;
+
+	teitz_bart.define_medianas(cidades, qtd_sedes);
+
+	unsigned int qtd_medianas = 0;
+
+	for (size_t i = 0; i < cidades.size(); i++)
+	{
+		Cidade& c = cidades[i];
+
+		if (c.is_mediana())
+		{
+			cout << "\t* " << c.get_nome() << endl;
+			qtd_medianas++;
+		}
+	}
+
+	ASSERT_EQ(qtd_medianas, qtd_sedes);
+
+	//
+	// Gillett & Johnson
+
+	cout << "[Gillett & Johnson] Localizando clusters..." << endl;
+
+	gillet_johnson.encontra_medianas(cidades);
+
+	int num_pontos_demanda = 0, num_atribuidas = 0;
+
+	for (unsigned int i = 0; i < cidades.size(); i++) {
+		if (!cidades[i].is_mediana()) {
+			num_pontos_demanda++;
+			if (cidades[i].get_id_mediana() != -1) {
+				num_atribuidas++;
+			}
+		}
+	}
+
+	ASSERT_NE(0, num_pontos_demanda);
+	ASSERT_EQ(num_pontos_demanda, num_atribuidas);
+	ASSERT_LT(num_pontos_demanda, cidades.size());
+
+	//
+	// Clarke & Wright
+
+	cout << "[Clarke & Wright] Localizando rotas nos clusters..." << endl;
+
+	vector<vector<vector<Rota>>> roteamentos = clarke_wright.encontra_roteamentos(cidades);
+
+	ASSERT_EQ(roteamentos.size(), qtd_sedes);
+}
+
+#endif // INTEGRACAO
 
