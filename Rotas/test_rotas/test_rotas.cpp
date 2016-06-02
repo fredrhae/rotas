@@ -27,7 +27,7 @@ protected:
 
 	virtual void SetUp() {
 		//Inicializa as cidades		
-		string path_do_csv = "../../dados_entrada/cidades_atendidas.csv";
+		string path_do_csv = "../../dados_entrada/matriz_distancias_real.csv";
 		rotas_context = ManipulaEntrada::inicializa_dados_partir_do_csv(path_do_csv);
 		cidades = rotas_context.get_cidades_atendidas();
 	}
@@ -35,14 +35,14 @@ protected:
 
 TEST_F(RotasTest, validacaoInicializacaoDoCsv)
 {
-	EXPECT_EQ(cidades.size(), 32);
+	EXPECT_EQ(cidades.size(), 93);
 
 	vector<vector<Rota>> matriz = rotas_context.get_matriz_distancias();
 	for (unsigned int i = 0; i < rotas_context.get_matriz_distancias().size(); i++)
 	{
 		cout << "Cidade " + cidades[i].get_nome()
 			<< " sendo validada..." << endl;
-		EXPECT_EQ(matriz[i].size(), 32);
+		EXPECT_EQ(matriz[i].size(), 93);
 	}
 	cout << "---------------------------" << endl;
 }
@@ -77,11 +77,16 @@ TEST_F(DijkstraTest, validacaoDistanciasGrafoSimples)
 										 450, 709, 720, 800, 340, 410, 376, 439,
 										 519, 893, 664, 792, 687, 903, 797, 774 };
 
+	string path_grafo_simples = "../../dados_entrada/teste_1_simples.csv";
+	Context rotas_context_grafo_simples = ManipulaEntrada::inicializa_dados_partir_do_csv(path_grafo_simples);
 
-	for (unsigned int i = 0; i < cidades.size(); i++)
+	std::vector<domain::Cidade> cidades_grafo_simples = rotas_context.get_cidades_atendidas();
+
+
+	for (unsigned int i = 0; i < cidades_grafo_simples.size(); i++)
 	{
-		cout << "Validando distância de " << cidades[0].get_nome() << " até " << cidades[i].get_nome() << "..." << endl;
-		EXPECT_EQ(distancias_origem_a[i], cidades[0].get_rotas()[i].get_distancia());
+		cout << "Validando distância de " << cidades_grafo_simples[0].get_nome() << " até " << cidades_grafo_simples[i].get_nome() << "..." << endl;
+		EXPECT_EQ(distancias_origem_a[i], cidades_grafo_simples[0].get_rotas()[i].get_distancia());
 	}
 	cout << endl;
 }
