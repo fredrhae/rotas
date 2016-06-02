@@ -34,7 +34,7 @@ namespace rotas
 			/**
 			 * Localizas as cidades que são medianas considerando a distância entre as demais.
 			 */
-			std::vector<Cidade> localiza_medianas(std::vector<Cidade> cidades, const unsigned int& p);
+			void define_medianas(std::vector<Cidade>& cidades, const unsigned int& p);
 		
 #ifndef GTEST
 		private:
@@ -83,7 +83,7 @@ namespace rotas
 			/**
 			 *
 			 */
-			static double calcula_numero_transmissao(vertice_t& vertice, lista_vertices_t& vertices, vertice_t& adicionar, vertice_t& remover);
+			static double calcula_numero_transmissao(vertice_t& vertice, lista_vertices_t& grafo, vertice_t& adicionar, vertice_t& remover);
 		};
 	} // algoritmos
 } // rotas

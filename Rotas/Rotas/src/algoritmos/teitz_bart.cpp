@@ -10,7 +10,7 @@ namespace rotas
 {
 	namespace algoritmos
 	{
-		std::vector<Cidade> TeitzBart::localiza_medianas(std::vector<Cidade> cidades, const unsigned int& p)
+		void TeitzBart::define_medianas(std::vector<Cidade>& cidades, const unsigned int& p)
 		{
 			lista_vertices_t todos_os_vertices /* { V } */ = TeitzBart::inicializa_vertices(cidades);
 
@@ -45,7 +45,7 @@ namespace rotas
 					//
 					// a) 'Vi' é um vértice "não-analisado". Calcular redução 'R' do número de transmissão
 					//	  para todo 'Vj' pertencente à { S }. Rij = NT(S) - NT(S u { Vi } - { Vj })
-					
+
 					int VjCidade_id = -1;
 					int VjMax_index = -1;
 					double max = std::numeric_limits<double>::min();
@@ -55,9 +55,9 @@ namespace rotas
 					for (size_t j = 0; j < medianas.size(); j++)
 					{
 						vertice_t& Vj = medianas[j];
-						
+
 						double reducao = ntS - calcula_numero_transmissao(Vj, todos_os_vertices, Vi, Vj);
-						
+
 						if (reducao > max)
 						{
 							//
@@ -76,7 +76,7 @@ namespace rotas
 
 						// Remove Vj0
 						medianas.erase(medianas.begin() + VjMax_index);
-						
+
 						// Adiciona Vi
 						medianas.push_back(Vi);
 
@@ -110,7 +110,22 @@ namespace rotas
 				existe_nao_analisados(todos_os_vertices) /* 'existe_nao_analisados()' pertence ao Passo 3 */ ||
 				modificou == true /* 'modificou' pertence ao Passo 4 */);
 
-			return vertices_para_cidades(medianas);
+			//
+			// Marca quem são as medianas
+
+			for (size_t i = 0; i < cidades.size(); i++)
+			{
+				Cidade& c = cidades[i];
+
+				if (contem_id(medianas, c.get_id()))
+				{
+					c.set_mediana(true);
+				}
+				else
+				{
+					c.set_mediana(false);
+				}
+			}
 		}
 
 		lista_vertices_t TeitzBart::seleciona_medianas_aleatoriamente(lista_vertices_t& vertices, const unsigned int& p)
@@ -173,7 +188,7 @@ namespace rotas
 		lista_vertices_t TeitzBart::inicializa_vertices(std::vector<Cidade>& cidades)
 		{
 			lista_vertices_t vertices;
-			
+
 			for (size_t i = 0; i < cidades.size(); i++)
 			{
 				vertices.push_back(vertice_t(cidades[i]));
@@ -235,7 +250,6 @@ namespace rotas
 
 				if (contem_id(grafo, rota.get_id_destino()) == false)
 				{
-
 					continue;
 				}
 
@@ -245,36 +259,25 @@ namespace rotas
 			return soma;
 		}
 
-		double TeitzBart::calcula_numero_transmissao(vertice_t& vertice, lista_vertices_t& vertices, vertice_t& adicionar, vertice_t& remover)
+		double TeitzBart::calcula_numero_transmissao(vertice_t& vertice, lista_vertices_t& grafo, vertice_t& adicionar, vertice_t& remover)
 		{
-			lista_vertices_t copia = lista_vertices_t(vertices);
-			int index = -1;
+			std::vector<Rota> rotas = vertice.cidade.get_rotas();
+			double soma = 0.0;
 
-			//
-			// Remove um vertice
-
-			for (size_t i = 0; i < vertices.size(); i++)
+			for (size_t i = 0; i < rotas.size(); i++)
 			{
-				if (vertices.at(i).cidade.get_id() == remover.cidade.get_id())
+				Rota rota = rotas.at(i);
+
+				if ((contem_id(grafo, rota.get_id_destino()) == false && rota.get_id_destino() != adicionar.cidade.get_id()) ||
+					rota.get_id_destino() == remover.cidade.get_id())
 				{
-					index = i;
-					break;
+					continue;
 				}
+
+				soma += rota.get_distancia();
 			}
 
-			if (index < 0)
-			{
-				return 0.0;
-			}
-
-			copia.erase(copia.begin() + index);
-
-			//
-			// Adiciona um vertice
-
-			copia.push_back(adicionar);
-
-			return calcula_numero_transmissao(vertice, copia);
+			return soma;
 		}
 	} // algoritmos
 } // rotas
