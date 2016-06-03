@@ -307,7 +307,7 @@ protected:
 	int a;
 	unsigned int num_atribuidas = 0;
 	unsigned int num_pontos_demanda = 0;
-	unsigned int qtd_sedes = 7;
+	unsigned int qtd_sedes = 6;
 	vector<Cidade*> pontos_atendimento = vector<Cidade*>();
 
 	algoritmos::GilletJohnson gillet_johnson;
@@ -666,7 +666,7 @@ TEST_F(IntegracaoTest, testIntegracao)
 {
 	using namespace teitz_bart;
 
-	unsigned int qtd_sedes = 7; // Quantidade de medianas (cidades sede)
+	unsigned int qtd_sedes = 6; // Quantidade de medianas (cidades sede)
 
 	//
 	// Dijkstra

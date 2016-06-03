@@ -41,7 +41,7 @@ namespace rotas {
 			double get_distancia(int id_destino);
 			double get_demanda();
 			double get_capacidade();
-			vector<Cidade> ordena_por_distancia(vector<Cidade> destinos);
+			vector<Cidade*>* ordena_por_distancia(vector<Cidade> *destinos);
 			Cidade* encontra_mais_proxima(vector<Cidade> *destinos);
 			double diferenca;
 			bool aloca_demanda(double demanda);

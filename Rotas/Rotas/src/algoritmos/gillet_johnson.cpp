@@ -26,13 +26,14 @@ namespace rotas
 			for (unsigned int i = 0; i < pontos_demanda.size(); i++) {
 				Cidade ponto_demanda = pontos_demanda[i];
 				//Passo 1: Encontrar L1 e L2, as duas medianas mais próximas
-				vector<Cidade> pontos_atendimento_ordenados = ponto_demanda.ordena_por_distancia(pontos_atendimento);
+				//vector<Cidade*>* Cidade::ordena_por_distancia(vector<Cidade> *destinos)
+				vector<Cidade*> *pontos_atendimento_ordenados = ponto_demanda.ordena_por_distancia(&pontos_atendimento);
 				//L1 -> cidades_ordenadas[0]
 				//L2 -> cidades_ordenadas[1]
 
 				//Passo 2: calcular a razão r = |L2| - |L1|
-				double d1 = ponto_demanda.get_distancia(pontos_atendimento_ordenados[0]);
-				double d2 = ponto_demanda.get_distancia(pontos_atendimento_ordenados[1]);
+				double d1 = ponto_demanda.get_distancia(*(pontos_atendimento_ordenados->at(0)));
+				double d2 = ponto_demanda.get_distancia(*(pontos_atendimento_ordenados->at(1)));
 				ponto_demanda.diferenca = d2 - d1;
 
 				//Passo 3: preencher a lista de designação
@@ -99,9 +100,26 @@ namespace rotas
 							remove_cidade(pontos_demanda, lista_designacao[i]);
 						}
 						else {
-							//Capacidade de atendimento estourada
+							//Ponto de atendimento não tem mais capacidade, atribuir ao próximo disponível
+							vector<Cidade*> *pontos_atendimento_ordenados = lista_designacao[i].ordena_por_distancia(&pontos_atendimento);
+							for (size_t j = 0; j < pontos_atendimento_ordenados->size(); j++) {
+								Cidade *ponto_atendimento = pontos_atendimento_ordenados->at(j);
+								
+								if (lista_designacao[i].get_demanda() >= ponto_atendimento->get_capacidade()) {
+									continue;
+								}
+
+								ponto_atendimento->set_capacidade(ponto_atendimento->get_capacidade() - lista_designacao[i].get_demanda());
+								lista_designacao[i].set_id_mediana(ponto_atendimento->get_id());
+								cidades[lista_designacao[i].get_id()].set_id_mediana(ponto_atendimento->get_id());
+								break;
+							}
+
+
 							flag_demanda_estourada = true;
-							remove_cidade(pontos_atendimento, *ponto_atendimento_mais_prox);
+							//Tira a cidade atendida dos pontos de demanda
+							remove_cidade(pontos_demanda, lista_designacao[i]);
+							//remove_cidade(pontos_atendimento, *ponto_atendimento_mais_prox);
 							break;
 						}
 					}

@@ -84,20 +84,20 @@ namespace rotas
 			return this->get_distancia(destino_a) < this->get_distancia(destino_b);
 		}
 
-		vector<Cidade> Cidade::ordena_por_distancia(vector<Cidade> destinos) {
-			vector<Cidade> cidades_em_ordem = vector<Cidade>();
+		vector<Cidade*>* Cidade::ordena_por_distancia(vector<Cidade> *destinos) {
+			vector<Cidade*> *cidades_em_ordem = new vector<Cidade*>();
 
-			cidades_em_ordem.push_back(destinos[0]);
+			cidades_em_ordem->push_back(&(destinos->at(0)));
 
 			struct _compara_distancia {
 				Cidade *origem;
-				bool operator() (Cidade a, Cidade b) { return origem->get_distancia(a) < origem->get_distancia(b); }
+				bool operator() (Cidade *a, Cidade *b) { return origem->get_distancia(*a) < origem->get_distancia(*b); }
 			} compara_distancia;
 			compara_distancia.origem = this;
 
-			for (unsigned int i = 1; i < destinos.size(); i++) {
-				auto it = upper_bound(cidades_em_ordem.begin(), cidades_em_ordem.end(), destinos[i], compara_distancia);
-				cidades_em_ordem.insert(it, destinos[i]);
+			for (size_t i = 1; i < destinos->size(); i++) {
+				auto it = upper_bound(cidades_em_ordem->begin(), cidades_em_ordem->end(), &(destinos->at(i)), compara_distancia);
+				cidades_em_ordem->insert(it, &(destinos->at(i)));
 
 			}
 
