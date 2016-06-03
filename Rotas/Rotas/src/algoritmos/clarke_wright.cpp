@@ -13,6 +13,7 @@ namespace rotas {
 	namespace algoritmos {
 
 		static vector<Cidade> cidades_entrada;
+		static Cidade facilidade;
 
 		vector<Cidade> encontra_pontos_demandas(Cidade facilidade)
 		{
@@ -71,39 +72,6 @@ namespace rotas {
 			return true;
 		}
 
-		// Adicionado na classe caminho
-		//bool cidade_existe_na_rota(int id_cidade, vector<Rota> rotas_encontradas)
-		//{
-		//	for each(Rota rota_atual in rotas_encontradas)
-		//	{
-		//		if(rota_atual.rota_contem_cidade(id_cidade))
-		//			return true;
-		//	}
-		//	return false;
-		//}
-
-		// Adicionado na classe caminho
-		//bool cidade_no_fim(int id_cidade, vector<Rota> rota)
-		//{
-		//	if (rota.rbegin()[1].get_id_destino() == id_cidade)
-		//		return true;
-		//	return false;
-		//}
-
-		// Adicionado na classe caminho
-		//bool cidade_no_comeco(int id_cidade, vector<Rota> rota)
-		//{
-		//	if (rota.begin()[1].get_id_origem() == id_cidade)
-		//		return true;
-		//	return false;
-		//}
-
-		// Adicionado na classe caminho
-		//bool cidade_esta_no_fim_ou_comeco_rota(int id_cidade, vector<Rota> rota)
-		//{
-		//	return cidade_no_fim(id_cidade,rota) || cidade_no_comeco(id_cidade,rota);
-		//}
-
 		int acha_rota_com_cidade(int id_cidade, vector<Caminho> &rotas)
 		{
 			int size_rotas = rotas.size();
@@ -114,25 +82,6 @@ namespace rotas {
 			}
 			return -1;
 		}
-
-		// Adicionado na classe caminho
-		//void adiciona_rota_fim(int id_cidade_origem,int id_cidade_destino, vector<Rota> &rotas_encontradas)
-		//{
-		//	Cidade origem = cidades_entrada[id_cidade_origem];
-		//	Cidade destino = cidades_entrada[id_cidade_destino];
-
-		//	rotas_encontradas.push_back(Rota(id_cidade_origem, id_cidade_destino, origem.get_distancia(destino)));
-		//}
-
-		// Adicionado na classe caminho
-		//void adiciona_rota_comeco(int id_cidade_origem, int id_cidade_destino, vector<Rota> &rotas_encontradas)
-		//{
-		//	Cidade origem = cidades_entrada[id_cidade_origem];
-		//	Cidade destino = cidades_entrada[id_cidade_destino];
-
-		//	rotas_encontradas.insert(rotas_encontradas.begin(),
-		//							Rota(id_cidade_origem, id_cidade_destino, origem.get_distancia(destino)));
-		//}
 
 		void adiciona_saving_na_rota(Rota saving, vector<Caminho> &rotas_encontradas)
 		{
@@ -251,7 +200,7 @@ namespace rotas {
 			}
 		}
 
-		void inicializa_rotas_demandas(vector<Caminho> &rotas_demandas, Cidade facilidade)
+		void inicializa_rotas_demandas(vector<Caminho> &rotas_demandas)
 		{
 			vector<Cidade> demandas = encontra_pontos_demandas(facilidade);
 			
@@ -265,41 +214,39 @@ namespace rotas {
 				int id_demanda = demandas[i].get_id();
 				rotas_demandas[i].adiciona_rota_fim_trajeto(id_facilidade, id_demanda, 
 											cidades_entrada[id_facilidade].get_distancia(id_demanda));
-				rotas_demandas[i].adiciona_rota_fim_trajeto(id_facilidade, id_demanda,
+				rotas_demandas[i].adiciona_rota_fim_trajeto(id_demanda,id_facilidade,
 					cidades_entrada[id_demanda].get_distancia(id_facilidade));
 			}
 		}
 
-		vector<Caminho> encontra_rota_partindo_dos_savings(vector<Rota> &savings, Cidade facilidade)
+		void encontra_rota_partindo_dos_savings(vector<Rota> &savings, vector<Caminho> & melhores_caminhos)
 		{
-			vector<Caminho> melhores_rotas_encontradas;
 
-			inicializa_rotas_demandas(melhores_rotas_encontradas,facilidade);
+			inicializa_rotas_demandas(melhores_caminhos);
 			
 			for (unsigned int i = 0;  i < savings.size(); i++)
 			{
 				if (saving_e_valido(savings[i]))
 				{
-					adiciona_saving_na_rota(savings[i], melhores_rotas_encontradas);
+					adiciona_saving_na_rota(savings[i], melhores_caminhos);
 				}
 			}
-
-			return melhores_rotas_encontradas;
 		}
 
-		vector<Caminho> ClarkeWright::encontra_roteamentos(Context context_inicializado,Cidade facilidade)
+		vector<Caminho> ClarkeWright::encontra_roteamentos(std::vector<Cidade> & cidades,Cidade facilidade_entrada)
 		{
-			cidades_entrada = context_inicializado.get_cidades_atendidas();
+			cidades_entrada = cidades;
+			facilidade = facilidade_entrada;
 		
-			vector<Caminho> melhores_caminhos_encontradas = vector<Caminho>();
+			vector<Caminho> melhores_caminhos_encontrados = vector<Caminho>();
 
 			vector<Rota> savings = inicializa_savings(facilidade);
 			
 			ordena_maior_pro_menor(savings);
 
-			melhores_caminhos_encontradas = encontra_rota_partindo_dos_savings(savings, facilidade);
+			encontra_rota_partindo_dos_savings(savings, melhores_caminhos_encontrados);
 
-			return melhores_caminhos_encontradas;
+			return melhores_caminhos_encontrados;
 		}
 	}
 }

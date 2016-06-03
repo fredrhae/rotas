@@ -11,13 +11,11 @@ namespace rotas
 	{
 		class Caminho 
 		{
-			int id_cidade_origem;
-			int id_cidade_destino;
 			std::vector<Rota> trajeto;
 		public:
 			Caminho() {};
-			Caminho(int origem, int destino, std::vector<Rota> trajeto) 
-					: id_cidade_origem(origem), id_cidade_destino(destino), trajeto(trajeto) {};
+			Caminho(std::vector<Rota> trajeto) 
+					: trajeto(trajeto) {};
 			int get_id_origem();
 			int get_id_destino();
 			std::vector<Rota> get_trajeto();

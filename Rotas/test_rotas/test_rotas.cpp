@@ -520,9 +520,69 @@ protected:
 	int a;
 	algoritmos::ClarkeWright clarke_wright;
 	algoritmos::GilletJohnson gillet_johnson;
+	unsigned int num_atribuidas = 0;
+	unsigned int num_pontos_demanda = 0;
+	unsigned int qtd_sedes = 7;
+	vector<Cidade*> pontos_atendimento = vector<Cidade*>();
 
+	std::vector<Cidade> cidades_dijkstra;
 	virtual void SetUp() {
 		RotasTest::SetUp();
+
+		using namespace teitz_bart;
+		Dijkstra dijkstra = Dijkstra();
+		TeitzBart teitz_bart = TeitzBart();
+
+		cout << "Total de cidades: " << cidades.size() << endl;
+
+
+		for (size_t i = 0; i < cidades.size(); i++)
+		{
+			Cidade c = cidades.at(i);
+
+			c.set_rotas(dijkstra.dijkstra_menor_caminho(rotas_context, c));
+
+			cidades_dijkstra.push_back(c);
+		}
+
+		teitz_bart.define_medianas(cidades_dijkstra, qtd_sedes);
+
+		cout << "Cidades sedes: " << endl;
+
+		unsigned int qtd_medianas = 0;
+
+		for (size_t i = 0; i < cidades_dijkstra.size(); i++)
+		{
+			Cidade& c = cidades_dijkstra[i];
+
+			if (c.is_mediana())
+			{
+				cout << "\t* " << c.get_nome() << endl;
+				qtd_medianas++;
+			}
+		}
+
+		gillet_johnson = algoritmos::GilletJohnson();
+
+		a = 5;
+
+
+
+		for (unsigned int i = 0; i < cidades_dijkstra.size(); i++) {
+			if (cidades_dijkstra[i].is_mediana()) {
+				pontos_atendimento.push_back(&(cidades_dijkstra[i]));
+			}
+		}
+
+		// Capacidades dos 3 caminhões
+		double capacidades[] = { 6200, 8300, 11000 };
+
+		for (size_t i = 0; i < pontos_atendimento.size(); i++) {
+			pontos_atendimento[i]->set_capacidade(capacidades[i % 3]);
+		}
+
+		gillet_johnson.encontra_medianas(cidades_dijkstra);
+
 		clarke_wright = algoritmos::ClarkeWright();
 		gillet_johnson = algoritmos::GilletJohnson();
 		a = 10;
@@ -536,14 +596,14 @@ TEST_F(ClarkeWrightTest, validacaoTrivial)
 
 TEST_F(ClarkeWrightTest, testGetDistancia)
 {
-	Cidade cidade_a = cidades[0];
-	Cidade cidade_b = cidades[1];
+	Cidade cidade_a = cidades_dijkstra[0];
+	Cidade cidade_b = cidades_dijkstra[1];
 	double distancia_encontrada = cidade_a.get_distancia(cidade_b);
 
-	EXPECT_EQ(638, distancia_encontrada);
+	EXPECT_EQ(568, distancia_encontrada);
 
-	cidade_a = cidades[6];
-	cidade_b = cidades[22];
+	cidade_a = cidades_dijkstra[6];
+	cidade_b = cidades_dijkstra[22];
 
 	distancia_encontrada = cidade_a.get_distancia(cidade_b);
 	EXPECT_EQ(158, distancia_encontrada);
@@ -558,28 +618,24 @@ TEST_F(ClarkeWrightTest, testOrdenaSavingsMaiorProMenor)
 TEST_F(ClarkeWrightTest, testEncontraRoteamentos)
 {
 
-	vector<Cidade> facilidades = vector<Cidade>();
-	//Escolhe 3 medianas ao acaso
-	cidades[10].set_mediana(true);
-	facilidades.push_back(cidades[10]);
-	cidades[20].set_mediana(true);
-	facilidades.push_back(cidades[20]);
-	cidades[30].set_mediana(true);
-	facilidades.push_back(cidades[30]);
-
-	gillet_johnson.encontra_medianas(cidades);
-
-	for (unsigned int w = 0; w < facilidades.size(); w++)
+	for (unsigned int w = 0; w < pontos_atendimento.size(); w++)
 	{
-		vector<Caminho> savings = clarke_wright.encontra_roteamentos(rotas_context, facilidades[w]);
-		cout << "Savings extraidos da cidade sede :" << endl;
-		for (unsigned int i = 0; i < savings.size(); i++) {
-			for (unsigned int j = 0; j < savings[i].quantidade_rotas_trajeto(); j++)
+		double acumulador_distancia = 0;
+		double acumulador_demanda = 0;
+		vector<Caminho> rota_final_otimizada = clarke_wright.encontra_roteamentos(cidades_dijkstra, *pontos_atendimento[w]);
+		cout << "Rota otimizada para cidade sede " << pontos_atendimento[w]->get_nome() <<":" << endl;
+		for (unsigned int i = 0; i < rota_final_otimizada.size(); i++) {
+			for (unsigned int j = 0; j < rota_final_otimizada[i].quantidade_rotas_trajeto(); j++)
 			{
-				cout << "S" << savings[i].get_rota_indice(j).get_id_origem() << "," << savings[i].get_rota_indice(j).get_id_destino() <<
-					"= " << savings[i].get_rota_indice(j).get_distancia() << "Km" <<
-					"| " << cidades[savings[i].get_rota_indice(j).get_id_destino()].get_demanda() << "Kg" << endl;
+				double distancia_atual = rota_final_otimizada[i].get_rota_indice(j).get_distancia();
+				double demanda_atual = cidades_dijkstra[rota_final_otimizada[i].get_rota_indice(j).get_id_destino()].get_demanda();
+				cout << "R" << rota_final_otimizada[i].get_rota_indice(j).get_id_origem() << "," << rota_final_otimizada[i].get_rota_indice(j).get_id_destino() <<
+					"= " << distancia_atual << "Km" <<
+					" | " << demanda_atual << "Kg" << endl;	
+				acumulador_demanda += demanda_atual;
+				acumulador_distancia += distancia_atual;
 			}
+			cout << "\nDistancia total: " << acumulador_distancia << "Km | " << "Demanda total: " << acumulador_demanda << "Kg\n" << endl;
 		}
 	}
 
@@ -691,7 +747,8 @@ TEST_F(IntegracaoTest, testIntegracao)
 				continue;
 			}
 
-			cout << "\t- " << c.get_nome() << ", Distancia: " << mediana.get_distancia(c) << "km" << endl;
+			cout << "\t- " << c.get_nome() << ", Distancia: " << mediana.get_distancia(c) << "Km | "
+				 << "Demanda: " << c.get_demanda() << "Kg" << endl;
 		}
 	}
 
@@ -700,21 +757,28 @@ TEST_F(IntegracaoTest, testIntegracao)
 
 	cout << "[Clarke & Wright] Localizando rotas nos clusters..." << endl;
 
-	vector<Cidade> facilidades = rotas_context.get_facilidades();
-
-	for (unsigned int w = 0; w < facilidades.size(); w++)
+	for (unsigned int w = 0; w < pontos_atendimento.size(); w++)
 	{
-		vector<Caminho> savings = clarke_wright.encontra_roteamentos(rotas_context, facilidades[w]);
-		cout << "Savings extraidos da cidade sede :" << endl;
-		for (unsigned int i = 0; i < savings.size(); i++) {
-			for (unsigned int j = 0; j < savings[i].quantidade_rotas_trajeto(); j++)
+		double acumulador_distancia = 0;
+		double acumulador_demanda = 0;
+		vector<Caminho> rota_final_otimizada = clarke_wright.encontra_roteamentos(cidades, *pontos_atendimento[w]);
+		cout << "Rota otimizada para cidade sede :" << endl;
+		for (unsigned int i = 0; i < rota_final_otimizada.size(); i++) {
+			for (unsigned int j = 0; j < rota_final_otimizada[i].quantidade_rotas_trajeto(); j++)
 			{
-				cout << "S" << savings[i].get_rota_indice(j).get_id_origem() << "," << savings[i].get_rota_indice(j).get_id_destino() <<
-					"= " << savings[i].get_rota_indice(j).get_distancia() << "Km" <<
-					"| " << cidades[savings[i].get_rota_indice(j).get_id_destino()].get_demanda() << "Kg" << endl;
+				double distancia_atual = rota_final_otimizada[i].get_rota_indice(j).get_distancia();
+				double demanda_atual = cidades[rota_final_otimizada[i].get_rota_indice(j).get_id_destino()].get_demanda();
+				cout << "R" << rota_final_otimizada[i].get_rota_indice(j).get_id_origem() << "," << rota_final_otimizada[i].get_rota_indice(j).get_id_destino() <<
+					"= " << distancia_atual << "Km" <<
+					" | " << demanda_atual << "Kg" << endl;
+				acumulador_demanda += demanda_atual;
+				acumulador_distancia += distancia_atual;
 			}
+			cout << "\n Distancia total: " << acumulador_distancia << "Km | " << "Demanda total: " << acumulador_demanda << "Kg" << endl;
 		}
 	}
+
+	cout << "-------------------------------------" << endl;
 }
 
 #endif // INTEGRACAO

@@ -15,7 +15,7 @@ namespace rotas
 				
 			public:
 				ClarkeWright(){};
-				vector<Caminho> encontra_roteamentos(Context context_inicializado, Cidade facilidade);
+				vector<Caminho> encontra_roteamentos(std::vector<Cidade> & cidades, Cidade facilidade);
 		};
 	}
 }

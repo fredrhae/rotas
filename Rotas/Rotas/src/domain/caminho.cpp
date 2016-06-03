@@ -6,12 +6,12 @@ namespace rotas
 	{
 		int Caminho::get_id_origem()
 		{
-			return id_cidade_origem;
+			return trajeto.front().get_id_origem();
 		}
 
 		int Caminho::get_id_destino()
 		{
-			return id_cidade_destino;
+			return trajeto.back().get_id_destino();
 		}
 
 		std::vector<Rota> Caminho::get_trajeto()
