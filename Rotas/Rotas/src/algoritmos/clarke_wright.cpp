@@ -39,14 +39,14 @@ namespace rotas {
 			return facilidades;
 		}
 
-		bool compara_rotas(Rota rota_a, Rota rota_b)
+		bool rota_a_maior_que_b(Rota rota_a, Rota rota_b)
 		{
 			return rota_a.get_distancia() > rota_b.get_distancia();
 		}
 
 		void ordena_maior_pro_menor(vector<Rota> &savings)
 		{
-			sort(savings.begin(), savings.end(), compara_rotas);
+			sort(savings.begin(), savings.end(), rota_a_maior_que_b);
 		}
 
 		vector<Rota> inicializa_savings(Cidade facilidade)
@@ -54,8 +54,6 @@ namespace rotas {
 			vector<Cidade> pontos_demanda = encontra_pontos_demandas(facilidade);
 
 			vector<Rota> savings = vector<Rota>();
-
-			ClarkeWright clarke = ClarkeWright();
 
 			for (unsigned int i = 0; i < pontos_demanda.size(); i++)
 			{
@@ -85,6 +83,7 @@ namespace rotas {
 			return true;
 		}
 
+		// Adicionado na classe caminho
 		bool cidade_existe_na_rota(int id_cidade, vector<Rota> rotas_encontradas)
 		{
 			for each(Rota rota_atual in rotas_encontradas)
@@ -95,6 +94,7 @@ namespace rotas {
 			return false;
 		}
 
+		// Adicionado na classe caminho
 		bool cidade_no_fim(int id_cidade, vector<Rota> rota)
 		{
 			if (rota.rbegin()[1].get_id_destino() == id_cidade)
@@ -102,6 +102,7 @@ namespace rotas {
 			return false;
 		}
 
+		// Adicionado na classe caminho
 		bool cidade_no_comeco(int id_cidade, vector<Rota> rota)
 		{
 			if (rota.begin()[1].get_id_origem() == id_cidade)
@@ -109,6 +110,7 @@ namespace rotas {
 			return false;
 		}
 
+		// Adicionado na classe caminho
 		bool cidade_esta_no_fim_ou_comeco_rota(int id_cidade, vector<Rota> rota)
 		{
 			return cidade_no_fim(id_cidade,rota) || cidade_no_comeco(id_cidade,rota);
@@ -124,6 +126,7 @@ namespace rotas {
 			return -1;
 		}
 
+		// Adicionado na classe caminho
 		void adiciona_rota_fim(int id_cidade_origem,int id_cidade_destino, vector<Rota> &rotas_encontradas)
 		{
 			Cidade origem = cidades_entrada[id_cidade_origem];
@@ -132,6 +135,7 @@ namespace rotas {
 			rotas_encontradas.push_back(Rota(id_cidade_origem, id_cidade_destino, origem.get_distancia(destino)));
 		}
 
+		// Adicionado na classe caminho
 		void adiciona_rota_comeco(int id_cidade_origem, int id_cidade_destino, vector<Rota> &rotas_encontradas)
 		{
 			Cidade origem = cidades_entrada[id_cidade_origem];
