@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "domain/cidade.h"
+#include "domain/caminho.h"
 
 namespace rotas 
 {
@@ -14,7 +15,7 @@ namespace rotas
 				
 			public:
 				ClarkeWright(){};
-				vector<vector<vector<Rota>>> encontra_roteamentos(std::vector<Cidade> & cidades);
+				vector<Caminho> encontra_roteamentos(Context context_inicializado, Cidade facilidade);
 		};
 	}
 }

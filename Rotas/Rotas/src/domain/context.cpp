@@ -29,6 +29,20 @@ double Context::get_distancia(int id_cidade_origem, int id_cidade_destino)
 	return matriz_distancias[id_cidade_origem][id_cidade_destino].get_distancia();
 }
 
+vector<Cidade> Context::get_facilidades()
+{
+	vector<Cidade> facilidades = vector<Cidade>();
+
+	size_t size_cidades = cidades_atendidas.size();
+	for (int i = 0; i < size_cidades; i++)
+	{
+		if(cidades_atendidas[i].is_mediana())
+			facilidades.push_back(cidades_atendidas[i]);
+	}
+
+	return facilidades;
+}
+
 
 
 

@@ -1,6 +1,7 @@
 #include "algoritmos/clarke_wright.h"
 #include "algoritmos/gillet_johnson.h"
 #include "domain/rota.h"
+#include "domain/caminho.h"
 #include <vector>
 #include <algorithm>
 #include <set>
@@ -12,7 +13,6 @@ namespace rotas {
 	namespace algoritmos {
 
 		static vector<Cidade> cidades_entrada;
-		static vector<vector<Rota>> todos_savings;
 
 		vector<Cidade> encontra_pontos_demandas(Cidade facilidade)
 		{
@@ -25,18 +25,6 @@ namespace rotas {
 			}
 
 			return pontos_demanda;
-		}
-
-		vector<Cidade> encontra_facilidades()
-		{
-			vector<Cidade> facilidades = vector<Cidade>();
-			for (unsigned int i = 0; i < cidades_entrada.size(); i++) {
-				if (cidades_entrada[i].is_mediana()) {
-					facilidades.push_back(cidades_entrada[i]);
-				}
-			}
-
-			return facilidades;
 		}
 
 		bool rota_a_maior_que_b(Rota rota_a, Rota rota_b)
@@ -84,68 +72,69 @@ namespace rotas {
 		}
 
 		// Adicionado na classe caminho
-		bool cidade_existe_na_rota(int id_cidade, vector<Rota> rotas_encontradas)
+		//bool cidade_existe_na_rota(int id_cidade, vector<Rota> rotas_encontradas)
+		//{
+		//	for each(Rota rota_atual in rotas_encontradas)
+		//	{
+		//		if(rota_atual.rota_contem_cidade(id_cidade))
+		//			return true;
+		//	}
+		//	return false;
+		//}
+
+		// Adicionado na classe caminho
+		//bool cidade_no_fim(int id_cidade, vector<Rota> rota)
+		//{
+		//	if (rota.rbegin()[1].get_id_destino() == id_cidade)
+		//		return true;
+		//	return false;
+		//}
+
+		// Adicionado na classe caminho
+		//bool cidade_no_comeco(int id_cidade, vector<Rota> rota)
+		//{
+		//	if (rota.begin()[1].get_id_origem() == id_cidade)
+		//		return true;
+		//	return false;
+		//}
+
+		// Adicionado na classe caminho
+		//bool cidade_esta_no_fim_ou_comeco_rota(int id_cidade, vector<Rota> rota)
+		//{
+		//	return cidade_no_fim(id_cidade,rota) || cidade_no_comeco(id_cidade,rota);
+		//}
+
+		int acha_rota_com_cidade(int id_cidade, vector<Caminho> &rotas)
 		{
-			for each(Rota rota_atual in rotas_encontradas)
+			int size_rotas = rotas.size();
+			for (unsigned int i = 0; i < size_rotas; i++)
 			{
-				if(rota_atual.rota_contem_cidade(id_cidade))
-					return true;
-			}
-			return false;
-		}
-
-		// Adicionado na classe caminho
-		bool cidade_no_fim(int id_cidade, vector<Rota> rota)
-		{
-			if (rota.rbegin()[1].get_id_destino() == id_cidade)
-				return true;
-			return false;
-		}
-
-		// Adicionado na classe caminho
-		bool cidade_no_comeco(int id_cidade, vector<Rota> rota)
-		{
-			if (rota.begin()[1].get_id_origem() == id_cidade)
-				return true;
-			return false;
-		}
-
-		// Adicionado na classe caminho
-		bool cidade_esta_no_fim_ou_comeco_rota(int id_cidade, vector<Rota> rota)
-		{
-			return cidade_no_fim(id_cidade,rota) || cidade_no_comeco(id_cidade,rota);
-		}
-
-		int acha_rota_com_cidade(int id_cidade, vector<vector<Rota>> &rotas)
-		{
-			for (unsigned int i = 0; i < rotas.size(); i++)
-			{
-				if(cidade_existe_na_rota(id_cidade,rotas[i]))
+				if(rotas[i].cidade_existe_na_rota(id_cidade))
 					return i;
 			}
 			return -1;
 		}
 
 		// Adicionado na classe caminho
-		void adiciona_rota_fim(int id_cidade_origem,int id_cidade_destino, vector<Rota> &rotas_encontradas)
-		{
-			Cidade origem = cidades_entrada[id_cidade_origem];
-			Cidade destino = cidades_entrada[id_cidade_destino];
+		//void adiciona_rota_fim(int id_cidade_origem,int id_cidade_destino, vector<Rota> &rotas_encontradas)
+		//{
+		//	Cidade origem = cidades_entrada[id_cidade_origem];
+		//	Cidade destino = cidades_entrada[id_cidade_destino];
 
-			rotas_encontradas.push_back(Rota(id_cidade_origem, id_cidade_destino, origem.get_distancia(destino)));
-		}
+		//	rotas_encontradas.push_back(Rota(id_cidade_origem, id_cidade_destino, origem.get_distancia(destino)));
+		//}
 
 		// Adicionado na classe caminho
-		void adiciona_rota_comeco(int id_cidade_origem, int id_cidade_destino, vector<Rota> &rotas_encontradas)
-		{
-			Cidade origem = cidades_entrada[id_cidade_origem];
-			Cidade destino = cidades_entrada[id_cidade_destino];
+		//void adiciona_rota_comeco(int id_cidade_origem, int id_cidade_destino, vector<Rota> &rotas_encontradas)
+		//{
+		//	Cidade origem = cidades_entrada[id_cidade_origem];
+		//	Cidade destino = cidades_entrada[id_cidade_destino];
 
-			rotas_encontradas.insert(rotas_encontradas.begin(),
-									Rota(id_cidade_origem, id_cidade_destino, origem.get_distancia(destino)));
-		}
+		//	rotas_encontradas.insert(rotas_encontradas.begin(),
+		//							Rota(id_cidade_origem, id_cidade_destino, origem.get_distancia(destino)));
+		//}
 
-		void adiciona_saving_na_rota(Rota saving, vector<vector<Rota>> &rotas_encontradas)
+		void adiciona_saving_na_rota(Rota saving, vector<Caminho> &rotas_encontradas)
 		{
 			int index_ciclo_origem = acha_rota_com_cidade(saving.get_id_origem(),rotas_encontradas);
 			int index_ciclo_destino = acha_rota_com_cidade(saving.get_id_destino(), rotas_encontradas);
@@ -156,12 +145,12 @@ namespace rotas {
 
 			if(index_ciclo_origem > -1)
 			{
-				pertence_rotas_diferentes = !cidade_existe_na_rota(saving.get_id_destino(),rotas_encontradas[index_ciclo_origem]);
-				origem_esta_apta_ser_adicionada = cidade_esta_no_fim_ou_comeco_rota(saving.get_id_origem(), rotas_encontradas[index_ciclo_origem]);
+				pertence_rotas_diferentes = !rotas_encontradas[index_ciclo_origem].cidade_existe_na_rota(saving.get_id_destino());
+				origem_esta_apta_ser_adicionada = rotas_encontradas[index_ciclo_origem].cidade_esta_no_fim_ou_comeco_rota(saving.get_id_origem());
 			}
 			if (index_ciclo_destino > -1)
 			{
-				destino_esta_apto_ser_adicionado = cidade_esta_no_fim_ou_comeco_rota(saving.get_id_destino(), rotas_encontradas[index_ciclo_destino]);
+				destino_esta_apto_ser_adicionado = rotas_encontradas[index_ciclo_destino].cidade_esta_no_fim_ou_comeco_rota(saving.get_id_destino());
 			}
 
 			// TODO: colocar checagem de exceder capacidade do veiculo aqui
@@ -171,23 +160,23 @@ namespace rotas {
 				int index_ciclo_join, index_ciclo_removido, id_origem, id_destino;
 				bool dois_ciclos_comeco = false;
 				bool dois_ciclos_fim = false;
-				if (cidade_no_fim(saving.get_id_origem(), rotas_encontradas[index_ciclo_origem]) && 
-					cidade_no_comeco(saving.get_id_destino(),rotas_encontradas[index_ciclo_destino]))
+				if (rotas_encontradas[index_ciclo_origem].cidade_no_fim_excluindo_facilidade(saving.get_id_origem()) &&
+					rotas_encontradas[index_ciclo_destino].cidade_no_comeco_excluindo_facilidade(saving.get_id_destino()))
 				{
 					index_ciclo_join = index_ciclo_origem;
 					index_ciclo_removido = index_ciclo_destino;
 					id_origem = saving.get_id_origem();
 					id_destino = saving.get_id_destino();
 				}
-				else if (cidade_no_comeco(saving.get_id_origem(), rotas_encontradas[index_ciclo_origem]) &&
-					cidade_no_fim(saving.get_id_destino(), rotas_encontradas[index_ciclo_destino])) {
+				else if (rotas_encontradas[index_ciclo_origem].cidade_no_comeco_excluindo_facilidade(saving.get_id_origem()) &&
+					rotas_encontradas[index_ciclo_destino].cidade_no_fim_excluindo_facilidade(saving.get_id_destino())) {
 					index_ciclo_join = index_ciclo_destino;
 					index_ciclo_removido = index_ciclo_origem;
 					id_origem = saving.get_id_destino();
 					id_destino = saving.get_id_origem();
 				}
-				else if (cidade_no_comeco(saving.get_id_origem(), rotas_encontradas[index_ciclo_origem]) &&
-					cidade_no_comeco(saving.get_id_destino(), rotas_encontradas[index_ciclo_destino])) {
+				else if (rotas_encontradas[index_ciclo_origem].cidade_no_comeco_excluindo_facilidade(saving.get_id_origem()) &&
+					rotas_encontradas[index_ciclo_destino].cidade_no_comeco_excluindo_facilidade(saving.get_id_destino())) {
 					dois_ciclos_comeco = true;
 					index_ciclo_join = index_ciclo_origem;
 					index_ciclo_removido = index_ciclo_destino;
@@ -204,35 +193,41 @@ namespace rotas {
 		
 				if (dois_ciclos_comeco)
 				{
-					// Remove a ultima rota e a primeira dos ciclos
-					rotas_encontradas[index_ciclo_join].erase(rotas_encontradas[index_ciclo_join].begin());
-					rotas_encontradas[index_ciclo_removido].erase(rotas_encontradas[index_ciclo_removido].begin());
+					// Remove a primeira rota dos dois ciclos
+					rotas_encontradas[index_ciclo_join].apaga_rota_comeco();
+					rotas_encontradas[index_ciclo_removido].apaga_rota_comeco();
 
 					// Adiciona a rota do saving ao ciclo que recebera o join
-					adiciona_rota_comeco(id_origem, id_destino, rotas_encontradas[index_ciclo_join]);
+					//adiciona_rota_comeco(id_origem, id_destino, rotas_encontradas[index_ciclo_join]);
+					rotas_encontradas[index_ciclo_join].adiciona_rota_fim_trajeto(id_origem, id_destino,
+						cidades_entrada[id_origem].get_distancia(id_destino));
 				}
 				else if (dois_ciclos_fim)
 				{
-					// Remove a ultima rota e a primeira dos ciclos
-					rotas_encontradas[index_ciclo_join].pop_back();
-					rotas_encontradas[index_ciclo_removido].pop_back();
+					// Remove as ultimas rotas dos dois ciclos
+					rotas_encontradas[index_ciclo_join].apaga_rota_fim();
+					rotas_encontradas[index_ciclo_removido].apaga_rota_fim();
 
 					// Adiciona a rota do saving ao ciclo que recebera o join
-					adiciona_rota_fim(id_origem, id_destino, rotas_encontradas[index_ciclo_join]);
+					rotas_encontradas[index_ciclo_join].adiciona_rota_fim_trajeto(id_origem, id_destino,
+						cidades_entrada[id_origem].get_distancia(id_destino));
 				}
 				else
 				{
 					// Remove a ultima rota e a primeira dos ciclos
-					rotas_encontradas[index_ciclo_join].pop_back();
-					rotas_encontradas[index_ciclo_removido].erase(rotas_encontradas[index_ciclo_removido].begin());
+					rotas_encontradas[index_ciclo_join].apaga_rota_fim();
+					rotas_encontradas[index_ciclo_removido].apaga_rota_comeco();
 
 					// Adiciona a rota do saving ao ciclo que recebera o join
-					adiciona_rota_fim(id_origem, id_destino, rotas_encontradas[index_ciclo_join]);
+					rotas_encontradas[index_ciclo_join].adiciona_rota_fim_trajeto(id_origem, id_destino,
+						cidades_entrada[id_origem].get_distancia(id_destino));
 
 					// Adiciona as rotas que estavam no ciclo que sera removido da lista
-					for (unsigned int i = 0; i < rotas_encontradas[index_ciclo_removido].size(); i++)
+					int size_ciclo_removido = rotas_encontradas[index_ciclo_removido].quantidade_rotas_trajeto();
+					for (unsigned int i = 0; i < size_ciclo_removido; i++)
 					{
-						rotas_encontradas[index_ciclo_join].push_back(rotas_encontradas[index_ciclo_removido][i]);
+						rotas_encontradas[index_ciclo_join].
+										adiciona_rota_fim_trajeto(rotas_encontradas[index_ciclo_removido].get_rota_indice(i));
 					}
 				}
 
@@ -240,12 +235,13 @@ namespace rotas {
 				if (dois_ciclos_comeco || dois_ciclos_fim)
 				{
 					// Adiciona as rotas que estavam no ciclo que sera removido da lista
-					for (unsigned int i = 0; i < rotas_encontradas[index_ciclo_removido].size(); i++)
+					int size_ciclo_removido = rotas_encontradas[index_ciclo_removido].quantidade_rotas_trajeto();
+					for (unsigned int i = 0; i < size_ciclo_removido; i++)
 					{
-						Rota rota_atual = rotas_encontradas[index_ciclo_removido][i];
+						Rota rota_atual = rotas_encontradas[index_ciclo_removido].get_rota_indice(i);
 						// Adiciona a rota do saving ao ciclo que recebera o join
-						adiciona_rota_comeco(rota_atual.get_id_destino(), rota_atual.get_id_origem(), rotas_encontradas[index_ciclo_join]);
-
+						rotas_encontradas[index_ciclo_join].
+							adiciona_rota_comeco_trajeto(rota_atual.get_id_destino(), rota_atual.get_id_origem(),rota_atual.get_distancia());
 					}
 				}
 				
@@ -255,66 +251,55 @@ namespace rotas {
 			}
 		}
 
-		void inicializa_rotas_demandas(vector<vector<Rota>> &rotas_demandas, Cidade facilidade)
+		void inicializa_rotas_demandas(vector<Caminho> &rotas_demandas, Cidade facilidade)
 		{
 			vector<Cidade> demandas = encontra_pontos_demandas(facilidade);
-
-			rotas_demandas = vector<vector<Rota>>(demandas.size(), vector<Rota>());
-
-			for (unsigned int i = 0; i < demandas.size(); i++)
+			
+			int size_demandas = demandas.size();
+			int id_facilidade = facilidade.get_id();
+	
+			rotas_demandas = vector<Caminho>(size_demandas);
+			
+			for (unsigned int i = 0; i < size_demandas; i++)
 			{
-				adiciona_rota_fim(facilidade.get_id(),demandas[i].get_id(), rotas_demandas[i]);
-				adiciona_rota_fim(demandas[i].get_id(),facilidade.get_id(), rotas_demandas[i]);
+				int id_demanda = demandas[i].get_id();
+				rotas_demandas[i].adiciona_rota_fim_trajeto(id_facilidade, id_demanda, 
+											cidades_entrada[id_facilidade].get_distancia(id_demanda));
+				rotas_demandas[i].adiciona_rota_fim_trajeto(id_facilidade, id_demanda,
+					cidades_entrada[id_demanda].get_distancia(id_facilidade));
 			}
 		}
 
-		vector<vector<Rota>> encontra_rota_partindo_dos_savings(vector<Rota> &savings_atual, Cidade facilidade)
+		vector<Caminho> encontra_rota_partindo_dos_savings(vector<Rota> &savings, Cidade facilidade)
 		{
-			vector<vector<Rota>> melhores_rotas_encontradas;
+			vector<Caminho> melhores_rotas_encontradas;
 
-			
 			inicializa_rotas_demandas(melhores_rotas_encontradas,facilidade);
 			
-			for (unsigned int i = 0;  i < savings_atual.size(); i++)
+			for (unsigned int i = 0;  i < savings.size(); i++)
 			{
-				if (saving_e_valido(savings_atual[i]))
+				if (saving_e_valido(savings[i]))
 				{
-					adiciona_saving_na_rota(savings_atual[i], melhores_rotas_encontradas);
+					adiciona_saving_na_rota(savings[i], melhores_rotas_encontradas);
 				}
 			}
 
 			return melhores_rotas_encontradas;
 		}
 
-		vector<vector<vector<Rota>>> ClarkeWright::encontra_roteamentos(std::vector<Cidade> & cidades)
+		vector<Caminho> ClarkeWright::encontra_roteamentos(Context context_inicializado,Cidade facilidade)
 		{
-			cidades_entrada = cidades;
+			cidades_entrada = context_inicializado.get_cidades_atendidas();
+		
+			vector<Caminho> melhores_caminhos_encontradas = vector<Caminho>();
 
-			vector<Cidade> facilidades = encontra_facilidades();
+			vector<Rota> savings = inicializa_savings(facilidade);
 			
-			vector<vector<vector<Rota>>> melhores_rotas_encontradas = vector<vector<vector<Rota>>>();
+			ordena_maior_pro_menor(savings);
 
-			todos_savings = vector<vector<Rota>>();
+			melhores_caminhos_encontradas = encontra_rota_partindo_dos_savings(savings, facilidade);
 
-			for (unsigned int i = 0; i < facilidades.size(); i++)
-			{
-				vector<Rota> saving_atual = inicializa_savings(facilidades[i]);
-				
-				ordena_maior_pro_menor(saving_atual);
-
-				todos_savings.push_back(saving_atual);
-			}
-
-			for (unsigned int i = 0; i < todos_savings.size(); i ++)
-			{
-				vector<vector<Rota>> melhor_rota_atual = vector<vector<Rota>>();
-
-				melhor_rota_atual = encontra_rota_partindo_dos_savings(todos_savings[i], facilidades[i]);
-				
-				melhores_rotas_encontradas.push_back(melhor_rota_atual);
-			}
-
-			return melhores_rotas_encontradas;
+			return melhores_caminhos_encontradas;
 		}
 	}
 }

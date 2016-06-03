@@ -29,17 +29,45 @@ namespace rotas
 			return distancia_total;
 		}
 
+		size_t Caminho::quantidade_rotas_trajeto()
+		{
+			return trajeto.size();
+		}
+
+		Rota Caminho::get_rota_indice(int index)
+		{
+			return trajeto.at(index);
+		}
+
 		void Caminho::adiciona_rota_fim_trajeto(int id_cidade_origem, int id_cidade_destino, double distancia)
 		{
 			trajeto.push_back(Rota(id_cidade_origem, id_cidade_destino, distancia));
 		}
 
-		void Caminho::adiciona_rota_comeco(int id_cidade_origem, int id_cidade_destino, double distancia)
+		void Caminho::adiciona_rota_comeco_trajeto(int id_cidade_origem, int id_cidade_destino, double distancia)
 		{
-			trajeto.insert(trajeto.begin(),
-				Rota(id_cidade_origem, id_cidade_destino, distancia));
+			trajeto.insert(trajeto.begin(),Rota(id_cidade_origem, id_cidade_destino, distancia));
 		}
 
+		void Caminho::adiciona_rota_fim_trajeto(Rota rota)
+		{
+			trajeto.push_back(rota);
+		}
+
+		void Caminho::adiciona_rota_comeco_trajeto(Rota rota)
+		{
+			trajeto.insert(trajeto.begin(),rota);
+		}
+
+		void Caminho::apaga_rota_comeco()
+		{
+			trajeto.erase(trajeto.begin());
+		}
+
+		void Caminho::apaga_rota_fim()
+		{
+			trajeto.pop_back();
+		}
 
 		bool Caminho::cidade_existe_na_rota(int id_cidade)
 		{

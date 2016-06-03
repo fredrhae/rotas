@@ -557,23 +557,28 @@ TEST_F(ClarkeWrightTest, testOrdenaSavingsMaiorProMenor)
 
 TEST_F(ClarkeWrightTest, testEncontraRoteamentos)
 {
+
+	vector<Cidade> facilidades = vector<Cidade>();
 	//Escolhe 3 medianas ao acaso
 	cidades[10].set_mediana(true);
+	facilidades.push_back(cidades[10]);
 	cidades[20].set_mediana(true);
+	facilidades.push_back(cidades[20]);
 	cidades[30].set_mediana(true);
+	facilidades.push_back(cidades[30]);
 
 	gillet_johnson.encontra_medianas(cidades);
 
-	vector<vector<vector<Rota>>> savings = clarke_wright.encontra_roteamentos(cidades);
-
-	for (unsigned int w = 0; w < savings.size(); w++)
+	for (unsigned int w = 0; w < facilidades.size(); w++)
 	{
+		vector<Caminho> savings = clarke_wright.encontra_roteamentos(rotas_context, facilidades[w]);
 		cout << "Savings extraidos da cidade sede :" << endl;
-		for (unsigned int i = 0; i < savings[w].size(); i++) {
-			for (unsigned int j = 0; j < savings[w][i].size(); j++)
+		for (unsigned int i = 0; i < savings.size(); i++) {
+			for (unsigned int j = 0; j < savings[i].quantidade_rotas_trajeto(); j++)
 			{
-				cout << "S" << savings[w][i][j].get_id_origem() << "," << savings[w][i][j].get_id_destino() <<
-					"= " << savings[w][i][j].get_distancia() << "km" << endl;
+				cout << "S" << savings[i].get_rota_indice(j).get_id_origem() << "," << savings[i].get_rota_indice(j).get_id_destino() <<
+					"= " << savings[i].get_rota_indice(j).get_distancia() << "Km" <<
+					"| " << cidades[savings[i].get_rota_indice(j).get_id_destino()].get_demanda() << "Kg" << endl;
 			}
 		}
 	}
@@ -695,16 +700,18 @@ TEST_F(IntegracaoTest, testIntegracao)
 
 	cout << "[Clarke & Wright] Localizando rotas nos clusters..." << endl;
 
-	vector<vector<vector<Rota>>> savings = clarke_wright.encontra_roteamentos(cidades);
+	vector<Cidade> facilidades = rotas_context.get_facilidades();
 
-	for (size_t w = 0; w < savings.size(); w++)
+	for (unsigned int w = 0; w < facilidades.size(); w++)
 	{
-		cout << "Savings extraidos da cidade sede " << medianas[w].get_nome() << ":" << endl;
-		for (size_t i = 0; i < savings[w].size(); i++) {
-			for (size_t j = 0; j < savings[w][i].size(); j++)
+		vector<Caminho> savings = clarke_wright.encontra_roteamentos(rotas_context, facilidades[w]);
+		cout << "Savings extraidos da cidade sede :" << endl;
+		for (unsigned int i = 0; i < savings.size(); i++) {
+			for (unsigned int j = 0; j < savings[i].quantidade_rotas_trajeto(); j++)
 			{
-				cout << "\t- S" << savings[w][i][j].get_id_origem() << "," << savings[w][i][j].get_id_destino() <<
-					"= " << savings[w][i][j].get_distancia() << "km" << endl;
+				cout << "S" << savings[i].get_rota_indice(j).get_id_origem() << "," << savings[i].get_rota_indice(j).get_id_destino() <<
+					"= " << savings[i].get_rota_indice(j).get_distancia() << "Km" <<
+					"| " << cidades[savings[i].get_rota_indice(j).get_id_destino()].get_demanda() << "Kg" << endl;
 			}
 		}
 	}
