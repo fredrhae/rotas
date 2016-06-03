@@ -61,8 +61,8 @@ namespace rotas
 		}
 
 		double Cidade::get_distancia(int id_destino) {
-			int size_rotas = rotas.size();
-			for (unsigned int i = 0; i < size_rotas; i++) {
+			size_t size_rotas = rotas.size();
+			for (size_t i = 0; i < size_rotas; i++) {
 				if (rotas[i].get_id_destino() == id_destino) {
 					return rotas[i].get_distancia();
 				}
