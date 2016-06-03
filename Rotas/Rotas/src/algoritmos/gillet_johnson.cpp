@@ -18,6 +18,11 @@ namespace rotas
 		vector<Cidade> encontra_lista_designacao(vector<Cidade> pontos_demanda, vector<Cidade> pontos_atendimento) {
 			vector<Cidade> lista_designacao = vector<Cidade>();
 
+			if (pontos_atendimento.size() == 1) {
+				lista_designacao.push_back(pontos_atendimento.front());
+				return lista_designacao;
+			}
+
 			for (unsigned int i = 0; i < pontos_demanda.size(); i++) {
 				Cidade ponto_demanda = pontos_demanda[i];
 				//Passo 1: Encontrar L1 e L2, as duas medianas mais próximas
@@ -83,10 +88,12 @@ namespace rotas
 
 					//Passo 5: Designar os pontos de demanda ao ponto de atendimento mais próximo
 					for (unsigned i = 0; i < lista_designacao.size(); i++) {
-						Cidade ponto_atendimento_mais_prox = lista_designacao[i].encontra_mais_proxima(pontos_atendimento);
-						if (ponto_atendimento_mais_prox.aloca_demanda(lista_designacao[i].get_demanda())) {
-							lista_designacao[i].set_id_mediana(ponto_atendimento_mais_prox.get_id());
-							cidades[lista_designacao[i].get_id()].set_id_mediana(ponto_atendimento_mais_prox.get_id());
+						Cidade* ponto_atendimento_mais_prox = lista_designacao[i].encontra_mais_proxima(&pontos_atendimento);
+						double capacidade = ponto_atendimento_mais_prox->get_capacidade();
+						if (capacidade >= lista_designacao[i].get_demanda()) {
+							ponto_atendimento_mais_prox->set_capacidade(capacidade - lista_designacao[i].get_demanda());
+							lista_designacao[i].set_id_mediana(ponto_atendimento_mais_prox->get_id());
+							cidades[lista_designacao[i].get_id()].set_id_mediana(ponto_atendimento_mais_prox->get_id());
 
 							//Tira a cidade atendida dos pontos de demanda
 							remove_cidade(pontos_demanda, lista_designacao[i]);
@@ -94,7 +101,7 @@ namespace rotas
 						else {
 							//Capacidade de atendimento estourada
 							flag_demanda_estourada = true;
-							remove_cidade(pontos_atendimento, ponto_atendimento_mais_prox);
+							remove_cidade(pontos_atendimento, *ponto_atendimento_mais_prox);
 							break;
 						}
 					}

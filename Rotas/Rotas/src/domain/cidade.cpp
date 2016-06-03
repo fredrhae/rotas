@@ -41,9 +41,9 @@ namespace rotas
 			rotas = novas_rotas;
 		}
 
-		void Cidade::set_demanda(double demanda)
+		void Cidade::set_demanda(double nova_demanda)
 		{
-			this->demanda = demanda;
+			this->demanda = nova_demanda;
 		}
 
 		void Cidade::set_capacidade(double capacidade)
@@ -99,16 +99,16 @@ namespace rotas
 			return cidades_em_ordem;
 		}
 
-		Cidade Cidade::encontra_mais_proxima(vector<Cidade> destinos)
+		Cidade* Cidade::encontra_mais_proxima(vector<Cidade> *destinos)
 		{
-			Cidade mais_proxima = destinos[0];
-			double menor_distancia = this->get_distancia(mais_proxima);
+			Cidade *mais_proxima = &(destinos->at(0));
+			double menor_distancia = this->get_distancia(*mais_proxima);
 
-			for (unsigned int i = 0; i < destinos.size(); i++) {
-				double distancia = this->get_distancia(destinos[i]);
+			for (unsigned int i = 0; i < destinos->size(); i++) {
+				double distancia = this->get_distancia(destinos->at(i));
 				if (distancia < menor_distancia) {
 					menor_distancia = distancia;
-					mais_proxima = destinos[i];
+					mais_proxima = &(destinos->at(i));
 				}
 			}
 
