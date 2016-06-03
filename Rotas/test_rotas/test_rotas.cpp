@@ -672,6 +672,25 @@ TEST_F(IntegracaoTest, testIntegracao)
 	// Gillett & Johnson
 
 	cout << "[Gillett & Johnson] Localizando clusters..." << endl;
+	//Ja sei que são 6 cidades, então vou distribuir as capacidades seguindo os caminhões
+	vector<Cidade*> pontos_demanda = vector<Cidade*>();
+
+	for (unsigned int i = 0; i < cidades.size(); i++) {
+		if (cidades[i].is_mediana()) {
+			pontos_demanda.push_back(&(cidades[i]));
+		}
+	}
+
+	ASSERT_EQ(6, pontos_demanda.size());
+
+	// Setando 2 caminhões por cidade, conforme acordado
+	pontos_demanda[0]->set_capacidade(6200);
+	pontos_demanda[1]->set_capacidade(8300);
+	pontos_demanda[2]->set_capacidade(11000);
+	pontos_demanda[3]->set_capacidade(6200);
+	pontos_demanda[4]->set_capacidade(8300);
+	pontos_demanda[5]->set_capacidade(11000);
+
 
 	gillet_johnson.encontra_medianas(cidades);
 
