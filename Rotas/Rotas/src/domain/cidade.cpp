@@ -55,9 +55,13 @@ namespace rotas
 		{
 			return rotas;
 		}
-		
+
 		double Cidade::get_distancia(Cidade destino) {
 			return get_distancia(destino.get_id());
+		}
+
+		double Cidade::get_distancia(Cidade *destino) {
+			return get_distancia(destino->get_id());
 		}
 
 		double Cidade::get_distancia(int id_destino) {

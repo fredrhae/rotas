@@ -38,6 +38,7 @@ namespace rotas {
 			void set_capacidade(double capacidade);
 			vector<Rota> get_rotas();
 			double get_distancia(Cidade destino);
+			double get_distancia(Cidade *destino);
 			double get_distancia(int id_destino);
 			double get_demanda();
 			double get_capacidade();
