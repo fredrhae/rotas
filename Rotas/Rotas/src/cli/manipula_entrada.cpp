@@ -12,11 +12,15 @@ vector<Cidade> cidades;
 vector<vector<Rota>> matriz_distancias;
 
 
+//############  Funcoes relacionadas a inicializacao da matriz de distancias   ###########
+
 void inicializa_cidades(vector<string> vetor_nomes_cidades)
 {
 	cidades = vector<Cidade>();
 
-	for (unsigned int i = 0; i < vetor_nomes_cidades.size(); i++)
+	int size_vetor_cidades = vetor_nomes_cidades.size();
+
+	for (unsigned int i = 0; i < size_vetor_cidades; i++)
 	{
 		Cidade cidade_atual = Cidade(vetor_nomes_cidades.at(i), i);
 		cidades.push_back(cidade_atual);
@@ -27,11 +31,14 @@ void inicializa_rotas(vector<vector<string>> matriz_distancias_string)
 {
 	matriz_distancias = vector<vector<Rota>>();
 
-	for (unsigned int i = 0; i < matriz_distancias_string.size(); i++)
+	int size_matriz_distancias = matriz_distancias_string.size();
+
+	for (unsigned int i = 0; i < size_matriz_distancias; i++)
 	{
 		vector<Rota> rotas_cidade_atual = vector<Rota>();
+		int size_linha_atual = matriz_distancias_string[i].size();
 
-		for (unsigned int j = 0; j < matriz_distancias_string[i].size(); j++)
+		for (unsigned int j = 0; j < size_linha_atual; j++)
 		{
 			Rota rota_para_cidade = Rota(i, j, std::stod(matriz_distancias_string[i][j]));
 			rotas_cidade_atual.push_back(rota_para_cidade);
@@ -43,29 +50,23 @@ void inicializa_rotas(vector<vector<string>> matriz_distancias_string)
 
 void inicializa_rotas_em_cidades()
 {
-	for (unsigned int i = 0; i < cidades.size(); i++)
+	int size_cidades = cidades.size();
+
+	for (unsigned int i = 1; i < size_cidades; i++)
 	{
 		cidades[i].set_rotas(matriz_distancias[i]);
 	}
 }
 
-bool checa_path_e_valido(string path)
-{
-	ifstream test(path);
-	if (!test)
-	{
-		return false;
-	}
-
-	return true;
-}
-
 bool checa_matriz_quadrada(vector<vector<string>> matriz_distancias)
 {
 	bool e_quadrada = true;
-	for (unsigned int i = 1; i < matriz_distancias.size(); i++)
+	int size_matriz_distancias = matriz_distancias.size();
+	int size_cidades = cidades.size();
+
+	for (unsigned int i = 1; i < size_matriz_distancias; i++)
 	{
-		if (matriz_distancias.at(i).size() != cidades.size())
+		if (matriz_distancias.at(i).size() != size_cidades)
 		{
 			e_quadrada = false;
 			break;
@@ -78,9 +79,11 @@ bool checa_matriz_quadrada(vector<vector<string>> matriz_distancias)
 bool checa_matriz_simetrica(vector<vector<string>> matriz_distancias)
 {
 	bool e_simetrica = true;
-	for (unsigned int i = 0; i < matriz_distancias.size(); i++)
+	int size_matriz_distancias = matriz_distancias.size();
+
+	for (unsigned int i = 0; i < size_matriz_distancias; i++)
 	{
-		for (unsigned int j = 0; j < matriz_distancias.size(); j++)
+		for (unsigned int j = 0; j < size_matriz_distancias; j++)
 		{
 			if (matriz_distancias[i][j] != matriz_distancias[j][i])
 			{
@@ -96,7 +99,9 @@ bool checa_matriz_simetrica(vector<vector<string>> matriz_distancias)
 bool checa_matriz_diagonal(vector<vector<string>> matriz_distancias)
 {
 	bool diagonal_e_zero = true;
-	for (unsigned int i = 0; i < matriz_distancias.size(); i++)
+	int size_matriz_distancias = matriz_distancias.size();
+
+	for (unsigned int i = 0; i < size_matriz_distancias; i++)
 	{
 		if (matriz_distancias[i][i] != "0")
 		{
@@ -108,18 +113,31 @@ bool checa_matriz_diagonal(vector<vector<string>> matriz_distancias)
 	return diagonal_e_zero;
 }
 
-vector<vector<string>> remove_elementos_desnecessarios(vector<vector<string>> matriz_distancias)
+void remove_elementos_desnecessarios_matriz_distancia(vector<vector<string>> &matriz_distancias)
 {
-	vector<vector<string>> nova_matriz_distancias = matriz_distancias;
+	int size_matriz_distancias = matriz_distancias.size();
 
 	// Remove a primeira coluna de todas as linhas
-	for (unsigned int i = 0; i < nova_matriz_distancias.size(); i++)
+	for (unsigned int i = 0; i < size_matriz_distancias; i++)
 	{
-		nova_matriz_distancias[i].erase(nova_matriz_distancias[i].begin());
+		matriz_distancias[i].erase(matriz_distancias[i].begin());
 	}
-	
-	return nova_matriz_distancias;
 }
+
+//###############  Funcoes relacionadas a matriz de demandas   ################3
+
+void inicializa_demandas(vector<vector<string>> matriz_demandas)
+{
+	int size_matriz_demandas = matriz_demandas.size();
+
+	for (unsigned int i = 0; i < size_matriz_demandas; i++)
+	{
+		cidades[i].set_demanda(std::stod(matriz_demandas[i][1]));
+	}
+}
+
+//############################################################
+
 vector<string> extrai_colunas_matriz(string linha_matriz)
 {
 	stringstream linha_matriz_stream(linha_matriz);
@@ -133,28 +151,40 @@ vector<string> extrai_colunas_matriz(string linha_matriz)
 	return colunas_da_linha;
 }
 
-vector<vector<string>> extrai_matriz_distancia(string path)
+vector<vector<string>> extrai_matriz_dados(string path)
 {
 	ifstream infile(path);
 	string line = "";
-	vector<vector<string>> matriz_distancias_string;
+	vector<vector<string>> matriz_dados_em_string;
 	while (getline(infile, line))
 	{
 		vector<string> colunas_matriz = extrai_colunas_matriz(line);
-		matriz_distancias_string.push_back(colunas_matriz);
+		matriz_dados_em_string.push_back(colunas_matriz);
 	}
 
-	return matriz_distancias_string;
+	return matriz_dados_em_string;
 }
+
+bool checa_path_e_invalido(string path)
+{
+	ifstream test(path);
+	if (!test)
+	{
+		return true;
+	}
+
+	return false;
+}
+
 Context ManipulaEntrada::inicializa_dados_partir_do_csv(string path)
 {
 
-	if(!checa_path_e_valido(path))
+	if(checa_path_e_invalido(path))
 		return Context();
 
-	vector<vector<string>> matriz_distancias_string = extrai_matriz_distancia(path);
+	vector<vector<string>> matriz_distancias_string = extrai_matriz_dados(path);
 	
-	matriz_distancias_string =	remove_elementos_desnecessarios(matriz_distancias_string);
+	remove_elementos_desnecessarios_matriz_distancia(matriz_distancias_string);
 
 	inicializa_cidades(matriz_distancias_string.front());
 
@@ -174,8 +204,26 @@ Context ManipulaEntrada::inicializa_dados_partir_do_csv(string path)
 	inicializa_rotas_em_cidades();
 
 	Context context_inicializado = Context(cidades, matriz_distancias);
-	
-	vector<Rota> teste = context_inicializado.get_cidades_atendidas()[0].get_rotas();
+
+	return context_inicializado;
+}
+
+Context ManipulaEntrada::inicializa_dados_partir_do_csv_com_demanda(string path_matriz, string path_demandas)
+{
+
+	if (checa_path_e_invalido(path_demandas) || checa_path_e_invalido(path_matriz))
+		return Context();
+
+	inicializa_dados_partir_do_csv(path_matriz);
+
+	vector<vector<string>> matriz_demandas = extrai_matriz_dados(path_demandas);
+
+	// Remove a primeira linha com os nomes de cidade e demanda
+	matriz_demandas.erase(matriz_demandas.begin());
+
+	inicializa_demandas(matriz_demandas);
+
+	Context context_inicializado = Context(cidades, matriz_distancias);
 
 	return context_inicializado;
 }

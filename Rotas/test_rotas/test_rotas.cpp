@@ -28,8 +28,11 @@ protected:
 
 	virtual void SetUp() {
 		//Inicializa as cidades		
-		string path_do_csv = "../../dados_entrada/matriz_distancias_real_alfabetica.csv";
-		rotas_context = ManipulaEntrada::inicializa_dados_partir_do_csv(path_do_csv);
+		//string path_do_csv = "../../dados_entrada/matriz_distancias_real_alfabetica.csv";
+		string path_do_csv = "../../dados_entrada/matriz_distancias_real.csv";
+		string path_do_csv_demandas = "../../dados_entrada/lista_demandas.csv";
+		//rotas_context = ManipulaEntrada::inicializa_dados_partir_do_csv(path_do_csv);
+		rotas_context = ManipulaEntrada::inicializa_dados_partir_do_csv_com_demanda(path_do_csv,path_do_csv_demandas);
 		cidades = rotas_context.get_cidades_atendidas();
 	}
 };
@@ -44,6 +47,24 @@ TEST_F(RotasTest, validacaoInicializacaoDoCsv)
 		cout << "Cidade " + cidades[i].get_nome()
 			<< " sendo validada..." << endl;
 		EXPECT_EQ(matriz[i].size(), 93);
+	}
+	cout << "---------------------------" << endl;
+}
+
+TEST_F(RotasTest, validacaoInicializacaoCsvComDemandas)
+{
+	EXPECT_EQ(cidades.size(), 93);
+
+	vector<vector<Rota>> matriz = rotas_context.get_matriz_distancias();
+	for (unsigned int i = 0; i < rotas_context.get_matriz_distancias().size(); i++)
+	{
+		cout << "Cidade " + cidades[i].get_nome()
+			<< " sendo validada..." << endl;
+		EXPECT_EQ(matriz[i].size(), 93);
+		if(i > 0)
+			ASSERT_GT(cidades[i].get_demanda(),0);
+		else
+			ASSERT_EQ(cidades[i].get_demanda(),0);
 	}
 	cout << "---------------------------" << endl;
 }

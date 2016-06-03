@@ -33,6 +33,7 @@
     <ClCompile Include="src\algoritmos\teitz_bart.cpp" />
     <ClCompile Include="src\cli\exibicao.cpp" />
     <ClCompile Include="src\cli\manipula_entrada.cpp" />
+    <ClCompile Include="src\domain\caminho.cpp" />
     <ClCompile Include="src\domain\context.cpp" />
     <ClCompile Include="src\domain\rota.cpp" />
     <ClCompile Include="src\domain\cidade.cpp" />
@@ -45,6 +46,7 @@
     <ClInclude Include="src\algoritmos\teitz_bart.h" />
     <ClInclude Include="src\cli\exibicao.h" />
     <ClInclude Include="src\cli\manipula_entrada.h" />
+    <ClInclude Include="src\domain\caminho.h" />
     <ClInclude Include="src\domain\cidade.h" />
     <ClInclude Include="src\domain\context.h" />
     <ClInclude Include="src\domain\rota.h" />

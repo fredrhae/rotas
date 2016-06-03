@@ -13,7 +13,8 @@ namespace rotas
 	{
 		class ManipulaEntrada {
 			public:
-				static Context inicializa_dados_partir_do_csv(std::string path);
+				static Context inicializa_dados_partir_do_csv(std::string path_matriz);
+				static Context inicializa_dados_partir_do_csv_com_demanda(std::string path_matriz, std::string path_demanda);
 		};
 	}
 }
