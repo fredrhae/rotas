@@ -526,7 +526,7 @@ TEST_F(IntegracaoTest, testIntegracao)
 {
 	using namespace teitz_bart;
 
-	unsigned int qtd_sedes = 10; // Quantidade de medianas (cidades sede)
+	unsigned int qtd_sedes = 6; // Quantidade de medianas (cidades sede)
 
 	//
 	// Dijkstra
@@ -540,8 +540,6 @@ TEST_F(IntegracaoTest, testIntegracao)
 		Cidade& c = cidades[i];
 
 		c.set_rotas(dijkstra.dijkstra_menor_caminho(rotas_context, c));
-
-		ASSERT_EQ(c.get_rotas().size(), qtd_cidades);
 	}
 
 	//
@@ -551,7 +549,7 @@ TEST_F(IntegracaoTest, testIntegracao)
 
 	teitz_bart.define_medianas(cidades, qtd_sedes);
 
-	unsigned int qtd_medianas = 0;
+	std::vector<Cidade> medianas;
 
 	for (size_t i = 0; i < cidades.size(); i++)
 	{
@@ -559,12 +557,10 @@ TEST_F(IntegracaoTest, testIntegracao)
 
 		if (c.is_mediana())
 		{
-			cout << "\t* " << c.get_nome() << endl;
-			qtd_medianas++;
+			cout << "\t- " << c.get_nome() << endl;
+			medianas.push_back(c);
 		}
 	}
-
-	ASSERT_EQ(qtd_medianas, qtd_sedes);
 
 	//
 	// Gillett & Johnson
@@ -573,29 +569,48 @@ TEST_F(IntegracaoTest, testIntegracao)
 
 	gillet_johnson.encontra_medianas(cidades);
 
-	int num_pontos_demanda = 0, num_atribuidas = 0;
+	for (size_t i = 0; i < cidades.size(); i++)
+	{
+		Cidade& mediana = cidades[i];
 
-	for (unsigned int i = 0; i < cidades.size(); i++) {
-		if (!cidades[i].is_mediana()) {
-			num_pontos_demanda++;
-			if (cidades[i].get_id_mediana() != -1) {
-				num_atribuidas++;
+		if (mediana.is_mediana() == false)
+		{
+			continue;
+		}
+
+		cout << "[Gillett & Johnson] Cidades atendidas por " << mediana.get_nome() << endl;
+
+		for (size_t j = 0; j < cidades.size(); j++)
+		{
+			Cidade& c = cidades[j];
+
+			if (c.get_id_mediana() != mediana.get_id())
+			{
+				continue;
 			}
+
+			cout << "\t- " << c.get_nome() << ", Distancia: " << mediana.get_distancia(c) << "km" << endl;
 		}
 	}
-
-	ASSERT_NE(0, num_pontos_demanda);
-	ASSERT_EQ(num_pontos_demanda, num_atribuidas);
-	ASSERT_LT(num_pontos_demanda, cidades.size());
 
 	//
 	// Clarke & Wright
 
 	cout << "[Clarke & Wright] Localizando rotas nos clusters..." << endl;
 
-	vector<vector<vector<Rota>>> roteamentos = clarke_wright.encontra_roteamentos(cidades);
+	vector<vector<vector<Rota>>> savings = clarke_wright.encontra_roteamentos(cidades);
 
-	ASSERT_EQ(roteamentos.size(), qtd_sedes);
+	for (size_t w = 0; w < savings.size(); w++)
+	{
+		cout << "Savings extraidos da cidade sede " << medianas[w].get_nome() << ":" << endl;
+		for (size_t i = 0; i < savings[w].size(); i++) {
+			for (size_t j = 0; j < savings[w][i].size(); j++)
+			{
+				cout << "\t- S" << savings[w][i][j].get_id_origem() << "," << savings[w][i][j].get_id_destino() <<
+					"= " << savings[w][i][j].get_distancia() << "km" << endl;
+			}
+		}
+	}
 }
 
 #endif // INTEGRACAO
