@@ -307,7 +307,8 @@ protected:
 	int a;
 	unsigned int num_atribuidas = 0;
 	unsigned int num_pontos_demanda = 0;
-	vector<Cidade*> medianas = vector<Cidade*>();
+	unsigned int qtd_sedes = 7;
+	vector<Cidade*> pontos_atendimento = vector<Cidade*>();
 
 	algoritmos::GilletJohnson gillet_johnson;
 	/*
@@ -333,8 +334,6 @@ protected:
 		Dijkstra dijkstra = Dijkstra();
 		TeitzBart teitz_bart = TeitzBart();
 
-		unsigned int p = 6;
-
 		cout << "Total de cidades: " << cidades.size() << endl;
 
 
@@ -347,7 +346,7 @@ protected:
 			cidades_dijkstra.push_back(c);
 		}
 
-		teitz_bart.define_medianas(cidades_dijkstra, p);
+		teitz_bart.define_medianas(cidades_dijkstra, qtd_sedes);
 
 		cout << "Cidades sedes: " << endl;
 
@@ -368,36 +367,31 @@ protected:
 		
 		a = 5;
 
+		
+
+		for (unsigned int i = 0; i < cidades_dijkstra.size(); i++) {
+			if (cidades_dijkstra[i].is_mediana()) {
+				pontos_atendimento.push_back(&(cidades_dijkstra[i]));
+			}
+		}
+
+		
+
+		// Capacidades dos 3 caminhões
+		double capacidades[] = { 6200, 8300, 11000 };
+
+		for (size_t i = 0; i < pontos_atendimento.size(); i++) {
+			pontos_atendimento[i]->set_capacidade(capacidades[i % 3]);
+		}
+
+		gillet_johnson.encontra_medianas(cidades_dijkstra);
+
 	}
 };
 
-TEST_F(GilletJohnsonTest, validacaoTrivial)
-{
-	EXPECT_EQ(a, 5);
-}
-
 TEST_F(GilletJohnsonTest, testTodasCidadesAtribuidas)
 {
-	//Ja sei que são 6 cidades, então vou distribuir as capacidades seguindo os caminhões
-	vector<Cidade*> pontos_demanda = vector<Cidade*>();
-
-	for (unsigned int i = 0; i < cidades_dijkstra.size(); i++) {
-		if (cidades_dijkstra[i].is_mediana()) {
-			pontos_demanda.push_back(&(cidades_dijkstra[i]));
-		}
-	}
-
-	ASSERT_EQ(6, pontos_demanda.size());
-
-	// Setando 2 caminhões por cidade, conforme acordado
-	pontos_demanda[0]->set_capacidade(6200);
-	pontos_demanda[1]->set_capacidade(8300);
-	pontos_demanda[2]->set_capacidade(11000);
-	pontos_demanda[3]->set_capacidade(6200);
-	pontos_demanda[4]->set_capacidade(8300);
-	pontos_demanda[5]->set_capacidade(11000);
-
-	gillet_johnson.encontra_medianas(cidades_dijkstra);
+	ASSERT_EQ(qtd_sedes, pontos_atendimento.size());
 
 	for (unsigned int i = 0; i < cidades_dijkstra.size(); i++) {
 		if (!cidades_dijkstra[i].is_mediana()) {
@@ -414,28 +408,7 @@ TEST_F(GilletJohnsonTest, testTodasCidadesAtribuidas)
 }
 
 TEST_F(GilletJohnsonTest, testDesignaMedianas)
-{
-	//Ja sei que são 6 cidades, então vou distribuir as capacidades seguindo os caminhões
-	vector<Cidade*> pontos_atendimento = vector<Cidade*>();
-
-	for (unsigned int i = 0; i < cidades_dijkstra.size(); i++) {
-		if (cidades_dijkstra[i].is_mediana()) {
-			pontos_atendimento.push_back(&(cidades_dijkstra[i]));
-		}
-	}
-
-	ASSERT_EQ(6, pontos_atendimento.size());
-
-	// Setando 2 caminhões por cidade, conforme acordado
-	pontos_atendimento[0]->set_capacidade(6200);
-	pontos_atendimento[1]->set_capacidade(8300);
-	pontos_atendimento[2]->set_capacidade(11000);
-	pontos_atendimento[3]->set_capacidade(6200);
-	pontos_atendimento[4]->set_capacidade(8300);
-	pontos_atendimento[5]->set_capacidade(11000);
-
-	gillet_johnson.encontra_medianas(cidades_dijkstra);
-
+{	
 	for (unsigned int i = 0; i < pontos_atendimento.size(); i++) {
 		cout << "Cidades atendidas por " << pontos_atendimento[i]->get_nome() << ": " << endl;
 		for (unsigned int j = 0; j < cidades_dijkstra.size(); j++) {
@@ -632,7 +605,7 @@ TEST_F(IntegracaoTest, testIntegracao)
 {
 	using namespace teitz_bart;
 
-	unsigned int qtd_sedes = 6; // Quantidade de medianas (cidades sede)
+	unsigned int qtd_sedes = 7; // Quantidade de medianas (cidades sede)
 
 	//
 	// Dijkstra
@@ -672,26 +645,25 @@ TEST_F(IntegracaoTest, testIntegracao)
 	// Gillett & Johnson
 
 	cout << "[Gillett & Johnson] Localizando clusters..." << endl;
-	//Ja sei que são 6 cidades, então vou distribuir as capacidades seguindo os caminhões
-	vector<Cidade*> pontos_demanda = vector<Cidade*>();
+	
+	vector<Cidade*> pontos_atendimento = vector<Cidade*>();
 
 	for (unsigned int i = 0; i < cidades.size(); i++) {
 		if (cidades[i].is_mediana()) {
-			pontos_demanda.push_back(&(cidades[i]));
+			pontos_atendimento.push_back(&(cidades[i]));
 		}
 	}
 
-	ASSERT_EQ(6, pontos_demanda.size());
+	ASSERT_EQ(qtd_sedes, pontos_atendimento.size());
 
 	// Setando 2 caminhões por cidade, conforme acordado
-	pontos_demanda[0]->set_capacidade(6200);
-	pontos_demanda[1]->set_capacidade(8300);
-	pontos_demanda[2]->set_capacidade(11000);
-	pontos_demanda[3]->set_capacidade(6200);
-	pontos_demanda[4]->set_capacidade(8300);
-	pontos_demanda[5]->set_capacidade(11000);
+	// Capacidades dos 3 caminhões
+	double capacidades[] = { 6200, 8300, 11000 };
 
-
+	for (size_t i = 0; i < pontos_atendimento.size(); i++) {
+		pontos_atendimento[i]->set_capacidade(capacidades[i % 3]);
+	}
+	
 	gillet_johnson.encontra_medianas(cidades);
 
 	for (size_t i = 0; i < cidades.size(); i++)
