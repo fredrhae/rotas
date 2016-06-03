@@ -56,9 +56,14 @@ namespace rotas
 			return rotas;
 		}
 		
-		double Cidade::get_distancia(Cidade destino) {			
-			for (unsigned int i = 0; i < rotas.size(); i++) {
-				if (rotas[i].get_id_destino() == destino.get_id()) {
+		double Cidade::get_distancia(Cidade destino) {
+			return get_distancia(destino.get_id());
+		}
+
+		double Cidade::get_distancia(int id_destino) {
+			int size_rotas = rotas.size();
+			for (unsigned int i = 0; i < size_rotas; i++) {
+				if (rotas[i].get_id_destino() == id_destino) {
 					return rotas[i].get_distancia();
 				}
 			}
