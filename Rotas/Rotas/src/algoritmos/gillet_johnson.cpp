@@ -59,9 +59,9 @@ namespace rotas
 				if (cidades[i].is_mediana()) {
 					pontos_atendimento.push_back(cidades[i]);
 				}
-				else {
+				//else {
 					pontos_demanda.push_back(cidades[i]);
-				}
+				//}
 			}
 
 			switch (pontos_atendimento.size()) {

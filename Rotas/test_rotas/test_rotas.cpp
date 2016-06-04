@@ -15,10 +15,10 @@ using namespace domain;
 using namespace cli;
 using namespace algoritmos;
 
-#define DIJKSTRA true
-#define TEITZ_BART true
-#define GILLET_JOHNSON true
-#define CLARKE_WRIGHT true
+#define DIJKSTRA false
+#define TEITZ_BART false
+#define GILLET_JOHNSON false
+#define CLARKE_WRIGHT false
 #define INTEGRACAO true
 
 class RotasTest : public ::testing::Test {
@@ -522,7 +522,7 @@ protected:
 	algoritmos::GilletJohnson gillet_johnson;
 	unsigned int num_atribuidas = 0;
 	unsigned int num_pontos_demanda = 0;
-	unsigned int qtd_sedes = 7;
+	unsigned int qtd_sedes = 6;
 	vector<Cidade*> pontos_atendimento = vector<Cidade*>();
 
 	std::vector<Cidade> cidades_dijkstra;
@@ -666,7 +666,7 @@ TEST_F(IntegracaoTest, testIntegracao)
 {
 	using namespace teitz_bart;
 
-	unsigned int qtd_sedes = 6; // Quantidade de medianas (cidades sede)
+	unsigned int qtd_sedes = 7; // Quantidade de medianas (cidades sede)
 
 	//
 	// Dijkstra
@@ -762,19 +762,24 @@ TEST_F(IntegracaoTest, testIntegracao)
 		double acumulador_distancia = 0;
 		double acumulador_demanda = 0;
 		vector<Caminho> rota_final_otimizada = clarke_wright.encontra_roteamentos(cidades, *pontos_atendimento[w]);
+		int size_rota_final = rota_final_otimizada.size();
 		cout << "Rota otimizada para cidade sede :" << endl;
-		for (unsigned int i = 0; i < rota_final_otimizada.size(); i++) {
-			for (unsigned int j = 0; j < rota_final_otimizada[i].quantidade_rotas_trajeto(); j++)
+		for (unsigned int i = 0; i < size_rota_final; i++) {
+			int size_rota_final_atual = rota_final_otimizada[i].quantidade_rotas_trajeto();
+			for (unsigned int j = 0; j < size_rota_final_atual; j++)
 			{
 				double distancia_atual = rota_final_otimizada[i].get_rota_indice(j).get_distancia();
 				double demanda_atual = cidades[rota_final_otimizada[i].get_rota_indice(j).get_id_destino()].get_demanda();
 				cout << "R" << rota_final_otimizada[i].get_rota_indice(j).get_id_origem() << "," << rota_final_otimizada[i].get_rota_indice(j).get_id_destino() <<
 					"= " << distancia_atual << "Km" <<
 					" | " << demanda_atual << "Kg" << endl;
-				acumulador_demanda += demanda_atual;
-				acumulador_distancia += distancia_atual;
+				if(j != size_rota_final_atual - 1)
+				{
+					acumulador_demanda += demanda_atual;
+					acumulador_distancia += distancia_atual;
+				}
 			}
-			cout << "\n Distancia total: " << acumulador_distancia << "Km | " << "Demanda total: " << acumulador_demanda << "Kg" << endl;
+			cout << "\nDistancia total: " << acumulador_distancia << "Km | " << "Demanda total: " << acumulador_demanda << "Kg" << endl;
 		}
 	}
 
