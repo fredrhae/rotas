@@ -29,8 +29,10 @@ protected:
 	virtual void SetUp() {
 		//Inicializa as cidades		
 		//string path_do_csv = "../../dados_entrada/matriz_distancias_real_alfabetica.csv";
-		string path_do_csv = "../../dados_entrada/matriz_distancias_real.csv";
-		string path_do_csv_demandas = "../../dados_entrada/lista_demandas.csv";
+		//string path_do_csv = "../../dados_entrada/matriz_distancias_real.csv";
+		string path_do_csv = "../../dados_entrada/matriz_distancias_final.csv";
+		string path_do_csv_demandas = "../../dados_entrada/lista_demandas_final.csv";
+		//string path_do_csv_demandas = "../../dados_entrada/lista_demandas.csv";
 		//rotas_context = ManipulaEntrada::inicializa_dados_partir_do_csv(path_do_csv);
 		rotas_context = ManipulaEntrada::inicializa_dados_partir_do_csv_com_demanda(path_do_csv,path_do_csv_demandas);
 		cidades = rotas_context.get_cidades_atendidas();
@@ -39,32 +41,29 @@ protected:
 
 TEST_F(RotasTest, validacaoInicializacaoDoCsv)
 {
-	EXPECT_EQ(cidades.size(), 93);
+	EXPECT_EQ(cidades.size(), 92);
 
 	vector<vector<Rota>> matriz = rotas_context.get_matriz_distancias();
 	for (unsigned int i = 0; i < rotas_context.get_matriz_distancias().size(); i++)
 	{
 		cout << "Cidade " + cidades[i].get_nome()
 			<< " sendo validada..." << endl;
-		EXPECT_EQ(matriz[i].size(), 93);
+		EXPECT_EQ(matriz[i].size(), 92);
 	}
 	cout << "---------------------------" << endl;
 }
 
 TEST_F(RotasTest, validacaoInicializacaoCsvComDemandas)
 {
-	EXPECT_EQ(cidades.size(), 93);
+	EXPECT_EQ(cidades.size(), 92);
 
 	vector<vector<Rota>> matriz = rotas_context.get_matriz_distancias();
 	for (unsigned int i = 0; i < rotas_context.get_matriz_distancias().size(); i++)
 	{
 		cout << "Cidade " + cidades[i].get_nome()
 			<< " sendo validada..." << endl;
-		EXPECT_EQ(matriz[i].size(), 93);
-		if(i > 0)
-			ASSERT_GT(cidades[i].get_demanda(),0);
-		else
-			ASSERT_EQ(cidades[i].get_demanda(),0);
+		EXPECT_EQ(matriz[i].size(), 92);
+		ASSERT_GT(cidades[i].get_demanda(),0);
 	}
 	cout << "---------------------------" << endl;
 }
@@ -773,11 +772,8 @@ TEST_F(IntegracaoTest, testIntegracao)
 				cout << "R" << rota_final_otimizada[i].get_rota_indice(j).get_id_origem() << "," << rota_final_otimizada[i].get_rota_indice(j).get_id_destino() <<
 					"= " << distancia_atual << "Km" <<
 					" | " << demanda_atual << "Kg" << endl;
-				if(j != size_rota_final_atual - 1)
-				{
-					acumulador_demanda += demanda_atual;
-					acumulador_distancia += distancia_atual;
-				}
+				acumulador_demanda += demanda_atual;
+				acumulador_distancia += distancia_atual;
 			}
 			cout << "\nDistancia total: " << acumulador_distancia << "Km | " << "Demanda total: " << acumulador_demanda << "Kg" << endl;
 		}
