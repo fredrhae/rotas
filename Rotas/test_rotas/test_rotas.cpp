@@ -665,7 +665,7 @@ TEST_F(IntegracaoTest, testIntegracao)
 {
 	using namespace teitz_bart;
 
-	unsigned int qtd_sedes = 7; // Quantidade de medianas (cidades sede)
+	unsigned int qtd_sedes = 6; // Quantidade de medianas (cidades sede)
 
 	//
 	// Dijkstra
@@ -769,8 +769,8 @@ TEST_F(IntegracaoTest, testIntegracao)
 			{
 				double distancia_atual = rota_final_otimizada[i].get_rota_indice(j).get_distancia();
 				double demanda_atual = cidades[rota_final_otimizada[i].get_rota_indice(j).get_id_destino()].get_demanda();
-				cout << "R" << rota_final_otimizada[i].get_rota_indice(j).get_id_origem() << "," << rota_final_otimizada[i].get_rota_indice(j).get_id_destino() <<
-					"= " << distancia_atual << "Km" <<
+				cout << "R " << cidades[rota_final_otimizada[i].get_rota_indice(j).get_id_origem()].get_nome() << "," << cidades[rota_final_otimizada[i].get_rota_indice(j).get_id_destino()].get_nome() <<
+					" = " << distancia_atual << "Km" <<
 					" | " << demanda_atual << "Kg" << endl;
 				acumulador_demanda += demanda_atual;
 				acumulador_distancia += distancia_atual;
