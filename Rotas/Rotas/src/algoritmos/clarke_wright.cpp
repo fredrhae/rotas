@@ -5,6 +5,7 @@
 #include <vector>
 #include <algorithm>
 #include <set>
+#include <iostream>
 
 using namespace std;
 using namespace rotas::algoritmos;
@@ -219,6 +220,15 @@ namespace rotas {
 			}
 		}
 
+		void print_saving_atual(Rota saving)
+		{
+			double distancia_atual = saving.get_distancia();
+
+			cout << "Saving de " << cidades_entrada[saving.get_id_origem()].get_nome() << "," << 
+									cidades_entrada[saving.get_id_destino()].get_nome() <<
+				" = " << distancia_atual << "Km sendo analisado..." << endl;
+		}
+
 		void encontra_rota_partindo_dos_savings(vector<Rota> &savings, vector<Caminho> & melhores_caminhos)
 		{
 
@@ -228,6 +238,7 @@ namespace rotas {
 			{
 				if (saving_e_valido(savings[i]))
 				{
+					print_saving_atual(savings[i]);
 					adiciona_saving_na_rota(savings[i], melhores_caminhos);
 				}
 			}
@@ -237,6 +248,8 @@ namespace rotas {
 		{
 			cidades_entrada = cidades;
 			facilidade = facilidade_entrada;
+
+			cout << endl << "Econtrando roteamento para " << facilidade_entrada.get_nome() << ":\n" << endl;
 		
 			vector<Caminho> melhores_caminhos_encontrados = vector<Caminho>();
 
@@ -245,6 +258,8 @@ namespace rotas {
 			ordena_maior_pro_menor(savings);
 
 			encontra_rota_partindo_dos_savings(savings, melhores_caminhos_encontrados);
+
+			cout << endl << endl;
 
 			return melhores_caminhos_encontrados;
 		}
