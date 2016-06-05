@@ -51,6 +51,20 @@ namespace rotas
 			}
 		}
 
+		void diminui_capacidade_pela_propria_demanda(vector<Cidade> &pontos_atendimento)
+		{
+			size_t size_pontos_atendimento = pontos_atendimento.size();
+			for (unsigned int i = 0; i < size_pontos_atendimento; i++)
+			{
+				double capacidade_atual = pontos_atendimento[i].get_capacidade();
+				double demanda_atual = pontos_atendimento[i].get_demanda();
+				if (capacidade_atual > demanda_atual)
+				{
+					pontos_atendimento[i].set_capacidade(capacidade_atual - demanda_atual);
+				}
+			}
+		}
+
 		void GilletJohnson::encontra_medianas(vector<Cidade> & cidades) {
 
 			vector<Cidade> pontos_atendimento = vector<Cidade>();
@@ -59,10 +73,10 @@ namespace rotas
 				if (cidades[i].is_mediana()) {
 					pontos_atendimento.push_back(cidades[i]);
 				}
-				//else {
-					pontos_demanda.push_back(cidades[i]);
-				//}
+				pontos_demanda.push_back(cidades[i]);
 			}
+
+			diminui_capacidade_pela_propria_demanda(pontos_atendimento);
 
 			switch (pontos_atendimento.size()) {
 			case 0:
