@@ -73,7 +73,9 @@ namespace rotas
 				if (cidades[i].is_mediana()) {
 					pontos_atendimento.push_back(cidades[i]);
 				}
-				pontos_demanda.push_back(cidades[i]);
+				else {
+					pontos_demanda.push_back(cidades[i]);
+				}
 			}
 
 			diminui_capacidade_pela_propria_demanda(pontos_atendimento);
