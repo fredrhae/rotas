@@ -128,10 +128,10 @@ namespace rotas {
 				else if (rotas_encontradas[index_ciclo_origem].cidade_no_comeco_excluindo_facilidade(saving.get_id_origem()) &&
 					rotas_encontradas[index_ciclo_destino].cidade_no_comeco_excluindo_facilidade(saving.get_id_destino())) {
 					dois_ciclos_comeco = true;
-					index_ciclo_join = index_ciclo_origem;
-					index_ciclo_removido = index_ciclo_destino;
-					id_origem = saving.get_id_destino(); 
-					id_destino = saving.get_id_origem();
+					index_ciclo_join = index_ciclo_destino;
+					index_ciclo_removido = index_ciclo_origem;
+					id_origem = saving.get_id_origem();
+					id_destino = saving.get_id_destino();
 				}
 				else {
 					dois_ciclos_fim = true;
@@ -149,8 +149,18 @@ namespace rotas {
 
 					// Adiciona a rota do saving ao ciclo que recebera o join
 					//adiciona_rota_comeco(id_origem, id_destino, rotas_encontradas[index_ciclo_join]);
-					rotas_encontradas[index_ciclo_join].adiciona_rota_fim_trajeto(id_origem, id_destino,
+					rotas_encontradas[index_ciclo_join].adiciona_rota_comeco_trajeto(id_origem, id_destino,
 						cidades_entrada[id_origem].get_distancia(id_destino));
+
+					// Adiciona as rotas que estavam no ciclo que sera removido da lista
+					int size_ciclo_removido = rotas_encontradas[index_ciclo_removido].quantidade_rotas_trajeto();
+					for (unsigned int i = 0; i < size_ciclo_removido; i++)
+					{
+						Rota rota_atual = rotas_encontradas[index_ciclo_removido].get_rota_indice(i);
+						// Adiciona a rota do saving ao ciclo que recebera o join
+						rotas_encontradas[index_ciclo_join].
+							adiciona_rota_comeco_trajeto(rota_atual.get_id_destino(), rota_atual.get_id_origem(), rota_atual.get_distancia());
+					}
 				}
 				else if (dois_ciclos_fim)
 				{
@@ -161,6 +171,17 @@ namespace rotas {
 					// Adiciona a rota do saving ao ciclo que recebera o join
 					rotas_encontradas[index_ciclo_join].adiciona_rota_fim_trajeto(id_origem, id_destino,
 						cidades_entrada[id_origem].get_distancia(id_destino));
+
+					// Adiciona as rotas que estavam no ciclo que sera removido da lista
+					int size_ciclo_removido = rotas_encontradas[index_ciclo_removido].quantidade_rotas_trajeto();
+
+					for (int i = size_ciclo_removido - 1; i > -1; i --)
+					{
+						Rota rota_atual = rotas_encontradas[index_ciclo_removido].get_rota_indice(i);
+						// Adiciona a rota do saving ao ciclo que recebera o join
+						rotas_encontradas[index_ciclo_join].
+							adiciona_rota_fim_trajeto(rota_atual.get_id_destino(), rota_atual.get_id_origem(), rota_atual.get_distancia());
+					}
 				}
 				else
 				{
@@ -178,20 +199,6 @@ namespace rotas {
 					{
 						rotas_encontradas[index_ciclo_join].
 										adiciona_rota_fim_trajeto(rotas_encontradas[index_ciclo_removido].get_rota_indice(i));
-					}
-				}
-
-
-				if (dois_ciclos_comeco || dois_ciclos_fim)
-				{
-					// Adiciona as rotas que estavam no ciclo que sera removido da lista
-					int size_ciclo_removido = rotas_encontradas[index_ciclo_removido].quantidade_rotas_trajeto();
-					for (unsigned int i = 0; i < size_ciclo_removido; i++)
-					{
-						Rota rota_atual = rotas_encontradas[index_ciclo_removido].get_rota_indice(i);
-						// Adiciona a rota do saving ao ciclo que recebera o join
-						rotas_encontradas[index_ciclo_join].
-							adiciona_rota_comeco_trajeto(rota_atual.get_id_destino(), rota_atual.get_id_origem(),rota_atual.get_distancia());
 					}
 				}
 				
